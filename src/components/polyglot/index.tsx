@@ -1,6 +1,8 @@
 import React, { ReactElement } from 'react';
 import GridLayout from 'react-grid-layout';
 
+import Text from '../text';
+
 export const Polyglot = (): ReactElement => {
   const layout1 = [
     {
@@ -29,16 +31,28 @@ export const Polyglot = (): ReactElement => {
         compactType="horizontal"
       >
         <div key="a" style={{ border: '1px solid black' }}>
-          <p>Text A</p>
+          <Text
+            text="οὐ μόνον δέ, ἀλλὰ καὶ καυχώμεθα ἐν ταῖς θλίψεσιν, εἰδότες ὅτι ἡ θλῖψις ὑπομονὴν κατεργάζεται,"
+            name="SBL GNT"
+          />
         </div>
         <div key="b" style={{ border: '1px solid black' }}>
-          <p>Text B</p>
+          <Text
+            text="And not only this, but we also boast in our afflictions, because we know that affliction produces patient endurance,"
+            name="LEB"
+          />
         </div>
         <div key="c" style={{ border: '1px solid black' }}>
-          <p>Text C</p>
+          <Text
+            text="Y no solo en esto, sino también en nuestros sufrimientos, porque sabemos que el sufrimiento produce perseverancia;"
+            name="NVI"
+          />
         </div>
         <div key="d" style={{ border: '1px solid black' }}>
-          <p>Text D</p>
+          <Text
+            text="And not only in this, otherwise too in our sufferings, because we know that the suffering produces perseverance;"
+            name="Back Trans"
+          />
         </div>
       </GridLayout>
     </React.Fragment>
