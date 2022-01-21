@@ -25,8 +25,18 @@ export const ControlPanel = (): ReactElement => {
         width={1200}
         maxRows={1}
       >
-        <div key="a" style={{ border: '1px solid black' }}>
-          <p>Control Panel</p>
+        <div
+          key="a"
+          style={{
+            border: '1px solid black',
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            gap: '10px'
+          }}
+        >
+          <button>Link</button>
+          <button>Unlink</button>
         </div>
       </GridLayout>
     </React.Fragment>
