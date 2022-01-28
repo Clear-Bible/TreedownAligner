@@ -1,7 +1,11 @@
 import React, { ReactElement, useState } from 'react';
+import { useRecoilState } from 'recoil';
+
+import { currentFocus } from 'state/atoms';
 
 interface TextSegmentProps {
-  segment: string;
+  id: string;
+  text: string;
 }
 
 const defaultStyle = { cursor: 'pointer' };
@@ -10,10 +14,16 @@ const focusedStyle = {
   textDecoration: 'underline',
 };
 
-export const TextSegment = (props: TextSegmentProps): ReactElement => {
-  const [isHovered, setIsHovered] = useState(false);
+export const TextSegmentComponent = (props: TextSegmentProps): ReactElement => {
+  console.log('render');
 
-  const computedStyle = isHovered ? focusedStyle : defaultStyle;
+  const { id } = props;
+
+  const [currentFocusState, setCurrentFocus] = useRecoilState(currentFocus);
+
+  const isFocused = currentFocusState?.id === props.id;
+
+  const computedStyle = isFocused ? focusedStyle : defaultStyle;
 
   return (
     <React.Fragment>
@@ -21,17 +31,17 @@ export const TextSegment = (props: TextSegmentProps): ReactElement => {
       <span
         style={computedStyle}
         onMouseEnter={() => {
-          setIsHovered(true);
+          setCurrentFocus({ id });
         }}
         onMouseLeave={() => {
-          setIsHovered(false);
+            setCurrentFocus({id: null});
         }}
       >
-        {props.segment}
+        {props.text}
       </span>
       <span> </span>
     </React.Fragment>
   );
 };
 
-export default TextSegment;
+export default TextSegmentComponent;

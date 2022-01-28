@@ -1,9 +1,13 @@
 import React, { ReactElement } from 'react';
 import GridLayout from 'react-grid-layout';
 
-import Text from '../text';
+import { Text } from 'structs';
+import TextComponent from 'components/text';
 
-export const Polyglot = (): ReactElement => {
+interface PolyglotProps {
+  texts?: Text[];
+}
+export const PolyglotComponent = (props: PolyglotProps): ReactElement => {
   const layout1 = [
     {
       i: 'a',
@@ -31,25 +35,25 @@ export const Polyglot = (): ReactElement => {
         compactType="horizontal"
       >
         <div key="a" style={{ border: '1px solid black' }}>
-          <Text
+          <TextComponent
             text="οὐ μόνον δέ, ἀλλὰ καὶ καυχώμεθα ἐν ταῖς θλίψεσιν, εἰδότες ὅτι ἡ θλῖψις ὑπομονὴν κατεργάζεται,"
             name="SBL GNT"
           />
         </div>
         <div key="b" style={{ border: '1px solid black' }}>
-          <Text
+          <TextComponent
             text="And not only this, but we also boast in our afflictions, because we know that affliction produces patient endurance,"
             name="LEB"
           />
         </div>
         <div key="c" style={{ border: '1px solid black' }}>
-          <Text
+          <TextComponent
             text="Y no solo en esto, sino también en nuestros sufrimientos, porque sabemos que el sufrimiento produce perseverancia;"
             name="NVI"
           />
         </div>
         <div key="d" style={{ border: '1px solid black' }}>
-          <Text
+          <TextComponent
             text="And not only in this, otherwise too in our sufferings, because we know that the suffering produces perseverance;"
             name="Back Trans"
           />
@@ -59,4 +63,4 @@ export const Polyglot = (): ReactElement => {
   );
 };
 
-export default Polyglot;
+export default PolyglotComponent;

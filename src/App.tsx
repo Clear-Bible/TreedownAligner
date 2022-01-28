@@ -1,18 +1,32 @@
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import {
+  RecoilRoot,
+  atom,
+  selector,
+  useRecoilState,
+  useRecoilValue,
+} from 'recoil';
 
-import Polyglot from './components/polyglot';
+import './App.css';
+//import atoms from './state/atoms';
+//import createSelectors from './state/selectors';
+
+import PolyglotComponent from './components/polyglot';
 import ControlPanel from './components/controlPanel';
 import ContextPanel from './components/contextPanel';
 
 function App() {
+
+  //createSelectors();
+
   return (
-    <div style={{ position: 'relative' }}>
-      <Polyglot />
-      <ControlPanel />
-      <ContextPanel />
-    </div>
+    <RecoilRoot>
+      <div style={{ position: 'relative' }}>
+        <PolyglotComponent />
+        <ControlPanel />
+        <ContextPanel />
+      </div>
+    </RecoilRoot>
   );
 }
 

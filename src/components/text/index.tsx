@@ -1,13 +1,13 @@
 import React, { ReactElement } from 'react';
 
-import TextSegment from '../../components/textSegment';
+import TextSegmentComponent from 'components/textSegment';
 
 interface TextProps {
   text: string;
   name: string;
 }
 
-export const Text = (props: TextProps): ReactElement => {
+export const TextComponent = (props: TextProps): ReactElement => {
   const segments = props.text.split(' ');
 
   return (
@@ -21,12 +21,13 @@ export const Text = (props: TextProps): ReactElement => {
           paddingRight: '0.7rem',
         }}
       >
-      {segments.map((segment: string): ReactElement => {
-          return <TextSegment segment={segment} />
-      })}
+      {segments.map((segment: string, index: number): ReactElement => {
+          const id = `${props.name}_${index}`;
+          return <TextSegmentComponent key={id} id={id} text={segment} />;
+        })}
       </p>
     </div>
   );
 };
 
-export default Text;
+export default TextComponent;
