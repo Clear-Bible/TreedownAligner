@@ -1,7 +1,7 @@
 import React, { ReactElement } from 'react';
 import GridLayout from 'react-grid-layout';
 
-import Text from '../text';
+import Text from 'features/text';
 
 export const Polyglot = (): ReactElement => {
   const layout1 = [

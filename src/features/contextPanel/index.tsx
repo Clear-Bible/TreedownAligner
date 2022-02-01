@@ -1,7 +1,8 @@
 import React, { ReactElement } from 'react';
 import GridLayout from 'react-grid-layout';
 
-import Context from '../context';
+import Context from 'features/context';
+
 export const ContextPanel = (): ReactElement => {
   const layout = [
     {

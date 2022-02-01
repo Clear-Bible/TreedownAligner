@@ -1,6 +1,6 @@
 import React, { ReactElement } from 'react';
 
-import TextSegment from '../../components/textSegment';
+import TextSegment from 'features/textSegment';
 
 interface TextProps {
   text: string;
