@@ -1,7 +1,11 @@
 import React, { ReactElement, useState } from 'react';
 
+import { useAppDispatch, useAppSelector } from 'app/hooks';
+import { hover } from 'features/textSegment/textSegment.slice';
+
 interface TextSegmentProps {
   segment: string;
+  id: string;
 }
 
 const defaultStyle = { cursor: 'pointer' };
@@ -11,7 +15,13 @@ const focusedStyle = {
 };
 
 export const TextSegment = (props: TextSegmentProps): ReactElement => {
-  const [isHovered, setIsHovered] = useState(false);
+  const { id } = props;
+
+  const dispatch = useAppDispatch();
+
+  const isHovered = useAppSelector(
+    (state) => state.textSegment.hoveredId === id
+  );
 
   const computedStyle = isHovered ? focusedStyle : defaultStyle;
 
@@ -21,10 +31,10 @@ export const TextSegment = (props: TextSegmentProps): ReactElement => {
       <span
         style={computedStyle}
         onMouseEnter={() => {
-          setIsHovered(true);
+          dispatch(hover(props.id));
         }}
         onMouseLeave={() => {
-          setIsHovered(false);
+          dispatch(hover(null));
         }}
       >
         {props.segment}

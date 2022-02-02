@@ -21,9 +21,10 @@ export const Text = (props: TextProps): ReactElement => {
           paddingRight: '0.7rem',
         }}
       >
-      {segments.map((segment: string): ReactElement => {
-          return <TextSegment segment={segment} />
-      })}
+        {segments.map((segment: string, index: number): ReactElement => {
+          const id = `${props.name}_${index}`;
+          return <TextSegment key={id} id={id} segment={segment} />;
+        })}
       </p>
     </div>
   );

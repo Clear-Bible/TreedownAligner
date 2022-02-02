@@ -1,6 +1,7 @@
 import React from 'react';
-import logo from './logo.svg';
+
 import './App.css';
+
 
 import Polyglot from 'features/polyglot';
 import ControlPanel from 'features/controlPanel';
