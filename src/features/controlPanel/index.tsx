@@ -1,7 +1,9 @@
 import React, { ReactElement } from 'react';
 import GridLayout from 'react-grid-layout';
+import useDebug from 'hooks/useDebug';
 
 export const ControlPanel = (): ReactElement => {
+  useDebug('ControlPanel');
   const layout = [
     {
       i: 'a',
@@ -32,7 +34,7 @@ export const ControlPanel = (): ReactElement => {
             display: 'flex',
             justifyContent: 'center',
             alignItems: 'center',
-            gap: '10px'
+            gap: '10px',
           }}
         >
           <button>Link</button>

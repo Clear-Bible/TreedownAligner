@@ -1,4 +1,6 @@
-import React, { ReactElement, useState } from 'react';
+import React, { ReactElement } from 'react';
+
+import useDebug from 'hooks/useDebug';
 
 import { useAppDispatch, useAppSelector } from 'app/hooks';
 import { hover } from 'features/textSegment/textSegment.slice';
@@ -16,6 +18,8 @@ const focusedStyle = {
 
 export const TextSegment = (props: TextSegmentProps): ReactElement => {
   const { id } = props;
+
+  useDebug('TextSegmentComponent');
 
   const dispatch = useAppDispatch();
 

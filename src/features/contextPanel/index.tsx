@@ -1,9 +1,11 @@
 import React, { ReactElement } from 'react';
 import GridLayout from 'react-grid-layout';
 
+import useDebug from 'hooks/useDebug';
 import Context from 'features/context';
 
 export const ContextPanel = (): ReactElement => {
+  useDebug('ContextPanel');
   const layout = [
     {
       i: 'a',
@@ -39,9 +41,9 @@ export const ContextPanel = (): ReactElement => {
       >
         <div key="a" style={{ border: '1px solid black' }}>
           <Context
-          anteText="Therefore, because we have been declared righteous by faith, we have peace with God through our Lord Jesus Christ, through whom also we have obtained access by faith into this grace in which we stand, and we boast in the hope of the glory of God."
-          text="And not only this, but we also boast in our afflictions, because we know that affliction produces patient endurance,"
-          postText="and patient endurance, proven character, and proven character, hope, and hope does not disappoint, because the love of God has been poured out in our hearts through the Holy Spirit who was given to us."
+            anteText="Therefore, because we have been declared righteous by faith, we have peace with God through our Lord Jesus Christ, through whom also we have obtained access by faith into this grace in which we stand, and we boast in the hope of the glory of God."
+            text="And not only this, but we also boast in our afflictions, because we know that affliction produces patient endurance,"
+            postText="and patient endurance, proven character, and proven character, hope, and hope does not disappoint, because the love of God has been poured out in our hearts through the Holy Spirit who was given to us."
             name="LEB"
           />
         </div>

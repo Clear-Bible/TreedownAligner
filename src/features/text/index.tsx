@@ -1,5 +1,6 @@
 import React, { ReactElement } from 'react';
 
+import useDebug from 'hooks/useDebug';
 import TextSegment from 'features/textSegment';
 
 interface TextProps {
@@ -8,6 +9,7 @@ interface TextProps {
 }
 
 export const Text = (props: TextProps): ReactElement => {
+  useDebug('TextComponent');
   const segments = props.text.split(' ');
 
   return (

@@ -1,9 +1,11 @@
 import React, { ReactElement } from 'react';
 import GridLayout from 'react-grid-layout';
 
+import useDebug from "hooks/useDebug";
 import Text from 'features/text';
 
 export const Polyglot = (): ReactElement => {
+    useDebug('PolyglotComponent');
   const layout1 = [
     {
       i: 'a',

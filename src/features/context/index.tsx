@@ -1,4 +1,5 @@
 import React, { ReactElement } from 'react';
+import useDebug from 'hooks/useDebug';
 
 interface TextProps {
   anteText: string;
@@ -8,6 +9,7 @@ interface TextProps {
 }
 
 export const Text = (props: TextProps): ReactElement => {
+  useDebug('ContextComponent');
   return (
     <div>
       <div
