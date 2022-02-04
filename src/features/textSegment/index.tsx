@@ -3,7 +3,10 @@ import React, { ReactElement } from 'react';
 import useDebug from 'hooks/useDebug';
 
 import { useAppDispatch, useAppSelector } from 'app/hooks';
-import { hover } from 'features/textSegment/textSegment.slice';
+import {
+  hover,
+  toggleTextSegment,
+} from 'features/textSegment/textSegment.slice';
 
 interface TextSegmentProps {
   segment: string;
@@ -11,9 +14,24 @@ interface TextSegmentProps {
 }
 
 const defaultStyle = { cursor: 'pointer' };
-const focusedStyle = {
-  ...defaultStyle,
-  textDecoration: 'underline',
+const focusedStyle = { textDecoration: 'underline' };
+const selectedStyle = { backgroundColor: 'grey' };
+
+const computeStyle = (
+  isHovered: boolean,
+  isSelected: boolean
+): Record<string, string> => {
+  let computedStyle = { ...defaultStyle };
+
+  if (isHovered) {
+    computedStyle = { ...computedStyle, ...focusedStyle };
+  }
+
+  if (isSelected) {
+    computedStyle = { ...computedStyle, ...selectedStyle };
+  }
+
+  return computedStyle;
 };
 
 export const TextSegment = (props: TextSegmentProps): ReactElement => {
@@ -27,7 +45,11 @@ export const TextSegment = (props: TextSegmentProps): ReactElement => {
     (state) => state.textSegment.hoveredId === id
   );
 
-  const computedStyle = isHovered ? focusedStyle : defaultStyle;
+  const isSelected = useAppSelector((state) =>
+    state.textSegment.selectedTextSegments.includes(props.id)
+  );
+
+  const computedStyle = computeStyle(isHovered, isSelected);
 
   return (
     <React.Fragment>
@@ -40,7 +62,10 @@ export const TextSegment = (props: TextSegmentProps): ReactElement => {
         onMouseLeave={() => {
           dispatch(hover(null));
         }}
-      >
+        onClick={() => {
+          dispatch(toggleTextSegment(props.id));
+        }}
+      >false
         {props.segment}
       </span>
       <span> </span>
