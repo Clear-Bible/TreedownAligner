@@ -65,7 +65,7 @@ export const TextSegment = (props: TextSegmentProps): ReactElement => {
         onClick={() => {
           dispatch(toggleTextSegment(props.id));
         }}
-      >false
+      >
         {props.segment}
       </span>
       <span> </span>
