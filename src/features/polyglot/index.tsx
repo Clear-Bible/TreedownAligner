@@ -1,61 +1,56 @@
 import React, { ReactElement } from 'react';
 import GridLayout from 'react-grid-layout';
 
-import useDebug from "hooks/useDebug";
-import Text from 'features/text';
+import { useAppSelector } from 'app/hooks';
+import useDebug from 'hooks/useDebug';
+import TextComponent from 'features/text';
+import { Text } from 'structs';
 
 export const Polyglot = (): ReactElement => {
-    useDebug('PolyglotComponent');
-  const layout1 = [
-    {
-      i: 'a',
-      x: 0,
+  useDebug('PolyglotComponent');
+  const texts = useAppSelector((state) => state.polyglot.texts);
+
+  const layoutRange = Array.from({ length: texts.length }, (x, i) => i);
+
+  const layout = layoutRange.map((key: number) => {
+    const width = 24 / texts.length;
+    const x = width * key;
+
+    return {
+      i: `text_${key}`,
+      x,
       y: 0,
-      w: 6,
+      w: width,
       h: 12,
-      minW: 6,
-      maxW: 6,
-      isResizeable: false,
-    },
-    { i: 'b', x: 6, y: 0, w: 6, h: 12, minW: 6, maxW: 6, isResizeable: false },
-    { i: 'c', x: 12, y: 0, w: 6, h: 12, minW: 6, maxW: 6, isResizeable: false },
-    { i: 'd', x: 18, y: 0, w: 6, h: 12, minW: 6, maxW: 6, isResizeable: false },
-  ];
+      minW: width,
+      maxW: width,
+      isResizable: false,
+    };
+  });
 
   return (
     <React.Fragment>
       <GridLayout
-        layout={layout1}
+        layout={layout}
         cols={24}
         rowHeight={12}
         width={1200}
         maxRows={1}
         compactType="horizontal"
       >
-        <div key="a" style={{ border: '1px solid black' }}>
-          <Text
-            text="οὐ μόνον δέ, ἀλλὰ καὶ καυχώμεθα ἐν ταῖς θλίψεσιν, εἰδότες ὅτι ἡ θλῖψις ὑπομονὴν κατεργάζεται,"
-            name="SBL GNT"
-          />
-        </div>
-        <div key="b" style={{ border: '1px solid black' }}>
-          <Text
-            text="And not only this, but we also boast in our afflictions, because we know that affliction produces patient endurance,"
-            name="LEB"
-          />
-        </div>
-        <div key="c" style={{ border: '1px solid black' }}>
-          <Text
-            text="Y no solo en esto, sino también en nuestros sufrimientos, porque sabemos que el sufrimiento produce perseverancia;"
-            name="NVI"
-          />
-        </div>
-        <div key="d" style={{ border: '1px solid black' }}>
-          <Text
-            text="And not only in this, otherwise too in our sufferings, because we know that the suffering produces perseverance;"
-            name="Back Trans"
-          />
-        </div>
+        {texts.map((text: Text, index: number): ReactElement => {
+          const key = `text_${index}`;
+          console.log(key);
+          return (
+            <div key={key} style={{ border: '1px solid black' }}>
+              <TextComponent
+                name={text.name}
+                text={text.text}
+                words={text.words}
+              />
+            </div>
+          );
+        })}
       </GridLayout>
     </React.Fragment>
   );
