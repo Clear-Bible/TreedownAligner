@@ -40,7 +40,6 @@ export const Polyglot = (): ReactElement => {
       >
         {texts.map((text: Text, index: number): ReactElement => {
           const key = `text_${index}`;
-          console.log(key);
           return (
             <div key={key} style={{ border: '1px solid black' }}>
               <TextComponent

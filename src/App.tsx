@@ -34,21 +34,25 @@ function App() {
       <Editor
         texts={[
           {
+            id: 'sbl',
             name: 'SBL GNT',
             text: sblText,
             words: sblWords,
           },
           {
+            id: 'leb',
             name: 'LEB',
             text: lebText,
             words: lebWords,
           },
           {
+            id: 'nvi',
             name: 'NVI',
             text: nviText,
             words: nviWords,
           },
           {
+            id: 'backTrans',
             name: 'Back Trans',
             text: backTransText,
             words: backTransWords,
