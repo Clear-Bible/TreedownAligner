@@ -6,6 +6,7 @@ import TextSegment from 'features/textSegment';
 import { Word } from 'structs';
 
 interface TextProps {
+  id: string;
   text: string;
   name: string;
   words: Word[];
@@ -26,7 +27,14 @@ export const Text = (props: TextProps): ReactElement => {
         }}
       >
         {props.words.map((word: Word): ReactElement => {
-          return <TextSegment key={word.id} id={word.id} segment={word.text} />;
+          return (
+            <TextSegment
+              key={word.id}
+              id={word.id}
+              segment={word.text}
+              textId={props.id}
+            />
+          );
         })}
       </p>
     </div>

@@ -12,9 +12,9 @@ const appSlice = createSlice({
   name: 'app',
   initialState,
   reducers: {
-    'debug': (state, action: PayloadAction<boolean>) => {
+    debug: (state, action: PayloadAction<boolean>) => {
       state.debug = action.payload;
-    }
+    },
   },
 });
 

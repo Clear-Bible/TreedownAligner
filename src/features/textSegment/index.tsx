@@ -7,10 +7,12 @@ import {
   hover,
   toggleTextSegment,
 } from 'features/textSegment/textSegment.slice';
+import { Word, Text } from 'structs';
 
 interface TextSegmentProps {
-  segment: string;
   id: string;
+  textId: string;
+  segment: string;
 }
 
 const defaultStyle = { cursor: 'pointer' };
@@ -45,9 +47,23 @@ export const TextSegment = (props: TextSegmentProps): ReactElement => {
     (state) => state.textSegment.hoveredId === id
   );
 
-  const isSelected = useAppSelector((state) =>
-    state.textSegment.selectedTextSegments.includes(props.id)
+  const isSelected = Boolean(
+    useAppSelector((state) =>
+      state.textSegment.selectedTextSegments.find((word: Word) => {
+        return word.id === props.id;
+      })
+    )
   );
+
+  const word = useAppSelector((state) => {
+    return state.polyglot.texts
+      .find((text: Text) => {
+        return text.id === props.textId;
+      })
+      ?.words.find((word: Word) => {
+        return word.id === props.id;
+      });
+  });
 
   const computedStyle = computeStyle(isHovered, isSelected);
 
@@ -63,7 +79,9 @@ export const TextSegment = (props: TextSegmentProps): ReactElement => {
           dispatch(hover(null));
         }}
         onClick={() => {
-          dispatch(toggleTextSegment(props.id));
+          if (word) {
+            dispatch(toggleTextSegment(word));
+          }
         }}
       >
         {props.segment}

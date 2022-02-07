@@ -43,6 +43,7 @@ export const Polyglot = (): ReactElement => {
           return (
             <div key={key} style={{ border: '1px solid black' }}>
               <TextComponent
+                id={text.id}
                 name={text.name}
                 text={text.text}
                 words={text.words}

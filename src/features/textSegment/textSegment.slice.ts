@@ -1,8 +1,10 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
+import { Word } from 'structs';
+
 interface TextSegmentState {
   hoveredId: string | null;
-  selectedTextSegments: string[];
+  selectedTextSegments: Word[];
 }
 
 const initialState: TextSegmentState = {
@@ -17,10 +19,15 @@ const textSegmentSlice = createSlice({
     hover: (state, action: PayloadAction<string | null>) => {
       state.hoveredId = action.payload;
     },
-    toggleTextSegment: (state, action: PayloadAction<string>) => {
-      if (state.selectedTextSegments.includes(action.payload)) {
+    toggleTextSegment: (state, action: PayloadAction<Word>) => {
+      const alreadySelected = Boolean(
+        state.selectedTextSegments.find((word: Word) => {
+          return word.id === action.payload.id;
+        })
+      );
+      if (alreadySelected) {
         state.selectedTextSegments = state.selectedTextSegments.filter(
-          (id) => id !== action.payload
+          (word) => word.id !== action.payload.id
         );
       } else {
         state.selectedTextSegments.push(action.payload);
