@@ -1,0 +1,233 @@
+----------------------
+LIGHT MODE
+----------------------
+
+Name: PrimaryHueLightBrush
+Hex Code: #FF90CAF9
+
+Name: PrimaryHueLightForegroundBrush
+Hex Code: #DD000000
+
+Name: PrimaryHueMidBrush
+Hex Code: #FF2196F3
+
+Name: PrimaryHueDarkForegroundBrush
+Hex Code: #DDFFFFFF
+
+Name: PrimaryHueDarkBrush
+Hex Code: #FF1976D2
+
+Name: SecondaryHueMidBrush
+Hex Code: #FFAA00FF
+
+Name: SecondaryHueMidForegroundBrush
+Hex Code: #DDFFFFFF
+
+Name: PurpleLightBrush
+Hex Code: #FFDEA5E8
+
+Name: PurpleMidBrush
+Hex Code: #FFAC5CD9
+
+Name: PurpleDarkBrush
+Hex Code: #FF6500CD
+
+Name: BlueLightBrush
+Hex Code: #FF9DBFF8
+
+Name: BlueMidBrush
+Hex Code: #FF5B8DEE
+
+Name: BlueDarkBrush
+Hex Code: #FF0063F8
+
+Name: RedLightBrush
+Hex Code: #FFFE807F
+
+Name: RedeMidBrush
+Hex Code: #FFFF5C5C
+
+Name: RedDarkBrush
+Hex Code: #FFFF3A3B
+
+Name: GreenLightBrush
+Hex Code: #FF57EBA3
+
+Name: GreenMidBrush
+Hex Code: #FF39DA8A
+
+Name: GreenDarkBrush
+Hex Code: #FF05C270
+
+Name: OrangeLightBrush
+Hex Code: #FFFCCC76
+
+Name: OrangeMidBrush
+Hex Code: #FFFDAC41
+
+Name: OrangeDarkBrush
+Hex Code: #FFFF8801
+
+Name: YellowLightBrush
+Hex Code: #FFFEED73
+
+Name: YellowMidBrush
+Hex Code: #FFFEDD49
+
+Name: YellowDarkBrush
+Hex Code: #FFFFCC00
+
+Name: TealLightBrush
+Hex Code: #FFA9EFF3
+
+Name: TealMidBrush
+Hex Code: #FF74E0E6
+
+Name: TealDarkBrush
+Hex Code: #FF00CFDD
+
+Name: MaterialDesignBackground
+Hex Code: #FFFFFFFF
+
+Name: MaterialDesignPaper
+Hex Code: #FFFAFAFA
+
+Name: MaterialDesignCardBackground
+Hex Code: #FFFFFFFF
+
+Name: MaterialDesignToolBarBackground
+Hex Code: #FFF5F5F5
+
+Name: MaterialDesignBody
+Hex Code: #DD000000
+
+Name: MaterialDesignBodyLight
+Hex Code: #89000000
+
+Name: MaterialDesignColumnHeader
+Hex Code: #BC000000
+
+Name: MaterialDesignCheckBoxOff
+Hex Code: #89000000
+
+Name: MaterialDesignCheckBoxDisabled
+Hex Code: #FFBDBDBD
+
+Name: MaterialDesignTextBoxBorder
+Hex Code: #89000000
+
+Name: MaterialDesignDivider
+Hex Code: #1F000000
+
+Name: MaterialDesignSelection
+Hex Code: #FFDEDEDE
+
+Name: MaterialDesignFlatButtonClick
+Hex Code: #FFDEDEDE
+
+Name: MaterialDesignFlatButtonRipple
+Hex Code: #FFB6B6B6
+
+Name: MaterialDesignToolTipBackground
+Hex Code: #FF757575
+
+Name: MaterialDesignChipBackground
+Hex Code: #12000000
+
+Name: MaterialDesignSnackbarBackground
+Hex Code: #FF323232
+
+Name: MaterialDesignSnackbarMouseOver
+Hex Code: #FF464642
+
+Name: MaterialDesignSnackbarRipple
+Hex Code: #FFB6B6B6
+
+Name: MaterialDesignTextFieldBoxBackground
+Hex Code: #0F000000
+
+Name: MaterialDesignTextFieldBoxBackground
+Hex Code: #0F000000
+
+Name: MaterialDesignTextFieldBoxHoverBackground
+Hex Code: #14000000
+
+Name: MaterialDesignTextFieldBoxDisabledBackground
+Hex Code: #08000000
+
+Name: MaterialDesignTextAreaBorder
+Hex Code: #BC000000
+
+Name: MaterialDesignTextAreaInactiveBorder
+Hex Code: #29000000
+
+-------
+BUTTONS
+-------
+
+Name: PurpleLightButton
+Hex Code: #FFDEA5E8
+
+Name: PurpleMidButton
+Hex Code: #FFAC5CD9
+
+Name: PurpleDarkButton
+Hex Code: #FF6500CD
+
+Name: BlueLightButton
+Hex Code: #FF9DBFF8
+
+Name: BlueMidButton
+Hex Code: #FF5B8DEE
+
+Name: BlueDarkButton
+Hex Code: #FF0063F8
+
+Name: RedLightButton
+Hex Code: #FFFE807F
+
+Name: RedMidButton
+Hex Code: #FFFF5C5C
+
+Name: RedDarkButton
+Hex Code: #FFFF3A3B
+
+Name: GreenLightButton
+Hex Code: #FF57EBA3
+
+Name: GreenMidButton
+Hex Code: #FF39DA8A
+
+Name: GreenDarkButton
+Hex Code: #FF05C270
+
+Name: OrangeLightButton
+Hex Code: #FFFCCC76
+
+Name: OrangeMidButton
+Hex Code: #FFFDAC41
+
+Name: OrangeDarkButton
+Hex Code: #FFFF8801
+
+Name: YellowLightButton
+Hex Code: #FFFEED73
+
+Name: YellowMidButton
+Hex Code: #FFFEDD49
+
+Name: YellowMidButton
+Hex Code: #FFFEDD49
+
+Name: YellowDarkButton
+Hex Code: #FFFFCC00
+
+Name: TealLightButton
+Hex Code: #FFA9EFF3
+
+Name: TealMidButton
+Hex Code: #FF74E0E6
+
+Name: TealDarkButton
+Hex Code: #FF00CFDD
+
