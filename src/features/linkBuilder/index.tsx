@@ -21,12 +21,40 @@ export const LinkBuilderComponent = (props: LinkBuilderProps): ReactElement => {
 
   const texts = useAppSelector((state) => state.polyglot.texts);
 
+  if (!Object.keys(selectedWords).length) {
+    return (
+      <Fragment>
+        <div
+          style={{
+            textAlign: 'center',
+            paddingLeft: '1rem',
+            paddingRight: '1rem',
+            paddingTop: '0.5rem',
+            paddingBottom: '0.5rem',
+          }}
+        >
+          <div style={{ lineHeight: '12rem' }}>
+            Select a word to begin building a link.
+          </div>
+        </div>
+      </Fragment>
+    );
+  }
+
   return (
     <Fragment>
       {Object.keys(selectedWords).map((textId: string): ReactElement => {
         const text = texts.find((text: Text) => {
           return text.id === textId;
         });
+
+        const selectedWordsForText = selectedWords[textId];
+        const sortedSelectedWordsForText = selectedWordsForText.sort(
+          (a: Word, b: Word) => {
+            return a.position > b.position ? 1 : -1;
+          }
+        );
+
         return (
           <div
             key={`linkBuilder_${text?.name}`}
@@ -41,20 +69,14 @@ export const LinkBuilderComponent = (props: LinkBuilderProps): ReactElement => {
           >
             <div style={{ textAlign: 'right' }}>{text?.name}</div>
             <div>
-              {selectedWords[textId]
-                .sort((a: Word, b: Word) => {
-                  return a.position > b.position ? 1 : -1;
-                })
-                .map((selectedWord): ReactElement => {
-                  const word = text?.words.find((word: Word): boolean => {
-                    return word.id === selectedWord.id;
-                  });
-                  return (
-                    <span key={`selected_${selectedWord.id}`}>
-                      {word?.text}{' '}
-                    </span>
-                  );
-                })}
+              {sortedSelectedWordsForText.map((selectedWord): ReactElement => {
+                const word = text?.words.find((word: Word): boolean => {
+                  return word.id === selectedWord.id;
+                });
+                return (
+                  <span key={`selected_${selectedWord.id}`}>{word?.text} </span>
+                );
+              })}
             </div>
           </div>
         );
