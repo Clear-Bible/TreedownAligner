@@ -2,13 +2,17 @@ import React, { ReactElement } from 'react';
 import GridLayout from 'react-grid-layout';
 import { ActionCreators } from 'redux-undo';
 
-import { useAppDispatch } from 'app/hooks';
+import { useAppDispatch, useAppSelector } from 'app/hooks';
 import useDebug from 'hooks/useDebug';
+import { resetTextSegments } from 'features/textSegment/textSegment.slice';
 
 export const ControlPanel = (): ReactElement => {
   useDebug('ControlPanel');
   const dispatch = useAppDispatch();
 
+  const anySegmentsSelected = useAppSelector((state) =>
+    Boolean(state.textSegment.present.selectedTextSegments.length)
+  );
   const layout = [
     {
       i: 'a',
@@ -42,8 +46,17 @@ export const ControlPanel = (): ReactElement => {
             gap: '10px',
           }}
         >
-          <button>Link</button>
-          <button>Unlink</button>
+          <button onClick={() => {}}>Link</button>
+          <button onClick={() => {}}>Unlink</button>
+          <button
+            disabled={!anySegmentsSelected}
+            onClick={() => {
+              console.log('dispatch the reset');
+              dispatch(resetTextSegments());
+            }}
+          >
+            Reset
+          </button>
           <button
             onClick={() => {
               dispatch(ActionCreators.redo());

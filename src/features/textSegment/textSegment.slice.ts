@@ -16,13 +16,12 @@ const textSegmentSlice = createSlice({
   name: 'textSegment',
   initialState,
   reducers: {
-    hover: (state, action: PayloadAction<string | null>) => {
-      state.hoveredId = action.payload;
-    },
     toggleTextSegment: (state, action: PayloadAction<Word>) => {
-      const alreadySelected = Boolean(state.selectedTextSegments.find((word: Word) => {
-        return word.id === action.payload.id;
-      }));
+      const alreadySelected = Boolean(
+        state.selectedTextSegments.find((word: Word) => {
+          return word.id === action.payload.id;
+        })
+      );
       if (alreadySelected) {
         state.selectedTextSegments = state.selectedTextSegments.filter(
           (word) => word.id !== action.payload.id
@@ -31,8 +30,12 @@ const textSegmentSlice = createSlice({
         state.selectedTextSegments.push(action.payload);
       }
     },
+    resetTextSegments: (state) => {
+      state.selectedTextSegments = [];
+    },
   },
 });
 
-export const { hover, toggleTextSegment } = textSegmentSlice.actions;
+export const { toggleTextSegment, resetTextSegments } =
+  textSegmentSlice.actions;
 export default textSegmentSlice.reducer;
