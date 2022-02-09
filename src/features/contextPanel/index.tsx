@@ -33,6 +33,7 @@ export const ContextPanel = (): ReactElement => {
   return (
     <div style={{ position: 'relative' }}>
       <GridLayout
+        draggableHandle=".drag-handle"
         layout={layout}
         cols={24}
         rowHeight={12}

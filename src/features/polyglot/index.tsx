@@ -31,6 +31,7 @@ export const Polyglot = (): ReactElement => {
   return (
     <React.Fragment>
       <GridLayout
+        draggableHandle=".drag-handle"
         layout={layout}
         cols={24}
         rowHeight={12}

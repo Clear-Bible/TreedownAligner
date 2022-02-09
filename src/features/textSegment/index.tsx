@@ -17,7 +17,7 @@ interface TextSegmentProps {
 
 const defaultStyle = { cursor: 'pointer' };
 const focusedStyle = { textDecoration: 'underline' };
-const selectedStyle = { backgroundColor: 'grey' };
+const selectedStyle = { backgroundColor: 'lightgrey' };
 
 const computeStyle = (
   isHovered: boolean,

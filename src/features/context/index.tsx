@@ -8,7 +8,7 @@ interface TextProps {
   name: string;
 }
 
-export const Text = (props: TextProps): ReactElement => {
+export const Context = (props: TextProps): ReactElement => {
   useDebug('ContextComponent');
   return (
     <div>
@@ -34,8 +34,21 @@ export const Text = (props: TextProps): ReactElement => {
         <span> </span>
         <span>{props.postText}</span>
       </p>
+      <div
+        className="drag-handle"
+        style={{
+          marginRight: '-1px',
+          position: 'absolute',
+          bottom: '0',
+          right: '0',
+          cursor: 'grab',
+          height: '0.7rem',
+          width: '0.7rem',
+          backgroundColor: 'black',
+        }}
+      ></div>
     </div>
   );
 };
 
-export default Text;
+export default Context;

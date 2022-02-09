@@ -1,4 +1,4 @@
-import React, { ReactElement } from 'react';
+import { ReactElement, Fragment } from 'react';
 
 import useDebug from 'hooks/useDebug';
 import TextSegment from 'features/textSegment';
@@ -16,7 +16,7 @@ export const Text = (props: TextProps): ReactElement => {
   useDebug('TextComponent');
 
   return (
-    <div>
+    <Fragment>
       <div style={{ textAlign: 'right', padding: '0.5rem' }}>{props.name}</div>
       <p
         style={{
@@ -24,6 +24,7 @@ export const Text = (props: TextProps): ReactElement => {
           paddingBottom: '0.5rem',
           paddingLeft: '0.7rem',
           paddingRight: '0.7rem',
+          userSelect: 'none',
         }}
       >
         {props.words.map((word: Word): ReactElement => {
@@ -37,7 +38,20 @@ export const Text = (props: TextProps): ReactElement => {
           );
         })}
       </p>
-    </div>
+      <div
+        className="drag-handle"
+        style={{
+          marginRight: '-1px',
+          position: 'absolute',
+          bottom: '0',
+          right: '0',
+          cursor: 'grab',
+          height: '0.7rem',
+          width: '0.7rem',
+          backgroundColor: 'black',
+        }}
+      ></div>
+    </Fragment>
   );
 };
 
