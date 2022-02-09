@@ -20,11 +20,9 @@ const textSegmentSlice = createSlice({
       state.hoveredId = action.payload;
     },
     toggleTextSegment: (state, action: PayloadAction<Word>) => {
-      const alreadySelected = Boolean(
-        state.selectedTextSegments.find((word: Word) => {
-          return word.id === action.payload.id;
-        })
-      );
+      const alreadySelected = Boolean(state.selectedTextSegments.find((word: Word) => {
+        return word.id === action.payload.id;
+      }));
       if (alreadySelected) {
         state.selectedTextSegments = state.selectedTextSegments.filter(
           (word) => word.id !== action.payload.id

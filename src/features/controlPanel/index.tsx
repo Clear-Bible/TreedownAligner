@@ -1,9 +1,14 @@
 import React, { ReactElement } from 'react';
 import GridLayout from 'react-grid-layout';
+import { ActionCreators } from 'redux-undo';
+
+import { useAppDispatch } from 'app/hooks';
 import useDebug from 'hooks/useDebug';
 
 export const ControlPanel = (): ReactElement => {
   useDebug('ControlPanel');
+  const dispatch = useAppDispatch();
+
   const layout = [
     {
       i: 'a',
@@ -39,6 +44,20 @@ export const ControlPanel = (): ReactElement => {
         >
           <button>Link</button>
           <button>Unlink</button>
+          <button
+            onClick={() => {
+              dispatch(ActionCreators.redo());
+            }}
+          >
+            Redo
+          </button>
+          <button
+            onClick={() => {
+              dispatch(ActionCreators.undo());
+            }}
+          >
+            Undo
+          </button>
         </div>
       </GridLayout>
     </React.Fragment>

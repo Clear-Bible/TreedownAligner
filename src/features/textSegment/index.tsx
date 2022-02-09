@@ -3,10 +3,8 @@ import React, { ReactElement } from 'react';
 import useDebug from 'hooks/useDebug';
 
 import { useAppDispatch, useAppSelector } from 'app/hooks';
-import {
-  hover,
-  toggleTextSegment,
-} from 'features/textSegment/textSegment.slice';
+import { toggleTextSegment } from 'features/textSegment/textSegment.slice';
+import { hover } from 'features/textSegment/textSegmentHover.slice';
 import { Word, Text } from 'structs';
 
 interface TextSegmentProps {
@@ -44,12 +42,12 @@ export const TextSegment = (props: TextSegmentProps): ReactElement => {
   const dispatch = useAppDispatch();
 
   const isHovered = useAppSelector(
-    (state) => state.textSegment.hoveredId === id
+    (state) => state.textSegmentHover.hoveredId === id
   );
 
   const isSelected = Boolean(
     useAppSelector((state) =>
-      state.textSegment.selectedTextSegments.find((word: Word) => {
+      state.textSegment.present.selectedTextSegments.find((word: Word) => {
         return word.id === props.id;
       })
     )
