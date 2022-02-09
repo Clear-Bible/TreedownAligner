@@ -3,6 +3,7 @@ import GridLayout from 'react-grid-layout';
 
 import useDebug from 'hooks/useDebug';
 import Context from 'features/context';
+import LinkBuilderComponent from 'features/linkBuilder';
 
 export const ContextPanel = (): ReactElement => {
   useDebug('ContextPanel');
@@ -32,6 +33,7 @@ export const ContextPanel = (): ReactElement => {
   return (
     <div style={{ position: 'relative' }}>
       <GridLayout
+        draggableHandle=".drag-handle"
         layout={layout}
         cols={24}
         rowHeight={12}
@@ -48,7 +50,7 @@ export const ContextPanel = (): ReactElement => {
           />
         </div>
         <div key="b" style={{ border: '1px solid black' }}>
-          <p>Link builder </p>
+          <LinkBuilderComponent />
         </div>
       </GridLayout>
     </div>

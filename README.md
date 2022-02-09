@@ -6,6 +6,6 @@ TreedownAligner contains React components written in Typesript using Redux for s
 
 ## Quickstart
 
-* Install dependencies: `yarn`
-* Run local server: `yarn start`
-* Build: `yarn build`
+- Install dependencies: `yarn`
+- Run local server: `yarn start`
+- Build: `yarn build`
