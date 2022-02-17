@@ -1,5 +1,5 @@
 import { configureStore } from '@reduxjs/toolkit';
-import undoable, { excludeAction } from 'redux-undo';
+import undoable from 'redux-undo';
 
 import AppReducer from 'app/app.slice';
 import TextSegmentReducer from 'features/textSegment/textSegment.slice';
