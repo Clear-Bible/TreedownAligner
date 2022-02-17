@@ -1,22 +1,30 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
+import { Alignment, Word } from 'structs';
+
 interface TextSegmentState {
-  hoveredId: string | null;
+  hovered: Word | null;
+  relatedAlignments: Alignment[];
 }
 
 const initialState: TextSegmentState = {
-  hoveredId: null,
+  hovered: null,
+  relatedAlignments: [],
 };
 
 const textSegmentHoverSlice = createSlice({
   name: 'textSegmentHover',
   initialState,
   reducers: {
-    hover: (state, action: PayloadAction<string | null>) => {
-      state.hoveredId = action.payload;
+    hover: (state, action: PayloadAction<Word | null>) => {
+      state.hovered = action.payload;
+    },
+    relatedAlignments: (state, action: PayloadAction<Alignment[]>) => {
+      console.log('RELATED ALIGNMENTS', action.payload);
+      state.relatedAlignments = action.payload;
     },
   },
 });
 
-export const { hover } = textSegmentHoverSlice.actions;
+export const { hover, relatedAlignments } = textSegmentHoverSlice.actions;
 export default textSegmentHoverSlice.reducer;

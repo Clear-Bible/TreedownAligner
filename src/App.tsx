@@ -37,25 +37,41 @@ function App() {
             id: 'sbl',
             name: 'SBL GNT',
             text: sblText,
+            language: 'grc',
             words: sblWords,
           },
           {
             id: 'leb',
             name: 'LEB',
             text: lebText,
+            language: 'eng',
             words: lebWords,
           },
           {
             id: 'nvi',
             name: 'NVI',
             text: nviText,
+            language: 'spa',
             words: nviWords,
           },
           {
             id: 'backTrans',
             name: 'Back Trans',
             text: backTransText,
+            language: 'eng',
             words: backTransWords,
+          },
+        ]}
+        alignments={[
+          {
+            text1: 'sbl',
+            text2: 'nvi',
+            links: [{ text1: ['sbl_0'], text2: ['nvi_0'] }],
+          },
+          {
+            text1: 'nvi',
+            text2: 'leb',
+            links: [{ text1: ['leb_2'], text2: ['nvi_4'] }],
           },
         ]}
       />

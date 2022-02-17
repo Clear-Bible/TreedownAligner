@@ -1,12 +1,14 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-import { Text } from 'structs';
+import { Text, Alignment } from 'structs';
 
 interface PolyglotState {
+  alignments: Alignment[];
   texts: Text[];
 }
 
 const initialState: PolyglotState = {
+  alignments: [],
   texts: [],
 };
 
@@ -17,8 +19,12 @@ const polyglotSlice = createSlice({
     loadTexts: (state, action: PayloadAction<Text[]>) => {
       state.texts = action.payload;
     },
+
+    loadAlignments: (state, action: PayloadAction<Alignment[]>) => {
+      state.alignments = action.payload;
+    },
   },
 });
 
-export const { loadTexts } = polyglotSlice.actions;
+export const { loadAlignments, loadTexts } = polyglotSlice.actions;
 export default polyglotSlice.reducer;

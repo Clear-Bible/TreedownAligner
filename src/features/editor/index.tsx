@@ -2,16 +2,17 @@ import { ReactElement, Fragment, useEffect } from 'react';
 
 import useDebug from 'hooks/useDebug';
 import { useAppDispatch } from 'app/hooks';
-import { loadTexts } from 'state/polyglot.slice';
+import { loadAlignments, loadTexts } from 'state/polyglot.slice';
 
 import Polyglot from 'features/polyglot';
 import ControlPanel from 'features/controlPanel';
 import ContextPanel from 'features/contextPanel';
 
-import { Text } from 'structs';
+import { Alignment, Text } from 'structs';
 
 interface EditorProps {
   texts: Text[];
+  alignments: Alignment[];
 }
 
 export const Editor = (props: EditorProps): ReactElement => {
@@ -21,6 +22,7 @@ export const Editor = (props: EditorProps): ReactElement => {
 
   useEffect(() => {
     dispatch(loadTexts(props.texts));
+    dispatch(loadAlignments(props.alignments));
   }, [dispatch, props.texts]);
 
   return (
