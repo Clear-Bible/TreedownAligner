@@ -3,8 +3,8 @@ import React, { ReactElement } from 'react';
 import useDebug from 'hooks/useDebug';
 
 import { useAppDispatch, useAppSelector } from 'app/hooks';
-import { toggleTextSegment } from 'features/textSegment/textSegment.slice';
-import { hover } from 'features/textSegment/textSegmentHover.slice';
+import { toggleTextSegment } from 'state/textSegment.slice';
+import { hover } from 'state/textSegmentHover.slice';
 import { Word, Text } from 'structs';
 
 interface TextSegmentProps {

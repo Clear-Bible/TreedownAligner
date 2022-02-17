@@ -2,7 +2,7 @@ import { ReactElement, Fragment, useEffect } from 'react';
 
 import useDebug from 'hooks/useDebug';
 import { useAppDispatch } from 'app/hooks';
-import { loadTexts } from 'features/polyglot/polyglot.slice';
+import { loadTexts } from 'state/polyglot.slice';
 
 import Polyglot from 'features/polyglot';
 import ControlPanel from 'features/controlPanel';
