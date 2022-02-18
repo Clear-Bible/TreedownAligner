@@ -20,7 +20,6 @@ const textSegmentHoverSlice = createSlice({
       state.hovered = action.payload;
     },
     relatedAlignments: (state, action: PayloadAction<Alignment[]>) => {
-      console.log('RELATED ALIGNMENTS', action.payload);
       state.relatedAlignments = action.payload;
     },
   },
