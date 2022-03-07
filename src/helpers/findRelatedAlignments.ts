@@ -1,10 +1,13 @@
 import { Alignment, Word, Link } from 'structs';
 
+// Takes an array of `Alignment` and a `Word`.
+// Returns only `Alignment` items that include the word.
+// `Alignment` `Link`s are filtered by relation to the word.
 const findRelatedAlignments = (
-  allAlignments: Alignment[],
+  unfilteredAlignments: Alignment[],
   word: Word
 ): Alignment[] => {
-  const filteredAlignments = allAlignments.map(
+  const filteredAlignments = unfilteredAlignments.map(
     (alignment: Alignment): Alignment | null => {
       const filteredLinks = alignment.links.filter((link: Link) => {
         return link.text1.includes(word.id) || link.text2.includes(word.id);

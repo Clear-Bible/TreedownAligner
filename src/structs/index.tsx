@@ -7,7 +7,6 @@ export interface Word {
 export interface Text {
   id: string;
   name: string;
-  text: string;
   language: string;
   words: Word[];
 }

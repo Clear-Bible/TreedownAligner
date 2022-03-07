@@ -7,7 +7,6 @@ import { Word } from 'structs';
 
 interface TextProps {
   id: string;
-  text: string;
   name: string;
   words: Word[];
 }

@@ -2,7 +2,7 @@ import React from 'react';
 
 import './App.css';
 
-import Editor from 'features/editor';
+import EditorWrapper from 'features/editor';
 
 function App() {
   const sblText =
@@ -31,33 +31,29 @@ function App() {
 
   return (
     <div style={{ position: 'relative' }}>
-      <Editor
+      <EditorWrapper
         texts={[
           {
             id: 'sbl',
             name: 'SBL GNT',
-            text: sblText,
             language: 'grc',
             words: sblWords,
           },
           {
             id: 'leb',
             name: 'LEB',
-            text: lebText,
             language: 'eng',
             words: lebWords,
           },
           {
             id: 'nvi',
             name: 'NVI',
-            text: nviText,
             language: 'spa',
             words: nviWords,
           },
           {
             id: 'backTrans',
             name: 'Back Trans',
-            text: backTransText,
             language: 'eng',
             words: backTransWords,
           },

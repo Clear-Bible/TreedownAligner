@@ -17,8 +17,6 @@ export const LinkBuilderComponent = (props: LinkBuilderProps): ReactElement => {
     )
   );
 
-  console.log('selectedWords', selectedWords);
-
   const texts = useAppSelector((state) => state.polyglot.texts);
 
   if (!Object.keys(selectedWords).length) {

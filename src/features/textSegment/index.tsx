@@ -68,7 +68,6 @@ export const TextSegment = (props: TextSegmentProps): ReactElement => {
 
   const isSelected = Boolean(
     useAppSelector((state) => {
-      console.log('isSelected');
       state.textSegment.present.selectedTextSegments.find((word: Word) => {
         return word.id === props.id;
       });
@@ -78,7 +77,6 @@ export const TextSegment = (props: TextSegmentProps): ReactElement => {
   const isLinked = Boolean(
     useAppSelector((state) => {
       if (word) {
-          console.log('TEST 1');
         const relatedAlignment = state.textSegmentHover.relatedAlignments.find(
           (alignment: Alignment) => {
             return (
