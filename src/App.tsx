@@ -61,8 +61,23 @@ function App() {
         alignments={[
           {
             text1: 'sbl',
-            text2: 'nvi',
-            links: [{ text1: ['sbl_0'], text2: ['nvi_0'] }],
+            text2: 'leb',
+            links: [
+              { text1: ['sbl_0'], text2: ['leb_1'] },
+              { text1: ['sbl_1'], text2: ['leb_2'] },
+              { text1: ['sbl_2'], text2: ['leb_0'] },
+              { text1: ['sbl_3'], text2: ['leb_4'] },
+              { text1: ['sbl_4'], text2: ['leb_6'] },
+              { text1: ['sbl_5'], text2: ['leb_5', 'leb_7'] },
+              { text1: ['sbl_6'], text2: ['leb_8'] },
+              { text1: ['sbl_7', 'sbl_8'], text2: ['leb_9', 'leb_10'] },
+              { text1: ['sbl_9'], text2: ['leb_12', 'leb_13'] },
+              { text1: ['sbl_10'], text2: ['leb_11'] },
+              { text1: ['sbl_11'], text2: ['leb_11'] },
+              { text1: ['sbl_12'], text2: ['leb_15'] },
+              { text1: ['sbl_13'], text2: ['leb_17', 'leb_18'] },
+              { text1: ['sbl_14'], text2: ['leb_16'] },
+            ],
           },
           {
             text1: 'nvi',
