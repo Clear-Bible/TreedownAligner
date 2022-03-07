@@ -17,7 +17,7 @@ interface TextSegmentProps {
 const defaultStyle = { cursor: 'pointer' };
 const focusedStyle = { textDecoration: 'underline' };
 const selectedStyle = { backgroundColor: 'lightgrey' };
-const linkedStyle = { border: '1px solid black' };
+const linkedStyle = { fontWeight: 'bold' };
 
 const computeStyle = (
   isHovered: boolean,
@@ -68,9 +68,14 @@ export const TextSegment = (props: TextSegmentProps): ReactElement => {
 
   const isSelected = Boolean(
     useAppSelector((state) => {
-      state.textSegment.present.selectedTextSegments.find((word: Word) => {
-        return word.id === props.id;
-      });
+      return state.textSegment.present.selectedTextSegments.find(
+        (word: Word) => {
+          if (props.id === 'sbl_9') {
+            console.log(word.id, props.id, word.id === props.id);
+          }
+          return word.id === props.id;
+        }
+      );
     })
   );
 
