@@ -8,16 +8,18 @@ export interface Text {
   id: string;
   name: string;
   language: string;
+
   words: Word[];
+  fullText?: string;
 }
 
 export interface Link {
-  text1: string[];
-  text2: string[];
+  sources: string[];
+  targets: string[];
 }
 
 export interface Alignment {
-  text1: string;
-  text2: string;
+  source: string;
+  target: string;
   links: Link[];
 }

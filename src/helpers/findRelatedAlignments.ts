@@ -10,7 +10,7 @@ const findRelatedAlignments = (
   const filteredAlignments = unfilteredAlignments.map(
     (alignment: Alignment): Alignment | null => {
       const filteredLinks = alignment.links.filter((link: Link) => {
-        return link.text1.includes(word.id) || link.text2.includes(word.id);
+        return link.sources.includes(word.id) || link.targets.includes(word.id);
       });
       if (filteredLinks.length) {
         return { ...alignment, links: filteredLinks };

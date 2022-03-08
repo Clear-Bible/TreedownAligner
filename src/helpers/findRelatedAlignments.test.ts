@@ -3,17 +3,17 @@ import findRelatedAlignments from 'helpers/findRelatedAlignments';
 
 const testAlignments: Alignment[] = [
   {
-    text1: 'regular',
-    text2: 'goofy',
+    source: 'regular',
+    target: 'goofy',
     links: [
-      { text1: ['regular_8'], text2: ['goofy_7'] },
-      { text1: ['regular_1'], text2: ['goofy_2'] },
+      { sources: ['regular_8'], targets: ['goofy_7'] },
+      { sources: ['regular_1'], targets: ['goofy_2'] },
     ],
   },
   {
-    text1: 'specificThing',
-    text2: 'genericThing',
-    links: [{ text1: ['specific_1', 'specific_2'], text2: ['generic_4'] }],
+    source: 'specificThing',
+    target: 'genericThing',
+    links: [{ sources: ['specific_1', 'specific_2'], targets: ['generic_4'] }],
   },
 ];
 

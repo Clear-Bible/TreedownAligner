@@ -85,14 +85,16 @@ export const TextSegment = (props: TextSegmentProps): ReactElement => {
         const relatedAlignment = state.textSegmentHover.relatedAlignments.find(
           (alignment: Alignment) => {
             return (
-              alignment.text1 === props.textId ||
-              alignment.text2 === props.textId
+              alignment.source === props.textId ||
+              alignment.target === props.textId
             );
           }
         );
 
         const relatedLink = relatedAlignment?.links.filter((link: Link) => {
-          return link.text1.includes(word.id) || link.text2.includes(word.id);
+          return (
+            link.sources.includes(word.id) || link.targets.includes(word.id)
+          );
         });
 
         return Boolean(relatedLink?.length);
