@@ -41,6 +41,7 @@ export const Text = (props: TextProps): ReactElement => {
         className="drag-handle"
         style={{
           marginRight: '-1px',
+          marginBottom: '-1px',
           position: 'absolute',
           bottom: '0',
           right: '0',
