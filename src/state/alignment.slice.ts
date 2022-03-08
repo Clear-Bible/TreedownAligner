@@ -1,21 +1,24 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-import { Word } from 'structs';
+import { Word, Alignment } from 'structs';
 
-interface TextSegmentState {
-  hoveredId: string | null;
+interface AlignmentState {
+  alignments: Alignment[];
   selectedTextSegments: Word[];
 }
 
-const initialState: TextSegmentState = {
-  hoveredId: null,
+const initialState: AlignmentState = {
+  alignments: [],
   selectedTextSegments: [],
 };
 
-const textSegmentSlice = createSlice({
-  name: 'textSegment',
+const alignmentSlice = createSlice({
+  name: 'alignment',
   initialState,
   reducers: {
+    loadAlignments: (state, action: PayloadAction<Alignment[]>) => {
+      state.alignments = action.payload;
+    },
     toggleTextSegment: (state, action: PayloadAction<Word>) => {
       const alreadySelected = Boolean(
         state.selectedTextSegments.find((word: Word) => {
@@ -36,6 +39,7 @@ const textSegmentSlice = createSlice({
   },
 });
 
-export const { toggleTextSegment, resetTextSegments } =
-  textSegmentSlice.actions;
-export default textSegmentSlice.reducer;
+export const { loadAlignments, toggleTextSegment, resetTextSegments } =
+  alignmentSlice.actions;
+
+export default alignmentSlice.reducer;

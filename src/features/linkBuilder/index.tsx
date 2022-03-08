@@ -14,7 +14,7 @@ export const LinkBuilderComponent = (props: LinkBuilderProps): ReactElement => {
 
   const selectedWords: Record<string, Word[]> = useAppSelector((state) =>
     groupBy(
-      state.textSegment.present.selectedTextSegments,
+      state.alignment.present.selectedTextSegments,
       (word: Word) => word.id.split('_')[0]
     )
   );

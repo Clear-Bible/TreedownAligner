@@ -4,14 +4,14 @@ import { ActionCreators } from 'redux-undo';
 
 import { useAppDispatch, useAppSelector } from 'app/hooks';
 import useDebug from 'hooks/useDebug';
-import { resetTextSegments } from 'state/textSegment.slice';
+import { resetTextSegments } from 'state/alignment.slice';
 
 export const ControlPanel = (): ReactElement => {
   useDebug('ControlPanel');
   const dispatch = useAppDispatch();
 
   const anySegmentsSelected = useAppSelector((state) =>
-    Boolean(state.textSegment.present.selectedTextSegments.length)
+    Boolean(state.alignment.present.selectedTextSegments.length)
   );
   const layout = [
     {
@@ -46,7 +46,13 @@ export const ControlPanel = (): ReactElement => {
             gap: '10px',
           }}
         >
-          <button onClick={() => {}}>Link</button>
+          <button
+            onClick={() => {
+              //dispatch(createLink());
+            }}
+          >
+            Link
+          </button>
           <button onClick={() => {}}>Unlink</button>
           <button
             disabled={!anySegmentsSelected}

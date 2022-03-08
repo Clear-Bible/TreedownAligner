@@ -3,7 +3,7 @@ import React, { ReactElement } from 'react';
 import useDebug from 'hooks/useDebug';
 
 import { useAppDispatch, useAppSelector } from 'app/hooks';
-import { toggleTextSegment } from 'state/textSegment.slice';
+import { toggleTextSegment } from 'state/alignment.slice';
 import { hover, relatedAlignments } from 'state/textSegmentHover.slice';
 import { Alignment, Word, Text, Link } from 'structs';
 import findRelatedAlignments from 'helpers/findRelatedAlignments';
@@ -68,7 +68,7 @@ export const TextSegment = (props: TextSegmentProps): ReactElement => {
 
   const isSelected = Boolean(
     useAppSelector((state) => {
-      return state.textSegment.present.selectedTextSegments.find(
+      return state.alignment.present.selectedTextSegments.find(
         (word: Word) => {
           if (props.id === 'sbl_9') {
             console.log(word.id, props.id, word.id === props.id);
