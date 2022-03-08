@@ -17,7 +17,7 @@ interface TextSegmentProps {
 const defaultStyle = { cursor: 'pointer' };
 const focusedStyle = { textDecoration: 'underline' };
 const selectedStyle = { backgroundColor: 'lightgrey' };
-const linkedStyle = { fontWeight: 'bold' };
+const linkedStyle = { webkitTextStroke: '1px black' };
 
 const computeStyle = (
   isHovered: boolean,
@@ -109,6 +109,7 @@ export const TextSegment = (props: TextSegmentProps): ReactElement => {
     <React.Fragment>
       <span> </span>
       <span
+        className="text-segment"
         style={computedStyle}
         onMouseEnter={() => {
           dispatch(hover(word));
