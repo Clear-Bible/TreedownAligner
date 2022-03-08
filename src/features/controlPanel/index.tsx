@@ -4,7 +4,7 @@ import { ActionCreators } from 'redux-undo';
 
 import { useAppDispatch, useAppSelector } from 'app/hooks';
 import useDebug from 'hooks/useDebug';
-import { resetTextSegments } from 'features/textSegment/textSegment.slice';
+import { resetTextSegments } from 'state/textSegment.slice';
 
 export const ControlPanel = (): ReactElement => {
   useDebug('ControlPanel');

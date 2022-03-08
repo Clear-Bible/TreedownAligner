@@ -5,7 +5,7 @@ interface AppState {
 }
 
 const initialState: AppState = {
-  debug: true,
+  debug: false,
 };
 
 const appSlice = createSlice({

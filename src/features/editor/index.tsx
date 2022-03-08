@@ -1,35 +1,24 @@
-import { ReactElement, Fragment, useEffect } from 'react';
+import { ReactElement, Fragment } from 'react';
 
-import useDebug from 'hooks/useDebug';
-import { useAppDispatch } from 'app/hooks';
-import { loadTexts } from 'features/polyglot/polyglot.slice';
+import { Provider } from 'react-redux';
+import { store } from 'app/store';
 
-import Polyglot from 'features/polyglot';
-import ControlPanel from 'features/controlPanel';
-import ContextPanel from 'features/contextPanel';
+import Editor from './editor';
+import { Alignment, Text } from 'structs';
 
-import { Text } from 'structs';
-
-interface EditorProps {
+interface EditorWrapperProps {
   texts: Text[];
+  alignments: Alignment[];
 }
 
-export const Editor = (props: EditorProps): ReactElement => {
-  useDebug('Editor');
-
-  const dispatch = useAppDispatch();
-
-  useEffect(() => {
-    dispatch(loadTexts(props.texts));
-  }, [dispatch, props.texts]);
-
+export const EditorWrapper = (props: EditorWrapperProps): ReactElement => {
   return (
     <Fragment>
-      <Polyglot />
-      <ControlPanel />
-      <ContextPanel />
+      <Provider store={store}>
+        <Editor texts={props.texts} alignments={props.alignments} />
+      </Provider>
     </Fragment>
   );
 };
 
-export default Editor;
+export default EditorWrapper;

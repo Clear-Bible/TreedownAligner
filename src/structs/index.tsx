@@ -7,6 +7,19 @@ export interface Word {
 export interface Text {
   id: string;
   name: string;
-  text: string;
+  language: string;
+
   words: Word[];
+  fullText?: string;
+}
+
+export interface Link {
+  sources: string[];
+  targets: string[];
+}
+
+export interface Alignment {
+  source: string;
+  target: string;
+  links: Link[];
 }

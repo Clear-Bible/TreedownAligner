@@ -1,6 +1,8 @@
 import React, { ReactElement } from 'react';
 import useDebug from 'hooks/useDebug';
 
+import DragHandle from 'features/dragHandle';
+
 interface TextProps {
   anteText: string;
   text: string;
@@ -34,19 +36,7 @@ export const Context = (props: TextProps): ReactElement => {
         <span> </span>
         <span>{props.postText}</span>
       </p>
-      <div
-        className="drag-handle"
-        style={{
-          marginRight: '-1px',
-          position: 'absolute',
-          bottom: '0',
-          right: '0',
-          cursor: 'grab',
-          height: '0.7rem',
-          width: '0.7rem',
-          backgroundColor: 'black',
-        }}
-      ></div>
+      <DragHandle />
     </div>
   );
 };

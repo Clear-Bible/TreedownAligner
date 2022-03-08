@@ -1,10 +1,10 @@
 import { configureStore } from '@reduxjs/toolkit';
 import undoable from 'redux-undo';
 
-import AppReducer from 'app/app.slice';
-import TextSegmentReducer from 'features/textSegment/textSegment.slice';
-import TextSegmentHoverReducer from 'features/textSegment/textSegmentHover.slice';
-import PolyglotReducer from 'features/polyglot/polyglot.slice';
+import AppReducer from 'state/app.slice';
+import TextSegmentReducer from 'state/textSegment.slice';
+import TextSegmentHoverReducer from 'state/textSegmentHover.slice';
+import PolyglotReducer from 'state/polyglot.slice';
 
 export const store = configureStore({
   reducer: {
