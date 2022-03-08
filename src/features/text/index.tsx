@@ -38,7 +38,7 @@ export const Text = (props: TextProps): ReactElement => {
           );
         })}
       </p>
-        <DragHandle />
+      <DragHandle />
     </Fragment>
   );
 };

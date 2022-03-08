@@ -17,8 +17,18 @@ const testAlignments: Alignment[] = [
   },
 ];
 
-const testWord = { id: 'regular_8', text: 'asdf', position: 8 };
-const testWord1 = { id: 'goofy_7', text: 'fdsa', position: 7 };
+const testWord = {
+  id: 'regular_8',
+  corpusId: 'regular',
+  text: 'asdf',
+  position: 8,
+};
+const testWord1 = {
+  id: 'goofy_7',
+  corpusId: 'regular',
+  text: 'fdsa',
+  position: 7,
+};
 
 describe('findRelatedAlignments', () => {
   it('filters Alignment by Word', () => {

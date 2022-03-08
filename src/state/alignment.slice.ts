@@ -7,7 +7,7 @@ interface AlignmentState {
   selectedTextSegments: Word[];
 }
 
-const initialState: AlignmentState = {
+export const initialState: AlignmentState = {
   alignments: [],
   selectedTextSegments: [],
 };
@@ -36,10 +36,24 @@ const alignmentSlice = createSlice({
     resetTextSegments: (state) => {
       state.selectedTextSegments = [];
     },
+
+    createLink: (state) => {
+      //const sources = state.selectedTextSegments.filter((word) => word.textId === );
+      //const targets = state.selectedTextSegments.filter();
+      //const newLink: Link = { sources: [], targets: [] };
+      //for (const alignment of alignments) {
+      //if (alignment.target ===
+      //}
+      state.selectedTextSegments = [];
+    },
   },
 });
 
-export const { loadAlignments, toggleTextSegment, resetTextSegments } =
-  alignmentSlice.actions;
+export const {
+  loadAlignments,
+  toggleTextSegment,
+  resetTextSegments,
+  createLink,
+} = alignmentSlice.actions;
 
 export default alignmentSlice.reducer;

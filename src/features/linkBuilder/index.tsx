@@ -3,7 +3,7 @@ import { groupBy } from 'lodash';
 import useDebug from 'hooks/useDebug';
 import { useAppSelector } from 'app/hooks';
 
-import { Text, Word } from 'structs';
+import { Corpus, Word } from 'structs';
 
 import DragHandle from 'features/dragHandle';
 
@@ -19,7 +19,7 @@ export const LinkBuilderComponent = (props: LinkBuilderProps): ReactElement => {
     )
   );
 
-  const texts = useAppSelector((state) => state.polyglot.texts);
+  const corpora = useAppSelector((state) => state.polyglot.corpora);
 
   if (!Object.keys(selectedWords).length) {
     return (
@@ -45,8 +45,8 @@ export const LinkBuilderComponent = (props: LinkBuilderProps): ReactElement => {
   return (
     <Fragment>
       {Object.keys(selectedWords).map((textId: string): ReactElement => {
-        const text = texts.find((text: Text) => {
-          return text.id === textId;
+        const corpus = corpora.find((corpus: Corpus) => {
+          return corpus.id === textId;
         });
 
         const selectedWordsForText = selectedWords[textId];
@@ -58,7 +58,7 @@ export const LinkBuilderComponent = (props: LinkBuilderProps): ReactElement => {
 
         return (
           <div
-            key={`linkBuilder_${text?.name}`}
+            key={`linkBuilder_${corpus?.name}`}
             style={{
               display: 'flex',
               flexDirection: 'column',
@@ -68,10 +68,10 @@ export const LinkBuilderComponent = (props: LinkBuilderProps): ReactElement => {
               paddingBottom: '0.5rem',
             }}
           >
-            <div style={{ textAlign: 'right' }}>{text?.name}</div>
+            <div style={{ textAlign: 'right' }}>{corpus?.name}</div>
             <div>
               {sortedSelectedWordsForText.map((selectedWord): ReactElement => {
-                const word = text?.words.find((word: Word): boolean => {
+                const word = corpus?.words.find((word: Word): boolean => {
                   return word.id === selectedWord.id;
                 });
                 return (

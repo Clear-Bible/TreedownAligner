@@ -15,24 +15,29 @@ function App() {
     'And not only in this, otherwise too in our sufferings, because we know that the suffering produces perseverance;';
 
   const sblWords = sblText.split(' ').map((word: string, index: number) => {
-    return { id: `sbl_${index}`, position: index, text: word };
+    return { id: `sbl_${index}`, corpusId: 'sbl', position: index, text: word };
   });
   const lebWords = lebText.split(' ').map((word: string, index: number) => {
-    return { id: `leb_${index}`, position: index, text: word };
+    return { id: `leb_${index}`, corpusId: 'leb', position: index, text: word };
   });
   const nviWords = nviText.split(' ').map((word: string, index: number) => {
-    return { id: `nvi_${index}`, position: index, text: word };
+    return { id: `nvi_${index}`, corpusId: 'nvi', position: index, text: word };
   });
   const backTransWords = backTransText
     .split(' ')
     .map((word: string, index: number) => {
-      return { id: `backTrans_${index}`, position: index, text: word };
+      return {
+        id: `backTrans_${index}`,
+        corpusId: 'backTrans',
+        position: index,
+        text: word,
+      };
     });
 
   return (
     <div style={{ position: 'relative' }}>
       <EditorWrapper
-        texts={[
+        corpora={[
           {
             id: 'sbl',
             name: 'SBL GNT',
