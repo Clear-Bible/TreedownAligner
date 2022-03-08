@@ -35,6 +35,20 @@ export const LinkBuilderComponent = (props: LinkBuilderProps): ReactElement => {
             Select a word to begin building a link.
           </div>
         </div>
+        <div
+          className="drag-handle"
+          style={{
+            marginRight: '-1px',
+            marginBottom: '-1px',
+            position: 'absolute',
+            bottom: '0',
+            right: '0',
+            cursor: 'grab',
+            height: '0.7rem',
+            width: '0.7rem',
+            backgroundColor: 'black',
+          }}
+        ></div>
       </Fragment>
     );
   }
@@ -83,6 +97,7 @@ export const LinkBuilderComponent = (props: LinkBuilderProps): ReactElement => {
         className="drag-handle"
         style={{
           marginRight: '-1px',
+          marginBottom: '-1px',
           position: 'absolute',
           bottom: '0',
           right: '0',
