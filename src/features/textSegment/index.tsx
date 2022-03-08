@@ -59,7 +59,7 @@ export const TextSegment = (props: TextSegmentProps): ReactElement => {
   });
 
   const alignments = useAppSelector((state) => {
-    return state.polyglot.alignments;
+    return state.alignment.present.alignments;
   });
 
   const isHovered = useAppSelector(

@@ -4,7 +4,7 @@ import { ActionCreators } from 'redux-undo';
 
 import { useAppDispatch, useAppSelector } from 'app/hooks';
 import useDebug from 'hooks/useDebug';
-import { resetTextSegments } from 'state/alignment.slice';
+import { resetTextSegments, createLink } from 'state/alignment.slice';
 
 export const ControlPanel = (): ReactElement => {
   useDebug('ControlPanel');
@@ -48,7 +48,7 @@ export const ControlPanel = (): ReactElement => {
         >
           <button
             onClick={() => {
-              //dispatch(createLink());
+              dispatch(createLink());
             }}
           >
             Link

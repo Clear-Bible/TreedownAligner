@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-import { Word, Alignment } from 'structs';
+import { Word, Alignment, Link } from 'structs';
 
 interface AlignmentState {
   alignments: Alignment[];
@@ -38,12 +38,23 @@ const alignmentSlice = createSlice({
     },
 
     createLink: (state) => {
-      //const sources = state.selectedTextSegments.filter((word) => word.textId === );
-      //const targets = state.selectedTextSegments.filter();
-      //const newLink: Link = { sources: [], targets: [] };
-      //for (const alignment of alignments) {
-      //if (alignment.target ===
-      //}
+      const sources = state.selectedTextSegments
+        .filter((word) => word.corpusId === 'sbl')
+        .map((word) => word.id);
+
+      const targets = state.selectedTextSegments
+        .filter((word) => word.corpusId !== 'sbl')
+        .map((word) => word.id);
+
+      const newLink: Link = { sources, targets };
+
+      state.alignments
+        .find(
+          (alignment) =>
+            alignment.source === 'sbl' && alignment.target === 'leb'
+        )
+        ?.links.push(newLink);
+
       state.selectedTextSegments = [];
     },
   },
