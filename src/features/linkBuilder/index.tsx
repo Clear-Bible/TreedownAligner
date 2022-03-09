@@ -70,6 +70,9 @@ export const LinkBuilderComponent = (props: LinkBuilderProps): ReactElement => {
           >
             <div style={{ textAlign: 'right' }}>{corpus?.name}</div>
             <div>
+              <hr />
+            </div>
+            <div>
               {sortedSelectedWordsForText.map((selectedWord): ReactElement => {
                 const word = corpus?.words.find((word: Word): boolean => {
                   return word.id === selectedWord.id;
@@ -78,6 +81,9 @@ export const LinkBuilderComponent = (props: LinkBuilderProps): ReactElement => {
                   <span key={`selected_${selectedWord.id}`}>{word?.text} </span>
                 );
               })}
+            </div>
+            <div>
+              <hr />
             </div>
           </div>
         );
