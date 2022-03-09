@@ -28,14 +28,7 @@ export const Text = (props: TextProps): ReactElement => {
         }}
       >
         {props.words.map((word: Word): ReactElement => {
-          return (
-            <TextSegment
-              key={word.id}
-              word={word}
-              segment={word.text}
-              corpusId={props.id}
-            />
-          );
+          return <TextSegment key={word.id} word={word} />;
         })}
       </p>
       <DragHandle />

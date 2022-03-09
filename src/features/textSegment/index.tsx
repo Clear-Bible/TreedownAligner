@@ -15,8 +15,6 @@ import findWordById from 'helpers/findWord';
 
 interface TextSegmentProps {
   word: Word;
-  corpusId: string;
-  segment: string;
 }
 
 const defaultStyle = { cursor: 'pointer' };
@@ -47,7 +45,7 @@ const computeStyle = (
 };
 
 export const TextSegment = (props: TextSegmentProps): ReactElement => {
-  const { word, corpusId } = props;
+  const { word } = props;
 
   useDebug('TextSegmentComponent');
 
@@ -77,7 +75,8 @@ export const TextSegment = (props: TextSegmentProps): ReactElement => {
         const relatedAlignment = state.textSegmentHover.relatedAlignments.find(
           (alignment: Alignment) => {
             return (
-              alignment.source === corpusId || alignment.target === corpusId
+              alignment.source === word.corpusId ||
+              alignment.target === word.corpusId
             );
           }
         );
@@ -165,7 +164,7 @@ export const TextSegment = (props: TextSegmentProps): ReactElement => {
           }
         }}
       >
-        {props.segment}
+        {props.word.text}
       </span>
       <span> </span>
     </React.Fragment>
