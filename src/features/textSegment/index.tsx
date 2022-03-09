@@ -6,6 +6,8 @@ import { useAppDispatch, useAppSelector } from 'app/hooks';
 import {
   toggleTextSegment,
   toggleAllLinkSegments,
+  setAlignmentMode,
+  AlignmentMode,
 } from 'state/alignment.slice';
 import { hover, relatedAlignments } from 'state/textSegmentHover.slice';
 import { Alignment, Word, Corpus, Link } from 'structs';
@@ -44,6 +46,10 @@ const computeStyle = (
   return computedStyle;
 };
 
+const isCleanSlateMode = (mode: AlignmentMode) => {
+  return mode === AlignmentMode.CleanSlate;
+};
+
 export const TextSegment = (props: TextSegmentProps): ReactElement => {
   const { word } = props;
 
@@ -53,6 +59,10 @@ export const TextSegment = (props: TextSegmentProps): ReactElement => {
 
   const alignments = useAppSelector((state) => {
     return state.alignment.present.alignments;
+  });
+
+  const mode = useAppSelector((state) => {
+    return state.alignment.present.mode;
   });
 
   const isHovered = useAppSelector(
@@ -144,7 +154,7 @@ export const TextSegment = (props: TextSegmentProps): ReactElement => {
           dispatch(relatedAlignments([]));
         }}
         onClick={() => {
-          if (link && isLinked) {
+          if (link && isLinked && isCleanSlateMode(mode)) {
             console.log('LINK!', link);
             const sourceWords = link.sources
               .map((source) => findWordById(corpora, source))
@@ -159,6 +169,7 @@ export const TextSegment = (props: TextSegmentProps): ReactElement => {
             const words = sourceWords.concat(targetWords);
             console.log('words', words);
             dispatch(toggleAllLinkSegments(words));
+            dispatch(setAlignmentMode(AlignmentMode.Edit));
           } else {
             dispatch(toggleTextSegment(word));
           }

@@ -4,20 +4,30 @@ import { Word, Alignment, Link, CorpusRole } from 'structs';
 
 import findWordById from 'helpers/findWord';
 
-interface AlignmentState {
+export enum AlignmentMode {
+  CleanSlate = 'cleanSlate',
+  Edit = 'edit',
+}
+
+export interface AlignmentState {
   alignments: Alignment[];
   selectedTextSegments: Word[];
+  mode: AlignmentMode;
 }
 
 export const initialState: AlignmentState = {
   alignments: [],
   selectedTextSegments: [],
+  mode: AlignmentMode.CleanSlate,
 };
 
 const alignmentSlice = createSlice({
   name: 'alignment',
   initialState,
   reducers: {
+    setAlignmentMode: (state, action: PayloadAction<AlignmentMode>) => {
+      state.mode = action.payload;
+    },
     loadAlignments: (state, action: PayloadAction<Alignment[]>) => {
       state.alignments = action.payload;
     },
@@ -37,12 +47,24 @@ const alignmentSlice = createSlice({
     },
 
     toggleAllLinkSegments: (state, action: PayloadAction<Word[]>) => {
-      for (const word of action.payload) {
-        state.selectedTextSegments.push(word);
+      for (const payloadWord of action.payload) {
+        const alreadySelected = Boolean(
+          state.selectedTextSegments.find((word: Word) => {
+            return word.id === payloadWord.id;
+          })
+        );
+        if (alreadySelected) {
+          state.selectedTextSegments = state.selectedTextSegments.filter(
+            (word) => word.id !== payloadWord.id
+          );
+        } else {
+          state.selectedTextSegments.push(payloadWord);
+        }
       }
     },
     resetTextSegments: (state) => {
       state.selectedTextSegments = [];
+      state.mode = AlignmentMode.CleanSlate;
     },
 
     createLink: (state) => {
@@ -68,15 +90,13 @@ const alignmentSlice = createSlice({
         ?.links.push(newLink);
 
       state.selectedTextSegments = [];
+      state.mode = AlignmentMode.CleanSlate;
     },
-
-    //selectAllSegmentsForLink: (state, action: PayloadAction<Link>) => {
-
-    //},
   },
 });
 
 export const {
+  setAlignmentMode,
   loadAlignments,
   toggleTextSegment,
   toggleAllLinkSegments,
