@@ -17,12 +17,12 @@ interface TextSegmentProps {
 const defaultStyle = { cursor: 'pointer' };
 const focusedStyle = { textDecoration: 'underline' };
 const selectedStyle = { backgroundColor: 'lightgrey' };
-const linkedStyle = { webkitTextStroke: '1px black' };
+const relatedStyle = { webkitTextStroke: '1px black' };
 
 const computeStyle = (
   isHovered: boolean,
   isSelected: boolean,
-  isLinked: boolean
+  isRelated: boolean
 ): Record<string, string> => {
   let computedStyle = { ...defaultStyle };
 
@@ -34,8 +34,8 @@ const computeStyle = (
     computedStyle = { ...computedStyle, ...selectedStyle };
   }
 
-  if (isLinked) {
-    computedStyle = { ...computedStyle, ...linkedStyle };
+  if (isRelated) {
+    computedStyle = { ...computedStyle, ...relatedStyle };
   }
 
   return computedStyle;
@@ -77,7 +77,7 @@ export const TextSegment = (props: TextSegmentProps): ReactElement => {
     })
   );
 
-  const isLinked = Boolean(
+  const isRelated = Boolean(
     useAppSelector((state) => {
       if (word) {
         const relatedAlignment = state.textSegmentHover.relatedAlignments.find(
@@ -100,7 +100,7 @@ export const TextSegment = (props: TextSegmentProps): ReactElement => {
     })
   );
 
-  const computedStyle = computeStyle(isHovered, isSelected, isLinked);
+  const computedStyle = computeStyle(isHovered, isSelected, isRelated);
 
   if (!word) {
     return <span>{'ERROR'}</span>;
