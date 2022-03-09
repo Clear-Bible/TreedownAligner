@@ -65,17 +65,18 @@ export const ControlPanel = (): ReactElement => {
           </button>
           <button
             onClick={() => {
-              dispatch(ActionCreators.redo());
-            }}
-          >
-            Redo
-          </button>
-          <button
-            onClick={() => {
               dispatch(ActionCreators.undo());
             }}
           >
             Undo
+          </button>
+
+          <button
+            onClick={() => {
+              dispatch(ActionCreators.redo());
+            }}
+          >
+            Redo
           </button>
         </div>
       </GridLayout>
