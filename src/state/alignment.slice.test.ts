@@ -1,4 +1,4 @@
-import { Word, Alignment } from 'structs';
+import { Word, Alignment, CorpusRole } from 'structs';
 
 import alignmentSliceReducer, {
   createLink,
@@ -11,12 +11,14 @@ const spanishAlignment: Alignment = { source: 'sbl', target: 'nvi', links: [] };
 const sourceWord1: Word = {
   id: 'sbl_0',
   corpusId: 'sbl',
+  role: CorpusRole.Source,
   text: '',
   position: 0,
 };
 const sourceWord2: Word = {
   id: 'sbl_1',
   corpusId: 'sbl',
+  role: CorpusRole.Source,
   text: '',
   position: 1,
 };
@@ -24,12 +26,14 @@ const sourceWord2: Word = {
 const targetWord1: Word = {
   id: 'leb_1',
   corpusId: 'leb',
+  role: CorpusRole.Target,
   text: '',
   position: 1,
 };
 const targetWord2: Word = {
   id: 'leb_2',
   corpusId: 'leb',
+  role: CorpusRole.Target,
   text: '',
   position: 2,
 };
@@ -37,6 +41,7 @@ const targetWord2: Word = {
 const otherTargetWord1: Word = {
   id: 'nvi_1',
   corpusId: 'nvi',
+  role: CorpusRole.Target,
   text: '',
   position: 1,
 };
@@ -70,7 +75,6 @@ describe('alignmentSlice reducer', () => {
     const resultState = alignmentSliceReducer(previousState, createLink());
 
     expect(resultState.alignments[0].links.length).toBe(1);
-    console.log(resultState.alignments[0]);
     expect(resultState.alignments[0].source).toBe('sbl');
     expect(resultState.alignments[0].target).toBe('nvi');
     expect(resultState.alignments[0].links[0]).toEqual({
