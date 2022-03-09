@@ -2,6 +2,8 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 import { Word, Alignment, Link, CorpusRole } from 'structs';
 
+import findWordById from 'helpers/findWord';
+
 interface AlignmentState {
   alignments: Alignment[];
   selectedTextSegments: Word[];
@@ -33,6 +35,12 @@ const alignmentSlice = createSlice({
         state.selectedTextSegments.push(action.payload);
       }
     },
+
+    toggleAllLinkSegments: (state, action: PayloadAction<Word[]>) => {
+      for (const word of action.payload) {
+        state.selectedTextSegments.push(word);
+      }
+    },
     resetTextSegments: (state) => {
       state.selectedTextSegments = [];
     },
@@ -61,12 +69,17 @@ const alignmentSlice = createSlice({
 
       state.selectedTextSegments = [];
     },
+
+    //selectAllSegmentsForLink: (state, action: PayloadAction<Link>) => {
+
+    //},
   },
 });
 
 export const {
   loadAlignments,
   toggleTextSegment,
+  toggleAllLinkSegments,
   resetTextSegments,
   createLink,
 } = alignmentSlice.actions;

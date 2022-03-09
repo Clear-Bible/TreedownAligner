@@ -31,9 +31,9 @@ export const Text = (props: TextProps): ReactElement => {
           return (
             <TextSegment
               key={word.id}
-              id={word.id}
+              word={word}
               segment={word.text}
-              textId={props.id}
+              corpusId={props.id}
             />
           );
         })}

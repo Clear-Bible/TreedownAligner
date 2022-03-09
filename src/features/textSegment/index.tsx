@@ -3,14 +3,19 @@ import React, { ReactElement } from 'react';
 import useDebug from 'hooks/useDebug';
 
 import { useAppDispatch, useAppSelector } from 'app/hooks';
-import { toggleTextSegment } from 'state/alignment.slice';
+import {
+  toggleTextSegment,
+  toggleAllLinkSegments,
+} from 'state/alignment.slice';
 import { hover, relatedAlignments } from 'state/textSegmentHover.slice';
 import { Alignment, Word, Corpus, Link } from 'structs';
+
 import findRelatedAlignments from 'helpers/findRelatedAlignments';
+import findWordById from 'helpers/findWord';
 
 interface TextSegmentProps {
-  id: string;
-  textId: string;
+  word: Word;
+  corpusId: string;
   segment: string;
 }
 
@@ -42,40 +47,29 @@ const computeStyle = (
 };
 
 export const TextSegment = (props: TextSegmentProps): ReactElement => {
-  const { id } = props;
+  const { word, corpusId } = props;
 
   useDebug('TextSegmentComponent');
 
   const dispatch = useAppDispatch();
-
-  const word = useAppSelector((state) => {
-    return state.polyglot.corpora
-      .find((corpus: Corpus) => {
-        return corpus.id === props.textId;
-      })
-      ?.words.find((word: Word) => {
-        return word.id === props.id;
-      });
-  });
 
   const alignments = useAppSelector((state) => {
     return state.alignment.present.alignments;
   });
 
   const isHovered = useAppSelector(
-    (state) => state.textSegmentHover.hovered?.id === id
+    (state) => state.textSegmentHover.hovered?.id === word.id
   );
 
   const isSelected = Boolean(
     useAppSelector((state) => {
       return state.alignment.present.selectedTextSegments.find((word: Word) => {
-        if (props.id === 'sbl_9') {
-          console.log(word.id, props.id, word.id === props.id);
-        }
-        return word.id === props.id;
+        return word.id === props.word.id;
       });
     })
   );
+
+  console.log('isSelected?', isSelected);
 
   const isRelated = Boolean(
     useAppSelector((state) => {
@@ -83,8 +77,7 @@ export const TextSegment = (props: TextSegmentProps): ReactElement => {
         const relatedAlignment = state.textSegmentHover.relatedAlignments.find(
           (alignment: Alignment) => {
             return (
-              alignment.source === props.textId ||
-              alignment.target === props.textId
+              alignment.source === corpusId || alignment.target === corpusId
             );
           }
         );
@@ -99,6 +92,38 @@ export const TextSegment = (props: TextSegmentProps): ReactElement => {
       }
     })
   );
+
+  const link = useAppSelector((state) => {
+    let foundLink = null;
+
+    if (word) {
+      const possibleAlignments = state.alignment.present.alignments.filter(
+        (alignment: Alignment) => {
+          return (
+            alignment.source === word.corpusId ||
+            alignment.target === word.corpusId
+          );
+        }
+      );
+      for (const alignment of possibleAlignments) {
+        for (const link of alignment.links) {
+          if (
+            link.sources.includes(word.id) ||
+            link.targets.includes(word.id)
+          ) {
+            foundLink = link;
+          }
+        }
+      }
+    }
+    return foundLink;
+  });
+
+  const isLinked = Boolean(link);
+
+  const corpora = useAppSelector((state) => {
+    return state.polyglot.corpora;
+  });
 
   const computedStyle = computeStyle(isHovered, isSelected, isRelated);
 
@@ -120,7 +145,22 @@ export const TextSegment = (props: TextSegmentProps): ReactElement => {
           dispatch(relatedAlignments([]));
         }}
         onClick={() => {
-          if (word) {
+          if (link && isLinked) {
+            console.log('LINK!', link);
+            const sourceWords = link.sources
+              .map((source) => findWordById(corpora, source))
+              .filter((x): x is Word => x !== null);
+
+            console.log('sourceWords', sourceWords);
+            const targetWords = link.targets
+              .map((target) => findWordById(corpora, target))
+              .filter((x): x is Word => x !== null);
+
+            console.log('targetWords', targetWords, link.targets);
+            const words = sourceWords.concat(targetWords);
+            console.log('words', words);
+            dispatch(toggleAllLinkSegments(words));
+          } else {
             dispatch(toggleTextSegment(word));
           }
         }}
