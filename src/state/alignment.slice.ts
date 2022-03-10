@@ -5,30 +5,27 @@ import { Word, Alignment, Link, InProgressLink, CorpusRole } from 'structs';
 import removeSegmentFromLink from 'helpers/removeSegmentFromLink';
 import generateLinkId from 'helpers/generateLinkId';
 
-//export enum AlignmentMode {
-//CleanSlate = 'cleanSlate',
-//Edit = 'edit',
-//}
+export enum AlignmentMode {
+  CleanSlate = 'cleanSlate',
+  Edit = 'edit',
+}
 
 export interface AlignmentState {
   alignments: Alignment[];
   inProgressLink: InProgressLink | null;
-  //mode: AlignmentMode;
+  mode: AlignmentMode;
 }
 
 export const initialState: AlignmentState = {
   alignments: [],
   inProgressLink: null,
-  //mode: AlignmentMode.CleanSlate,
+  mode: AlignmentMode.CleanSlate,
 };
 
 const alignmentSlice = createSlice({
   name: 'alignment',
   initialState,
   reducers: {
-    //setAlignmentMode: (state, action: PayloadAction<AlignmentMode>) => {
-    //state.mode = action.payload;
-    //},
     loadAlignments: (state, action: PayloadAction<Alignment[]>) => {
       const alignments = action.payload.concat([]);
 
@@ -64,6 +61,7 @@ const alignmentSlice = createSlice({
           ) {
             // if nothing is selected, clear the link
             state.inProgressLink = null;
+            state.mode = AlignmentMode.CleanSlate;
           }
         } else {
           // add segment to link
@@ -102,6 +100,7 @@ const alignmentSlice = createSlice({
             sources: existingLink.sources,
             targets: existingLink.targets,
           };
+          state.mode = AlignmentMode.Edit;
         } else {
           // Create new link
           // assume it's a target segment for now
@@ -126,29 +125,14 @@ const alignmentSlice = createSlice({
             sources: newSources,
             targets: newTargets,
           };
+          state.mode = AlignmentMode.Edit;
         }
       }
     },
 
-    toggleAllLinkSegments: (state, action: PayloadAction<Word[]>) => {
-      //for (const payloadWord of action.payload) {
-      //const alreadySelected = Boolean(
-      //state.selectedTextSegments.find((word: Word) => {
-      //return word.id === payloadWord.id;
-      //})
-      //);
-      //if (alreadySelected) {
-      //state.selectedTextSegments = state.selectedTextSegments.filter(
-      //(word) => word.id !== payloadWord.id
-      //);
-      //} else {
-      //state.selectedTextSegments.push(payloadWord);
-      //}
-      //}
-    },
     resetTextSegments: (state) => {
       state.inProgressLink = null;
-      //state.mode = AlignmentMode.CleanSlate;
+      state.mode = AlignmentMode.CleanSlate;
     },
 
     createLink: (state) => {
@@ -183,17 +167,15 @@ const alignmentSlice = createSlice({
         }
 
         state.inProgressLink = null;
-        //state.mode = AlignmentMode.CleanSlate;
+        state.mode = AlignmentMode.CleanSlate;
       }
     },
   },
 });
 
 export const {
-  //setAlignmentMode,
   loadAlignments,
   toggleTextSegment,
-  toggleAllLinkSegments,
   resetTextSegments,
   createLink,
 } = alignmentSlice.actions;
