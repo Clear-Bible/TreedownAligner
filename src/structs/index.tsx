@@ -28,8 +28,16 @@ export interface Corpus {
 
 // An instance of alignment
 export interface Link {
+  _id?: string;
   sources: string[];
   targets: string[];
+}
+
+// Extension of Link, use in tracking
+// state of 'inProgress' links.
+export interface InProgressLink extends Link {
+  source: string;
+  target: string;
 }
 
 // Collection of textual pairs

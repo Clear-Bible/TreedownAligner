@@ -6,11 +6,11 @@ import { useAppDispatch, useAppSelector } from 'app/hooks';
 import {
   toggleTextSegment,
   toggleAllLinkSegments,
-  setAlignmentMode,
-  AlignmentMode,
+  //setAlignmentMode,
+  //AlignmentMode,
 } from 'state/alignment.slice';
 import { hover, relatedAlignments } from 'state/textSegmentHover.slice';
-import { Alignment, Word, Corpus, Link } from 'structs';
+import { Alignment, Word, CorpusRole, Link } from 'structs';
 
 import findRelatedAlignments from 'helpers/findRelatedAlignments';
 import findWordById from 'helpers/findWord';
@@ -22,7 +22,7 @@ interface TextSegmentProps {
 const defaultStyle = { cursor: 'pointer' };
 const focusedStyle = { textDecoration: 'underline' };
 const selectedStyle = { backgroundColor: 'lightgrey' };
-const relatedStyle = { webkitTextStroke: '1px black' };
+const relatedStyle = { WebkitTextStroke: '1px black' };
 
 const computeStyle = (
   isHovered: boolean,
@@ -46,9 +46,9 @@ const computeStyle = (
   return computedStyle;
 };
 
-const isCleanSlateMode = (mode: AlignmentMode) => {
-  return mode === AlignmentMode.CleanSlate;
-};
+//const isCleanSlateMode = (mode: AlignmentMode) => {
+//return mode === AlignmentMode.CleanSlate;
+//};
 
 export const TextSegment = (props: TextSegmentProps): ReactElement => {
   const { word } = props;
@@ -61,9 +61,9 @@ export const TextSegment = (props: TextSegmentProps): ReactElement => {
     return state.alignment.present.alignments;
   });
 
-  const mode = useAppSelector((state) => {
-    return state.alignment.present.mode;
-  });
+  //const mode = useAppSelector((state) => {
+  //return state.alignment.present.mode;
+  //});
 
   const isHovered = useAppSelector(
     (state) => state.textSegmentHover.hovered?.id === word.id
@@ -71,13 +71,20 @@ export const TextSegment = (props: TextSegmentProps): ReactElement => {
 
   const isSelected = Boolean(
     useAppSelector((state) => {
-      return state.alignment.present.selectedTextSegments.find((word: Word) => {
-        return word.id === props.word.id;
-      });
+      if (word.role === CorpusRole.Source) {
+        return state.alignment.present.inProgressLink?.sources.includes(
+          word.id
+        );
+      }
+      if (word.role === CorpusRole.Target) {
+        return state.alignment.present.inProgressLink?.targets.includes(
+          word.id
+        );
+      }
     })
   );
 
-  console.log('isSelected?', isSelected);
+  //console.log('isSelected?', isSelected);
 
   const isRelated = Boolean(
     useAppSelector((state) => {
@@ -154,25 +161,7 @@ export const TextSegment = (props: TextSegmentProps): ReactElement => {
           dispatch(relatedAlignments([]));
         }}
         onClick={() => {
-          if (link && isLinked && isCleanSlateMode(mode)) {
-            console.log('LINK!', link);
-            const sourceWords = link.sources
-              .map((source) => findWordById(corpora, source))
-              .filter((x): x is Word => x !== null);
-
-            console.log('sourceWords', sourceWords);
-            const targetWords = link.targets
-              .map((target) => findWordById(corpora, target))
-              .filter((x): x is Word => x !== null);
-
-            console.log('targetWords', targetWords, link.targets);
-            const words = sourceWords.concat(targetWords);
-            console.log('words', words);
-            dispatch(toggleAllLinkSegments(words));
-            dispatch(setAlignmentMode(AlignmentMode.Edit));
-          } else {
-            dispatch(toggleTextSegment(word));
-          }
+          dispatch(toggleTextSegment(word));
         }}
       >
         {props.word.text}

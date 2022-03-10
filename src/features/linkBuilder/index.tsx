@@ -4,6 +4,7 @@ import useDebug from 'hooks/useDebug';
 import { useAppSelector } from 'app/hooks';
 
 import { Corpus, Word } from 'structs';
+import findWordById from 'helpers/findWord';
 
 import DragHandle from 'features/dragHandle';
 
@@ -12,12 +13,26 @@ interface LinkBuilderProps {}
 export const LinkBuilderComponent = (props: LinkBuilderProps): ReactElement => {
   useDebug('LinkBuilderComponent');
 
-  const selectedWords: Record<string, Word[]> = useAppSelector((state) =>
-    groupBy(
-      state.alignment.present.selectedTextSegments,
-      (word: Word) => word.id.split('_')[0]
-    )
-  );
+  const selectedWords: Record<string, Word[]> = useAppSelector((state) => {
+    const inProgressLink = state.alignment.present.inProgressLink;
+
+    if (inProgressLink) {
+      const sourceWords: Word[] = inProgressLink.sources
+        .map((sourceId) => findWordById(state.polyglot.corpora, sourceId))
+        .filter((x): x is Word => x !== null);
+
+      const targetWords: Word[] = inProgressLink.targets
+        .map((targetId) => findWordById(state.polyglot.corpora, targetId))
+        .filter((x): x is Word => x !== null);
+
+      return {
+        [inProgressLink.source]: sourceWords,
+        [inProgressLink.target]: targetWords,
+      };
+    }
+
+    return {};
+  });
 
   const corpora = useAppSelector((state) => state.polyglot.corpora);
 

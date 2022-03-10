@@ -11,7 +11,7 @@ export const ControlPanel = (): ReactElement => {
   const dispatch = useAppDispatch();
 
   const anySegmentsSelected = useAppSelector((state) =>
-    Boolean(state.alignment.present.selectedTextSegments.length)
+    Boolean(state.alignment.present.inProgressLink)
   );
   const layout = [
     {
