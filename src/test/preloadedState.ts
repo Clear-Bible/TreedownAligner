@@ -3,7 +3,7 @@ import { RootState } from 'test/harness';
 import { AlignmentMode } from 'state/alignment.slice';
 
 const preloadedState: RootState = {
-  app: { debug: false },
+  app: { debug: false, theme: 'day' },
   alignment: {
     past: [],
     present: {

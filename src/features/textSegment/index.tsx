@@ -9,26 +9,46 @@ import { hover, relatedAlignments } from 'state/textSegmentHover.slice';
 import { Alignment, Word, CorpusRole, Link } from 'structs';
 import findRelatedAlignments from 'helpers/findRelatedAlignments';
 
+import 'styles/theme.css';
+import cssVar from 'styles/cssVar';
+
 interface TextSegmentProps {
   word: Word;
 }
 
-const defaultStyle = { cursor: 'pointer', lineHeight: '1.4rem' };
-
-const focusedStyle = { textDecoration: 'underline' };
-
-const unlinkedStyle = { fontStyle: 'italic', color: 'dimgrey' };
-
-const lockedStyle = { cursor: 'not-allowed' };
-
-const selectedStyle = {
-  backgroundColor: 'black',
-  color: 'white',
-  borderRadius: '0.25rem',
+const defaultStyle = (theme: 'night' | 'day') => {
+  return {
+    cursor: 'pointer',
+    lineHeight: '1.4rem',
+    color: cssVar('font-color', theme),
+  };
 };
-const relatedStyle = {
-  WebkitTextStroke: '1px black',
-  backgroundColor: 'yellow',
+
+const focusedStyle = () => {
+  return { textDecoration: 'underline' };
+};
+
+const unlinkedStyle = (theme: 'night' | 'day') => {
+  return { fontStyle: 'italic', color: cssVar('unlinked-font-color', theme) };
+};
+
+const lockedStyle = () => {
+  return { cursor: 'not-allowed' };
+};
+
+const selectedStyle = (theme: 'night' | 'day') => {
+  return {
+    backgroundColor: cssVar('selected-segment-background-color', theme),
+    color: cssVar('selected-segment-font-color', theme),
+    borderRadius: '0.25rem',
+  };
+};
+
+const relatedStyle = (theme: 'night' | 'day') => {
+  return {
+    WebkitTextStroke: `1px black`,
+    backgroundColor: 'yellow',
+  };
 };
 
 const computeStyle = (
@@ -37,32 +57,33 @@ const computeStyle = (
   isRelated: boolean,
   isLinked: boolean,
   isCurrentLinkMember: boolean,
-  mode: AlignmentMode
+  mode: AlignmentMode,
+  theme: 'night' | 'day'
 ): Record<string, string> => {
-  let computedStyle = { ...defaultStyle };
+  let computedStyle = { ...defaultStyle(theme) };
 
   if (isRelated && !isSelected && !(mode === AlignmentMode.Edit)) {
-    computedStyle = { ...computedStyle, ...relatedStyle };
+    computedStyle = { ...computedStyle, ...relatedStyle(theme) };
   }
 
   if (isHovered && !isSelected) {
-    computedStyle = { ...computedStyle, ...focusedStyle };
+    computedStyle = { ...computedStyle, ...focusedStyle() };
   }
 
   if (isSelected) {
-    computedStyle = { ...computedStyle, ...selectedStyle };
+    computedStyle = { ...computedStyle, ...selectedStyle(theme) };
   }
 
   if (isLinked && mode === AlignmentMode.Edit && !isCurrentLinkMember) {
-    computedStyle = { ...computedStyle, ...lockedStyle };
+    computedStyle = { ...computedStyle, ...lockedStyle() };
   }
 
   if (mode === AlignmentMode.Edit && isCurrentLinkMember && !isSelected) {
-    computedStyle = { ...computedStyle, ...unlinkedStyle };
+    computedStyle = { ...computedStyle, ...unlinkedStyle(theme) };
   }
 
   if (!isLinked && !isSelected) {
-    computedStyle = { ...computedStyle, ...unlinkedStyle };
+    computedStyle = { ...computedStyle, ...unlinkedStyle(theme) };
   }
 
   return computedStyle;
@@ -74,6 +95,10 @@ export const TextSegment = (props: TextSegmentProps): ReactElement => {
   useDebug('TextSegmentComponent');
 
   const dispatch = useAppDispatch();
+
+  const theme = useAppSelector((state) => {
+    return state.app.theme;
+  });
 
   const alignments = useAppSelector((state) => {
     return state.alignment.present.alignments;
@@ -220,7 +245,8 @@ export const TextSegment = (props: TextSegmentProps): ReactElement => {
     isRelated,
     isLinked,
     isCurrentLinkMember,
-    mode
+    mode,
+    theme
   );
 
   if (!word) {

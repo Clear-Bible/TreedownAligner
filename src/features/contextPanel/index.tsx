@@ -1,9 +1,12 @@
 import React, { ReactElement } from 'react';
 import GridLayout from 'react-grid-layout';
 
+import { useAppSelector } from 'app/hooks';
 import useDebug from 'hooks/useDebug';
 import Context from 'features/context';
 import LinkBuilderComponent from 'features/linkBuilder';
+
+import cssVar from 'styles/cssVar';
 
 export const ContextPanel = (): ReactElement => {
   useDebug('ContextPanel');
@@ -30,6 +33,10 @@ export const ContextPanel = (): ReactElement => {
     },
   ];
 
+  const theme = useAppSelector((state) => {
+    return state.app.theme;
+  });
+
   return (
     <div style={{ position: 'relative' }}>
       <GridLayout
@@ -41,7 +48,13 @@ export const ContextPanel = (): ReactElement => {
         maxRows={1}
         compactType="horizontal"
       >
-        <div key="a" style={{ border: '1px solid black' }}>
+        <div
+          key="a"
+          style={{
+            border: '1px solid',
+            borderColor: cssVar('border-color', theme),
+          }}
+        >
           <Context
             anteText="Therefore, because we have been declared righteous by faith, we have peace with God through our Lord Jesus Christ, through whom also we have obtained access by faith into this grace in which we stand, and we boast in the hope of the glory of God."
             text="And not only this, but we also boast in our afflictions, because we know that affliction produces patient endurance,"
@@ -49,7 +62,14 @@ export const ContextPanel = (): ReactElement => {
             name="LEB"
           />
         </div>
-        <div key="b" style={{ border: '1px solid black' }}>
+        <div
+          key="b"
+          style={{
+            border: '1px solid',
+
+            borderColor: cssVar('border-color', theme),
+          }}
+        >
           <LinkBuilderComponent />
         </div>
       </GridLayout>

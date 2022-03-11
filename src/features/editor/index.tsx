@@ -9,13 +9,18 @@ import { Alignment, Corpus } from 'structs';
 interface EditorWrapperProps {
   corpora: Corpus[];
   alignments: Alignment[];
+  theme: 'night' | 'day';
 }
 
 export const EditorWrapper = (props: EditorWrapperProps): ReactElement => {
   return (
     <Fragment>
       <Provider store={store}>
-        <Editor corpora={props.corpora} alignments={props.alignments} />
+        <Editor
+          corpora={props.corpora}
+          alignments={props.alignments}
+          theme={props.theme}
+        />
       </Provider>
     </Fragment>
   );

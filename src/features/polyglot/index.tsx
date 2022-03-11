@@ -6,6 +6,8 @@ import useDebug from 'hooks/useDebug';
 import TextComponent from 'features/text';
 import { Corpus } from 'structs';
 
+import cssVar from 'styles/cssVar';
+
 export const Polyglot = (): ReactElement => {
   useDebug('PolyglotComponent');
   const corpora = useAppSelector((state) => state.polyglot.corpora);
@@ -28,6 +30,10 @@ export const Polyglot = (): ReactElement => {
     };
   });
 
+  const theme = useAppSelector((state) => {
+    return state.app.theme;
+  });
+
   return (
     <React.Fragment>
       <GridLayout
@@ -42,7 +48,13 @@ export const Polyglot = (): ReactElement => {
         {corpora.map((corpus: Corpus, index: number): ReactElement => {
           const key = `text_${index}`;
           return (
-            <div key={key} style={{ border: '1px solid black' }}>
+            <div
+              key={key}
+              style={{
+                border: '1px solid',
+                borderColor: cssVar('border-color', theme),
+              }}
+            >
               <TextComponent
                 id={corpus.id}
                 name={corpus.name}

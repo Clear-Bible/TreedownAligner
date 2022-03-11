@@ -8,6 +8,8 @@ import findWordById from 'helpers/findWord';
 
 import DragHandle from 'features/dragHandle';
 
+import cssVar from 'styles/cssVar';
+
 interface LinkBuilderProps {}
 
 export const LinkBuilderComponent = (props: LinkBuilderProps): ReactElement => {
@@ -36,6 +38,10 @@ export const LinkBuilderComponent = (props: LinkBuilderProps): ReactElement => {
 
   const corpora = useAppSelector((state) => state.polyglot.corpora);
 
+  const theme = useAppSelector((state) => {
+    return state.app.theme;
+  });
+
   if (!Object.keys(selectedWords).length) {
     return (
       <Fragment>
@@ -48,7 +54,9 @@ export const LinkBuilderComponent = (props: LinkBuilderProps): ReactElement => {
             paddingBottom: '0.5rem',
           }}
         >
-          <div style={{ lineHeight: '12rem' }}>
+          <div
+            style={{ lineHeight: '12rem', color: cssVar('font-color', theme) }}
+          >
             Select a word to begin building a link.
           </div>
         </div>
@@ -81,6 +89,7 @@ export const LinkBuilderComponent = (props: LinkBuilderProps): ReactElement => {
               paddingRight: '1rem',
               paddingTop: '0.5rem',
               paddingBottom: '0.5rem',
+              color: cssVar('font-color', theme),
             }}
           >
             <div style={{ textAlign: 'right' }}>{corpus?.name}</div>

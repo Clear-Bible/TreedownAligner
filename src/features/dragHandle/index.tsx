@@ -1,4 +1,12 @@
-export const dragHandle = () => {
+import { useAppSelector } from 'app/hooks';
+
+import cssVar from 'styles/cssVar';
+
+export const DragHandle = () => {
+  const theme = useAppSelector((state) => {
+    return state.app.theme;
+  });
+
   return (
     <div
       className="drag-handle"
@@ -11,10 +19,10 @@ export const dragHandle = () => {
         cursor: 'grab',
         height: '0.7rem',
         width: '0.7rem',
-        backgroundColor: 'black',
+        backgroundColor: cssVar('drag-handle-color', theme),
       }}
     ></div>
   );
 };
 
-export default dragHandle;
+export default DragHandle;

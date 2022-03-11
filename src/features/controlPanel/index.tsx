@@ -6,6 +6,8 @@ import { useAppDispatch, useAppSelector } from 'app/hooks';
 import useDebug from 'hooks/useDebug';
 import { resetTextSegments, createLink } from 'state/alignment.slice';
 
+import cssVar from 'styles/cssVar';
+
 export const ControlPanel = (): ReactElement => {
   useDebug('ControlPanel');
   const dispatch = useAppDispatch();
@@ -13,6 +15,11 @@ export const ControlPanel = (): ReactElement => {
   const anySegmentsSelected = useAppSelector((state) =>
     Boolean(state.alignment.present.inProgressLink)
   );
+
+  const theme = useAppSelector((state) => {
+    return state.app.theme;
+  });
+
   const layout = [
     {
       i: 'a',
@@ -39,7 +46,8 @@ export const ControlPanel = (): ReactElement => {
         <div
           key="a"
           style={{
-            border: '1px solid black',
+            border: '1px solid',
+            borderColor: cssVar('border-color', theme),
             display: 'flex',
             justifyContent: 'center',
             alignItems: 'center',
