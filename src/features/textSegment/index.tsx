@@ -57,6 +57,10 @@ const computeStyle = (
     computedStyle = { ...computedStyle, ...lockedStyle };
   }
 
+  if (mode === AlignmentMode.Edit && isCurrentLinkMember && !isSelected) {
+    computedStyle = { ...computedStyle, ...unlinkedStyle };
+  }
+
   if (!isLinked && !isSelected) {
     computedStyle = { ...computedStyle, ...unlinkedStyle };
   }
@@ -131,27 +135,51 @@ export const TextSegment = (props: TextSegmentProps): ReactElement => {
   );
 
   const link = useAppSelector((state) => {
-    // There is a BUG in here.
-    // If this segment is involved in multiple links,
-    // then we might grab the wrong one.
-    let foundLink = null;
+    const inProgressLink = state.alignment.present.inProgressLink;
 
-    if (word) {
-      const possibleAlignments = state.alignment.present.alignments.filter(
-        (alignment: Alignment) => {
+    const contextualAlignment = state.alignment.present.alignments.find(
+      (alignment: Alignment) => {
+        if (inProgressLink) {
           return (
-            alignment.source === word.corpusId ||
-            alignment.target === word.corpusId
+            inProgressLink.source === alignment.source &&
+            inProgressLink.target === alignment.target
           );
         }
-      );
-      for (const alignment of possibleAlignments) {
-        for (const link of alignment.links) {
+        return false;
+      }
+    );
+
+    let foundLink = null;
+
+    if (contextualAlignment) {
+      if (word) {
+        for (const link of contextualAlignment.links) {
           if (
             link.sources.includes(word.id) ||
             link.targets.includes(word.id)
           ) {
             foundLink = link;
+          }
+        }
+      }
+    } else {
+      if (word) {
+        const possibleAlignments = state.alignment.present.alignments.filter(
+          (alignment: Alignment) => {
+            return (
+              alignment.source === word.corpusId ||
+              alignment.target === word.corpusId
+            );
+          }
+        );
+        for (const alignment of possibleAlignments) {
+          for (const link of alignment.links) {
+            if (
+              link.sources.includes(word.id) ||
+              link.targets.includes(word.id)
+            ) {
+              foundLink = link;
+            }
           }
         }
       }
