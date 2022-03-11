@@ -1,4 +1,4 @@
-import { ReactElement, Fragment, useEffect } from 'react';
+import { ReactElement, useEffect } from 'react';
 
 import useDebug from 'hooks/useDebug';
 import { useAppDispatch } from 'app/hooks';
@@ -29,7 +29,7 @@ export const Editor = (props: EditorProps): ReactElement => {
 
   useEffect(() => {
     dispatch(setTheme(theme));
-  }, [theme]);
+  }, [dispatch, theme]);
 
   useEffect(() => {
     dispatch(loadCorpora(props.corpora));

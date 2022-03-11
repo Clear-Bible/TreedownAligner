@@ -9,6 +9,7 @@ const generateLinkId = (links: Link[]): number => {
         if (idTagParsed) {
           return Number(idTagParsed[1]);
         }
+        return null;
       })
       .filter((x): x is number => x !== null);
     const highestId = Math.max(...linkIds);

@@ -1,5 +1,4 @@
 import { ReactElement, Fragment } from 'react';
-import { groupBy } from 'lodash';
 import useDebug from 'hooks/useDebug';
 import { useAppSelector } from 'app/hooks';
 
