@@ -1,29 +1,49 @@
-import { ReactElement, Fragment } from 'react';
-import { groupBy } from 'lodash';
+import { ReactElement } from 'react';
 import useDebug from 'hooks/useDebug';
 import { useAppSelector } from 'app/hooks';
 
-import { Text, Word } from 'structs';
+import { Corpus, Word } from 'structs';
+import findWordById from 'helpers/findWord';
 
 import DragHandle from 'features/dragHandle';
+
+import cssVar from 'styles/cssVar';
 
 interface LinkBuilderProps {}
 
 export const LinkBuilderComponent = (props: LinkBuilderProps): ReactElement => {
   useDebug('LinkBuilderComponent');
 
-  const selectedWords: Record<string, Word[]> = useAppSelector((state) =>
-    groupBy(
-      state.textSegment.present.selectedTextSegments,
-      (word: Word) => word.id.split('_')[0]
-    )
-  );
+  const selectedWords: Record<string, Word[]> = useAppSelector((state) => {
+    const inProgressLink = state.alignment.present.inProgressLink;
 
-  const texts = useAppSelector((state) => state.polyglot.texts);
+    if (inProgressLink) {
+      const sourceWords: Word[] = inProgressLink.sources
+        .map((sourceId) => findWordById(state.polyglot.corpora, sourceId))
+        .filter((x): x is Word => x !== null);
+
+      const targetWords: Word[] = inProgressLink.targets
+        .map((targetId) => findWordById(state.polyglot.corpora, targetId))
+        .filter((x): x is Word => x !== null);
+
+      return {
+        [inProgressLink.source]: sourceWords,
+        [inProgressLink.target]: targetWords,
+      };
+    }
+
+    return {};
+  });
+
+  const corpora = useAppSelector((state) => state.polyglot.corpora);
+
+  const theme = useAppSelector((state) => {
+    return state.app.theme;
+  });
 
   if (!Object.keys(selectedWords).length) {
     return (
-      <Fragment>
+      <>
         <div
           style={{
             textAlign: 'center',
@@ -33,20 +53,22 @@ export const LinkBuilderComponent = (props: LinkBuilderProps): ReactElement => {
             paddingBottom: '0.5rem',
           }}
         >
-          <div style={{ lineHeight: '12rem' }}>
-            Select a word to begin building a link.
+          <div
+            style={{ lineHeight: '12rem', color: cssVar('font-color', theme) }}
+          >
+            Select a target word to begin building a link.
           </div>
         </div>
         <DragHandle />
-      </Fragment>
+      </>
     );
   }
 
   return (
-    <Fragment>
+    <>
       {Object.keys(selectedWords).map((textId: string): ReactElement => {
-        const text = texts.find((text: Text) => {
-          return text.id === textId;
+        const corpus = corpora.find((corpus: Corpus) => {
+          return corpus.id === textId;
         });
 
         const selectedWordsForText = selectedWords[textId];
@@ -58,7 +80,7 @@ export const LinkBuilderComponent = (props: LinkBuilderProps): ReactElement => {
 
         return (
           <div
-            key={`linkBuilder_${text?.name}`}
+            key={`linkBuilder_${corpus?.name}`}
             style={{
               display: 'flex',
               flexDirection: 'column',
@@ -66,24 +88,49 @@ export const LinkBuilderComponent = (props: LinkBuilderProps): ReactElement => {
               paddingRight: '1rem',
               paddingTop: '0.5rem',
               paddingBottom: '0.5rem',
+              color: cssVar('font-color', theme),
             }}
           >
-            <div style={{ textAlign: 'right' }}>{text?.name}</div>
+            <div style={{ textAlign: 'right' }}>{corpus?.name}</div>
             <div>
-              {sortedSelectedWordsForText.map((selectedWord): ReactElement => {
-                const word = text?.words.find((word: Word): boolean => {
-                  return word.id === selectedWord.id;
-                });
-                return (
-                  <span key={`selected_${selectedWord.id}`}>{word?.text} </span>
-                );
-              })}
+              <hr />
+            </div>
+            <div>
+              {sortedSelectedWordsForText.map(
+                (selectedWord, index: number): ReactElement => {
+                  const word = corpus?.words.find((word: Word): boolean => {
+                    return word.id === selectedWord.id;
+                  });
+
+                  let nextIsSequential: boolean = true;
+                  const next = sortedSelectedWordsForText[index + 1];
+                  if (next) {
+                    const sequenceDiff = next.position - selectedWord.position;
+                    if (sequenceDiff > 1) {
+                      nextIsSequential = false;
+                    }
+                  }
+                  return (
+                    <span key={`selected_${selectedWord.id}`}>
+                      <span>{word?.text} </span>
+                      {!nextIsSequential ? (
+                        <span key={`selected_${selectedWord.id}_ellipsis`}>
+                          ...{' '}
+                        </span>
+                      ) : null}
+                    </span>
+                  );
+                }
+              )}
+            </div>
+            <div>
+              <hr />
             </div>
           </div>
         );
       })}
       <DragHandle />
-    </Fragment>
+    </>
   );
 };
 

@@ -1,23 +1,52 @@
 import { ReactElement, Fragment } from 'react';
 
 import useDebug from 'hooks/useDebug';
+import { useAppSelector } from 'app/hooks';
 import TextSegment from 'features/textSegment';
 import DragHandle from 'features/dragHandle';
 
-import { Word } from 'structs';
+import { Word, Corpus } from 'structs';
+
+import cssVar from 'styles/cssVar';
 
 interface TextProps {
-  id: string;
-  name: string;
-  words: Word[];
+  corpus: Corpus;
 }
 
 export const Text = (props: TextProps): ReactElement => {
+  const { corpus } = props;
   useDebug('TextComponent');
+
+  const theme = useAppSelector((state) => {
+    return state.app.theme;
+  });
 
   return (
     <Fragment>
-      <div style={{ textAlign: 'right', padding: '0.5rem' }}>{props.name}</div>
+      <div
+        style={{
+          textAlign: 'right',
+          padding: '0.5rem',
+          fontWeight: 'regular',
+          color: cssVar('font-color', theme),
+        }}
+      >
+        {corpus.name}
+      </div>
+      <div
+        style={{
+          textAlign: 'right',
+          padding: '0.5rem',
+          marginTop: '-0.75rem',
+          fontSize: 'small',
+          fontVariant: 'small-caps',
+          fontStyle: 'small-caps',
+          color: cssVar('font-color', theme),
+        }}
+      >
+        {corpus.fullName}
+      </div>
+
       <p
         style={{
           paddingTop: '0.5rem',
@@ -27,18 +56,11 @@ export const Text = (props: TextProps): ReactElement => {
           userSelect: 'none',
         }}
       >
-        {props.words.map((word: Word): ReactElement => {
-          return (
-            <TextSegment
-              key={word.id}
-              id={word.id}
-              segment={word.text}
-              textId={props.id}
-            />
-          );
+        {corpus.words.map((word: Word): ReactElement => {
+          return <TextSegment key={word.id} word={word} />;
         })}
       </p>
-        <DragHandle />
+      <DragHandle />
     </Fragment>
   );
 };

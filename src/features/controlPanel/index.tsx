@@ -4,15 +4,22 @@ import { ActionCreators } from 'redux-undo';
 
 import { useAppDispatch, useAppSelector } from 'app/hooks';
 import useDebug from 'hooks/useDebug';
-import { resetTextSegments } from 'state/textSegment.slice';
+import { resetTextSegments, createLink } from 'state/alignment.slice';
+
+import cssVar from 'styles/cssVar';
 
 export const ControlPanel = (): ReactElement => {
   useDebug('ControlPanel');
   const dispatch = useAppDispatch();
 
   const anySegmentsSelected = useAppSelector((state) =>
-    Boolean(state.textSegment.present.selectedTextSegments.length)
+    Boolean(state.alignment.present.inProgressLink)
   );
+
+  const theme = useAppSelector((state) => {
+    return state.app.theme;
+  });
+
   const layout = [
     {
       i: 'a',
@@ -39,14 +46,21 @@ export const ControlPanel = (): ReactElement => {
         <div
           key="a"
           style={{
-            border: '1px solid black',
+            border: '1px solid',
+            borderColor: cssVar('border-color', theme),
             display: 'flex',
             justifyContent: 'center',
             alignItems: 'center',
             gap: '10px',
           }}
         >
-          <button onClick={() => {}}>Link</button>
+          <button
+            onClick={() => {
+              dispatch(createLink());
+            }}
+          >
+            Link
+          </button>
           <button onClick={() => {}}>Unlink</button>
           <button
             disabled={!anySegmentsSelected}
@@ -59,17 +73,18 @@ export const ControlPanel = (): ReactElement => {
           </button>
           <button
             onClick={() => {
-              dispatch(ActionCreators.redo());
-            }}
-          >
-            Redo
-          </button>
-          <button
-            onClick={() => {
               dispatch(ActionCreators.undo());
             }}
           >
             Undo
+          </button>
+
+          <button
+            onClick={() => {
+              dispatch(ActionCreators.redo());
+            }}
+          >
+            Redo
           </button>
         </div>
       </GridLayout>

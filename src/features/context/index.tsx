@@ -1,7 +1,11 @@
 import React, { ReactElement } from 'react';
+
 import useDebug from 'hooks/useDebug';
+import { useAppSelector } from 'app/hooks';
 
 import DragHandle from 'features/dragHandle';
+
+import cssVar from 'styles/cssVar';
 
 interface TextProps {
   anteText: string;
@@ -12,6 +16,11 @@ interface TextProps {
 
 export const Context = (props: TextProps): ReactElement => {
   useDebug('ContextComponent');
+
+  const theme = useAppSelector((state) => {
+    return state.app.theme;
+  });
+
   return (
     <div>
       <div
@@ -19,6 +28,7 @@ export const Context = (props: TextProps): ReactElement => {
           textAlign: 'right',
           padding: '0.7rem',
           paddingBottom: '0rem',
+          color: cssVar('font-color', theme),
         }}
       >
         {props.name}
@@ -28,11 +38,19 @@ export const Context = (props: TextProps): ReactElement => {
           paddingBottom: '0.5rem',
           paddingLeft: '0.7rem',
           paddingRight: '0.7rem',
+          color: cssVar('font-color', theme),
         }}
       >
         <span>{props.anteText}</span>
         <span> </span>
-        <span style={{ backgroundColor: 'lightgray' }}>{props.text}</span>
+        <span
+          style={{
+            backgroundColor: 'darkgrey',
+            color: cssVar('font-color', theme),
+          }}
+        >
+          {props.text}
+        </span>
         <span> </span>
         <span>{props.postText}</span>
       </p>

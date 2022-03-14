@@ -1,92 +1,159 @@
 import React, { ReactElement } from 'react';
 
 import useDebug from 'hooks/useDebug';
-
 import { useAppDispatch, useAppSelector } from 'app/hooks';
-import { toggleTextSegment } from 'state/textSegment.slice';
+
+import { toggleTextSegment, AlignmentMode } from 'state/alignment.slice';
 import { hover, relatedAlignments } from 'state/textSegmentHover.slice';
-import { Alignment, Word, Text, Link } from 'structs';
+
+import { Alignment, Word, CorpusRole, Link } from 'structs';
 import findRelatedAlignments from 'helpers/findRelatedAlignments';
 
+import 'styles/theme.css';
+import cssVar from 'styles/cssVar';
+
 interface TextSegmentProps {
-  id: string;
-  textId: string;
-  segment: string;
+  word: Word;
 }
 
-const defaultStyle = { cursor: 'pointer' };
-const focusedStyle = { textDecoration: 'underline' };
-const selectedStyle = { backgroundColor: 'lightgrey' };
-const linkedStyle = { webkitTextStroke: '1px black' };
+const defaultStyle = (theme: 'night' | 'day') => {
+  return {
+    cursor: 'pointer',
+    lineHeight: '1.4rem',
+    color: cssVar('font-color', theme),
+  };
+};
+
+const focusedStyle = () => {
+  return { textDecoration: 'underline' };
+};
+
+const unlinkedStyle = (theme: 'night' | 'day') => {
+  return { fontStyle: 'italic', color: cssVar('unlinked-font-color', theme) };
+};
+
+const lockedStyle = () => {
+  return { cursor: 'not-allowed' };
+};
+
+const selectedStyle = (theme: 'night' | 'day') => {
+  return {
+    backgroundColor: cssVar('selected-segment-background-color', theme),
+    color: cssVar('selected-segment-font-color', theme),
+    borderRadius: '0.25rem',
+  };
+};
+
+const relatedStyle = () => {
+  return {
+    WebkitTextStroke: `1px black`,
+    backgroundColor: 'yellow',
+  };
+};
 
 const computeStyle = (
   isHovered: boolean,
   isSelected: boolean,
-  isLinked: boolean
+  isRelated: boolean,
+  isLinked: boolean,
+  isCurrentLinkMember: boolean,
+  isInvolved: boolean,
+  role: CorpusRole,
+  mode: AlignmentMode,
+  theme: 'night' | 'day'
 ): Record<string, string> => {
-  let computedStyle = { ...defaultStyle };
+  let computedStyle = { ...defaultStyle(theme) };
 
-  if (isHovered) {
-    computedStyle = { ...computedStyle, ...focusedStyle };
+  if (isRelated && !isSelected && !(mode === AlignmentMode.Edit)) {
+    computedStyle = { ...computedStyle, ...relatedStyle() };
+  }
+
+  if (isHovered && !isSelected) {
+    computedStyle = { ...computedStyle, ...focusedStyle() };
   }
 
   if (isSelected) {
-    computedStyle = { ...computedStyle, ...selectedStyle };
+    computedStyle = { ...computedStyle, ...selectedStyle(theme) };
   }
 
-  if (isLinked) {
-    computedStyle = { ...computedStyle, ...linkedStyle };
+  if (isLinked && mode === AlignmentMode.Edit && !isCurrentLinkMember) {
+    computedStyle = { ...computedStyle, ...lockedStyle() };
+  }
+
+  if (mode === AlignmentMode.Edit && isCurrentLinkMember && !isSelected) {
+    computedStyle = { ...computedStyle, ...unlinkedStyle(theme) };
+  }
+
+  if (!isLinked && !isSelected) {
+    computedStyle = { ...computedStyle, ...unlinkedStyle(theme) };
+  }
+
+  if (isLinked && role === 'source' && !isCurrentLinkMember) {
+    computedStyle = { ...computedStyle, ...lockedStyle() };
+  }
+
+  if (!isInvolved && mode === AlignmentMode.Edit) {
+    computedStyle = { ...computedStyle, ...lockedStyle() };
   }
 
   return computedStyle;
 };
 
 export const TextSegment = (props: TextSegmentProps): ReactElement => {
-  const { id } = props;
+  const { word } = props;
 
   useDebug('TextSegmentComponent');
 
   const dispatch = useAppDispatch();
 
-  const word = useAppSelector((state) => {
-    return state.polyglot.texts
-      .find((text: Text) => {
-        return text.id === props.textId;
-      })
-      ?.words.find((word: Word) => {
-        return word.id === props.id;
-      });
+  const theme = useAppSelector((state) => {
+    return state.app.theme;
   });
 
   const alignments = useAppSelector((state) => {
-    return state.polyglot.alignments;
+    return state.alignment.present.alignments;
+  });
+
+  const mode = useAppSelector((state) => {
+    return state.alignment.present.mode;
   });
 
   const isHovered = useAppSelector(
-    (state) => state.textSegmentHover.hovered?.id === id
+    (state) => state.textSegmentHover.hovered?.id === word.id
   );
 
   const isSelected = Boolean(
     useAppSelector((state) => {
-      return state.textSegment.present.selectedTextSegments.find(
-        (word: Word) => {
-          if (props.id === 'sbl_9') {
-            console.log(word.id, props.id, word.id === props.id);
-          }
-          return word.id === props.id;
-        }
+      if (word.role === CorpusRole.Source) {
+        return state.alignment.present.inProgressLink?.sources.includes(
+          word.id
+        );
+      }
+      if (word.role === CorpusRole.Target) {
+        return state.alignment.present.inProgressLink?.targets.includes(
+          word.id
+        );
+      }
+    })
+  );
+
+  const isInProgressLinkMember = Boolean(
+    useAppSelector((state) => {
+      return (
+        state.alignment.present.inProgressLink?.sources.includes(word.id) ||
+        state.alignment.present.inProgressLink?.targets.includes(word.id)
       );
     })
   );
 
-  const isLinked = Boolean(
+  const isRelated = Boolean(
     useAppSelector((state) => {
       if (word) {
         const relatedAlignment = state.textSegmentHover.relatedAlignments.find(
           (alignment: Alignment) => {
             return (
-              alignment.source === props.textId ||
-              alignment.target === props.textId
+              alignment.source === word.corpusId ||
+              alignment.target === word.corpusId
             );
           }
         );
@@ -102,7 +169,103 @@ export const TextSegment = (props: TextSegmentProps): ReactElement => {
     })
   );
 
-  const computedStyle = computeStyle(isHovered, isSelected, isLinked);
+  const link = useAppSelector((state) => {
+    const inProgressLink = state.alignment.present.inProgressLink;
+
+    const contextualAlignment = state.alignment.present.alignments.find(
+      (alignment: Alignment) => {
+        if (inProgressLink) {
+          return (
+            inProgressLink.source === alignment.source &&
+            inProgressLink.target === alignment.target
+          );
+        }
+        return false;
+      }
+    );
+
+    let foundLink = null;
+
+    if (contextualAlignment) {
+      if (word) {
+        for (const link of contextualAlignment.links) {
+          if (
+            link.sources.includes(word.id) ||
+            link.targets.includes(word.id)
+          ) {
+            foundLink = link;
+          }
+        }
+      }
+    } else {
+      if (word) {
+        const possibleAlignments = state.alignment.present.alignments.filter(
+          (alignment: Alignment) => {
+            return (
+              alignment.source === word.corpusId ||
+              alignment.target === word.corpusId
+            );
+          }
+        );
+        for (const alignment of possibleAlignments) {
+          for (const link of alignment.links) {
+            if (
+              link.sources.includes(word.id) ||
+              link.targets.includes(word.id)
+            ) {
+              foundLink = link;
+            }
+          }
+        }
+      }
+    }
+    return foundLink;
+  });
+
+  const isLinked = Boolean(link);
+
+  const mightBeWorkingOnLink = Boolean(
+    useAppSelector((state) => {
+      const inProgressLink = state.alignment.present.inProgressLink;
+
+      if (inProgressLink && link) {
+        const sourcesIntersection = link.sources.filter((sourceId) => {
+          return inProgressLink.sources.includes(sourceId);
+        });
+        const targetsIntersection = link.targets.filter((targetId) => {
+          return inProgressLink.targets.includes(targetId);
+        });
+
+        return sourcesIntersection.length > 0 || targetsIntersection.length > 0;
+      }
+    })
+  );
+
+  const isCurrentLinkMember = mightBeWorkingOnLink || isInProgressLinkMember;
+
+  const isInvolved = Boolean(
+    useAppSelector((state) => {
+      const inProgressLink = state.alignment.present.inProgressLink;
+      if (inProgressLink) {
+        return (
+          inProgressLink.source === word.corpusId ||
+          inProgressLink.target === word.corpusId
+        );
+      }
+    })
+  );
+
+  const computedStyle = computeStyle(
+    isHovered,
+    isSelected,
+    isRelated,
+    isLinked,
+    isCurrentLinkMember,
+    isInvolved,
+    word.role,
+    mode,
+    theme
+  );
 
   if (!word) {
     return <span>{'ERROR'}</span>;
@@ -122,12 +285,22 @@ export const TextSegment = (props: TextSegmentProps): ReactElement => {
           dispatch(relatedAlignments([]));
         }}
         onClick={() => {
-          if (word) {
+          if (
+            mode === AlignmentMode.Edit &&
+            (!isLinked || isCurrentLinkMember) &&
+            isInvolved
+          ) {
+            dispatch(toggleTextSegment(word));
+          } else if (word.role === 'source') {
+            // ...do nothing...
+            // for now users have to create / edit
+            // by going to a target first.
+          } else if (mode === AlignmentMode.CleanSlate) {
             dispatch(toggleTextSegment(word));
           }
         }}
       >
-        {props.segment}
+        {props.word.text}
       </span>
       <span> </span>
     </React.Fragment>

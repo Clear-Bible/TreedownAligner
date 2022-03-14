@@ -1,30 +1,24 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-import { Text, Alignment } from 'structs';
+import { Corpus } from 'structs';
 
 interface PolyglotState {
-  alignments: Alignment[];
-  texts: Text[];
+  corpora: Corpus[];
 }
 
 const initialState: PolyglotState = {
-  alignments: [],
-  texts: [],
+  corpora: [],
 };
 
 const polyglotSlice = createSlice({
   name: 'polyglot',
   initialState,
   reducers: {
-    loadTexts: (state, action: PayloadAction<Text[]>) => {
-      state.texts = action.payload;
-    },
-
-    loadAlignments: (state, action: PayloadAction<Alignment[]>) => {
-      state.alignments = action.payload;
+    loadCorpora: (state, action: PayloadAction<Corpus[]>) => {
+      state.corpora = action.payload;
     },
   },
 });
 
-export const { loadAlignments, loadTexts } = polyglotSlice.actions;
+export const { loadCorpora } = polyglotSlice.actions;
 export default polyglotSlice.reducer;
