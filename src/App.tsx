@@ -148,7 +148,7 @@ function App() {
             {
               id: 'backTrans',
               name: 'Back Translation',
-              fullName: 'Back Trans (Espanol)',
+              fullName: 'Back Trans 1 (Espanol)',
               language: 'eng',
               role: CorpusRole.Target,
               words: backTransWords,

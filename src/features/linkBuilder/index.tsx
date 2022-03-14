@@ -1,4 +1,4 @@
-import { ReactElement, Fragment } from 'react';
+import { ReactElement } from 'react';
 import useDebug from 'hooks/useDebug';
 import { useAppSelector } from 'app/hooks';
 
@@ -43,7 +43,7 @@ export const LinkBuilderComponent = (props: LinkBuilderProps): ReactElement => {
 
   if (!Object.keys(selectedWords).length) {
     return (
-      <Fragment>
+      <>
         <div
           style={{
             textAlign: 'center',
@@ -56,16 +56,16 @@ export const LinkBuilderComponent = (props: LinkBuilderProps): ReactElement => {
           <div
             style={{ lineHeight: '12rem', color: cssVar('font-color', theme) }}
           >
-            Select a word to begin building a link.
+            Select a target word to begin building a link.
           </div>
         </div>
         <DragHandle />
-      </Fragment>
+      </>
     );
   }
 
   return (
-    <Fragment>
+    <>
       {Object.keys(selectedWords).map((textId: string): ReactElement => {
         const corpus = corpora.find((corpus: Corpus) => {
           return corpus.id === textId;
@@ -96,14 +96,32 @@ export const LinkBuilderComponent = (props: LinkBuilderProps): ReactElement => {
               <hr />
             </div>
             <div>
-              {sortedSelectedWordsForText.map((selectedWord): ReactElement => {
-                const word = corpus?.words.find((word: Word): boolean => {
-                  return word.id === selectedWord.id;
-                });
-                return (
-                  <span key={`selected_${selectedWord.id}`}>{word?.text} </span>
-                );
-              })}
+              {sortedSelectedWordsForText.map(
+                (selectedWord, index: number): ReactElement => {
+                  const word = corpus?.words.find((word: Word): boolean => {
+                    return word.id === selectedWord.id;
+                  });
+
+                  let nextIsSequential: boolean = true;
+                  const next = sortedSelectedWordsForText[index + 1];
+                  if (next) {
+                    const sequenceDiff = next.position - selectedWord.position;
+                    if (sequenceDiff > 1) {
+                      nextIsSequential = false;
+                    }
+                  }
+                  return (
+                    <span key={`selected_${selectedWord.id}`}>
+                      <span>{word?.text} </span>
+                      {!nextIsSequential ? (
+                        <span key={`selected_${selectedWord.id}_ellipsis`}>
+                          ...{' '}
+                        </span>
+                      ) : null}
+                    </span>
+                  );
+                }
+              )}
             </div>
             <div>
               <hr />
@@ -112,7 +130,7 @@ export const LinkBuilderComponent = (props: LinkBuilderProps): ReactElement => {
         );
       })}
       <DragHandle />
-    </Fragment>
+    </>
   );
 };
 
