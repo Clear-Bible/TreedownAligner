@@ -55,11 +55,7 @@ export const Polyglot = (): ReactElement => {
                 borderColor: cssVar('border-color', theme),
               }}
             >
-              <TextComponent
-                id={corpus.id}
-                name={corpus.name}
-                words={corpus.words}
-              />
+              <TextComponent key={corpus.id} corpus={corpus} />
             </div>
           );
         })}

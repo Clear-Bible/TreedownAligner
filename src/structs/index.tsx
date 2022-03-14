@@ -19,6 +19,7 @@ export interface Word {
 export interface Corpus {
   id: string;
   name: string;
+  fullName: string;
   language: string;
   role: CorpusRole;
 

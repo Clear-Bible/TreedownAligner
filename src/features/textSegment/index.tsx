@@ -44,7 +44,7 @@ const selectedStyle = (theme: 'night' | 'day') => {
   };
 };
 
-const relatedStyle = (theme: 'night' | 'day') => {
+const relatedStyle = () => {
   return {
     WebkitTextStroke: `1px black`,
     backgroundColor: 'yellow',
@@ -57,13 +57,15 @@ const computeStyle = (
   isRelated: boolean,
   isLinked: boolean,
   isCurrentLinkMember: boolean,
+  isInvolved: boolean,
+  role: CorpusRole,
   mode: AlignmentMode,
   theme: 'night' | 'day'
 ): Record<string, string> => {
   let computedStyle = { ...defaultStyle(theme) };
 
   if (isRelated && !isSelected && !(mode === AlignmentMode.Edit)) {
-    computedStyle = { ...computedStyle, ...relatedStyle(theme) };
+    computedStyle = { ...computedStyle, ...relatedStyle() };
   }
 
   if (isHovered && !isSelected) {
@@ -84,6 +86,14 @@ const computeStyle = (
 
   if (!isLinked && !isSelected) {
     computedStyle = { ...computedStyle, ...unlinkedStyle(theme) };
+  }
+
+  if (isLinked && role === 'source' && !isCurrentLinkMember) {
+    computedStyle = { ...computedStyle, ...lockedStyle() };
+  }
+
+  if (!isInvolved && mode === AlignmentMode.Edit) {
+    computedStyle = { ...computedStyle, ...lockedStyle() };
   }
 
   return computedStyle;
@@ -226,12 +236,6 @@ export const TextSegment = (props: TextSegmentProps): ReactElement => {
           return inProgressLink.targets.includes(targetId);
         });
 
-        if (word.id === 'sbl_13') {
-          console.log('link', link);
-          console.log('sourcesIntersection', sourcesIntersection);
-          console.log('targetsIntersection', targetsIntersection);
-        }
-
         return sourcesIntersection.length > 0 || targetsIntersection.length > 0;
       }
     })
@@ -239,12 +243,26 @@ export const TextSegment = (props: TextSegmentProps): ReactElement => {
 
   const isCurrentLinkMember = mightBeWorkingOnLink || isInProgressLinkMember;
 
+  const isInvolved = Boolean(
+    useAppSelector((state) => {
+      const inProgressLink = state.alignment.present.inProgressLink;
+      if (inProgressLink) {
+        return (
+          inProgressLink.source === word.corpusId ||
+          inProgressLink.target === word.corpusId
+        );
+      }
+    })
+  );
+
   const computedStyle = computeStyle(
     isHovered,
     isSelected,
     isRelated,
     isLinked,
     isCurrentLinkMember,
+    isInvolved,
+    word.role,
     mode,
     theme
   );
@@ -267,16 +285,16 @@ export const TextSegment = (props: TextSegmentProps): ReactElement => {
           dispatch(relatedAlignments([]));
         }}
         onClick={() => {
-          console.log('click', mode);
-          console.log('isLinked?', isLinked);
-          console.log('isCurrentLinkMember?', isCurrentLinkMember);
-          console.log('mightBeWorking?', mightBeWorkingOnLink);
           if (
             mode === AlignmentMode.Edit &&
-            (!isLinked || isCurrentLinkMember)
+            (!isLinked || isCurrentLinkMember) &&
+            isInvolved
           ) {
-            console.log('toggle');
             dispatch(toggleTextSegment(word));
+          } else if (word.role === 'source') {
+            // ...do nothing...
+            // for now users have to create / edit
+            // by going to a target first.
           } else if (mode === AlignmentMode.CleanSlate) {
             dispatch(toggleTextSegment(word));
           }

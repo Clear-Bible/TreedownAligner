@@ -124,6 +124,7 @@ function App() {
             {
               id: 'sbl',
               name: 'SBL GNT',
+              fullName: 'SBL Greek New Testament',
               language: 'grc',
               role: CorpusRole.Source,
               words: sblWords,
@@ -131,6 +132,7 @@ function App() {
             {
               id: 'leb',
               name: 'LEB',
+              fullName: 'Lexham English Bible',
               language: 'eng',
               role: CorpusRole.Target,
               words: lebWords,
@@ -138,13 +140,15 @@ function App() {
             {
               id: 'nvi',
               name: 'NVI',
+              fullName: 'Nueva Versión Internacional',
               language: 'spa',
               role: CorpusRole.Target,
               words: nviWords,
             },
             {
               id: 'backTrans',
-              name: 'Back Trans',
+              name: 'Back Translation',
+              fullName: 'Back Trans (Espanol)',
               language: 'eng',
               role: CorpusRole.Target,
               words: backTransWords,
