@@ -29,6 +29,15 @@ export const ControlPanel = (): ReactElement => {
     return state.alignment.present.mode;
   });
 
+  const linkHasBothSides = useAppSelector((state) => {
+    return (
+      Number(state.alignment.present.inProgressLink?.sources.length) > 0 &&
+      Number(state.alignment.present.inProgressLink?.targets.length) > 0
+    );
+  });
+
+  console.log('link has both sides?', linkHasBothSides);
+
   const layout = [
     {
       i: 'a',
@@ -64,6 +73,7 @@ export const ControlPanel = (): ReactElement => {
           }}
         >
           <button
+            disabled={mode !== AlignmentMode.Edit || !linkHasBothSides}
             onClick={() => {
               dispatch(createLink());
             }}

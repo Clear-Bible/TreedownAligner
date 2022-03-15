@@ -65,7 +65,14 @@ export const LinkBuilderComponent = (props: LinkBuilderProps): ReactElement => {
   }
 
   return (
-    <>
+    <div
+      style={{
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'center',
+        height: '100%',
+      }}
+    >
       {Object.keys(selectedWords).map((textId: string): ReactElement => {
         const corpus = corpora.find((corpus: Corpus) => {
           return corpus.id === textId;
@@ -96,6 +103,7 @@ export const LinkBuilderComponent = (props: LinkBuilderProps): ReactElement => {
               <hr />
             </div>
             <div>
+              <span>&nbsp;</span>
               {sortedSelectedWordsForText.map(
                 (selectedWord, index: number): ReactElement => {
                   const word = corpus?.words.find((word: Word): boolean => {
@@ -113,6 +121,7 @@ export const LinkBuilderComponent = (props: LinkBuilderProps): ReactElement => {
                   return (
                     <span key={`selected_${selectedWord.id}`}>
                       <span>{word?.text} </span>
+
                       {!nextIsSequential ? (
                         <span key={`selected_${selectedWord.id}_ellipsis`}>
                           ...{' '}
@@ -130,7 +139,7 @@ export const LinkBuilderComponent = (props: LinkBuilderProps): ReactElement => {
         );
       })}
       <DragHandle />
-    </>
+    </div>
   );
 };
 
