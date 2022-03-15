@@ -4,7 +4,11 @@ import { ActionCreators } from 'redux-undo';
 
 import { useAppDispatch, useAppSelector } from 'app/hooks';
 import useDebug from 'hooks/useDebug';
-import { resetTextSegments, createLink } from 'state/alignment.slice';
+import {
+  resetTextSegments,
+  createLink,
+  deleteLink,
+} from 'state/alignment.slice';
 
 import cssVar from 'styles/cssVar';
 
@@ -61,11 +65,16 @@ export const ControlPanel = (): ReactElement => {
           >
             Link
           </button>
-          <button onClick={() => {}}>Unlink</button>
+          <button
+            onClick={() => {
+              dispatch(deleteLink());
+            }}
+          >
+            Unlink
+          </button>
           <button
             disabled={!anySegmentsSelected}
             onClick={() => {
-              console.log('dispatch the reset');
               dispatch(resetTextSegments());
             }}
           >

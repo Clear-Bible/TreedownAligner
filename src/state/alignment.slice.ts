@@ -4,6 +4,7 @@ import { Word, Alignment, Link, InProgressLink, CorpusRole } from 'structs';
 
 import removeSegmentFromLink from 'helpers/removeSegmentFromLink';
 import generateLinkId from 'helpers/generateLinkId';
+import { link } from 'fs';
 
 export enum AlignmentMode {
   CleanSlate = 'cleanSlate',
@@ -170,6 +171,34 @@ const alignmentSlice = createSlice({
         state.mode = AlignmentMode.CleanSlate;
       }
     },
+    deleteLink: (state) => {
+      const inProgressLink = state.inProgressLink;
+
+      if (inProgressLink) {
+        const alignmentIndex = state.alignments.findIndex(
+          (alignment: Alignment) => {
+            return (
+              alignment.source === inProgressLink.source &&
+              alignment.target === inProgressLink.target
+            );
+          }
+        );
+
+        if (Number.isFinite(alignmentIndex)) {
+          const linkToDeleteIndex = state.alignments[
+            alignmentIndex
+          ].links.findIndex((link: Link) => {
+            return link._id === inProgressLink._id;
+          });
+
+          if (Number.isFinite(linkToDeleteIndex)) {
+            state.alignments[alignmentIndex].links.splice(linkToDeleteIndex, 1);
+            state.inProgressLink = null;
+            state.mode = AlignmentMode.CleanSlate;
+          }
+        }
+      }
+    },
   },
 });
 
@@ -178,6 +207,7 @@ export const {
   toggleTextSegment,
   resetTextSegments,
   createLink,
+  deleteLink,
 } = alignmentSlice.actions;
 
 export default alignmentSlice.reducer;
