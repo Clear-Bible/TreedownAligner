@@ -8,6 +8,7 @@ import {
   resetTextSegments,
   createLink,
   deleteLink,
+  AlignmentMode,
 } from 'state/alignment.slice';
 
 import cssVar from 'styles/cssVar';
@@ -22,6 +23,10 @@ export const ControlPanel = (): ReactElement => {
 
   const theme = useAppSelector((state) => {
     return state.app.theme;
+  });
+
+  const mode = useAppSelector((state) => {
+    return state.alignment.present.mode;
   });
 
   const layout = [
@@ -66,6 +71,7 @@ export const ControlPanel = (): ReactElement => {
             Link
           </button>
           <button
+            disabled={!(mode === AlignmentMode.Select)}
             onClick={() => {
               dispatch(deleteLink());
             }}

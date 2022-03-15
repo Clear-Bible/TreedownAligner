@@ -221,6 +221,58 @@ describe('alignmentSlice reducer', () => {
         targets: ['leb_1'],
       });
     });
+
+    it('enters select mode (from blank slate)', () => {
+      const previousState = {
+        ...initialState,
+        alignments: [
+          {
+            source: 'sbl',
+            target: 'leb',
+            links: [
+              { _id: 'sbl-leb-1', sources: ['sbl_0'], targets: ['leb_1'] },
+            ],
+          },
+        ],
+        inProgressLink: null,
+      };
+
+      const resultState = alignmentSliceReducer(
+        previousState,
+        toggleTextSegment(targetWord1)
+      );
+
+      expect(resultState.mode).toEqual(AlignmentMode.Select);
+    });
+
+    it('enters edit mode (from select)', () => {
+      const previousState = {
+        ...initialState,
+        alignments: [
+          {
+            source: 'sbl',
+            target: 'leb',
+            links: [
+              { _id: 'sbl-leb-1', sources: ['sbl_0'], targets: ['leb_1'] },
+            ],
+          },
+        ],
+        inProgressLink: {
+          _id: 'sbl-leb-1',
+          source: 'sbl',
+          target: 'leb',
+          sources: ['sbl_0'],
+          targets: ['leb_1'],
+        },
+      };
+
+      const resultState = alignmentSliceReducer(
+        previousState,
+        toggleTextSegment(targetWord2)
+      );
+
+      expect(resultState.mode).toEqual(AlignmentMode.Edit);
+    });
   });
 
   describe('createLink', () => {

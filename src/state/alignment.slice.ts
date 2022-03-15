@@ -4,11 +4,11 @@ import { Word, Alignment, Link, InProgressLink, CorpusRole } from 'structs';
 
 import removeSegmentFromLink from 'helpers/removeSegmentFromLink';
 import generateLinkId from 'helpers/generateLinkId';
-import { link } from 'fs';
 
 export enum AlignmentMode {
-  CleanSlate = 'cleanSlate',
-  Edit = 'edit',
+  CleanSlate = 'cleanSlate', // Default mode
+  Select = 'select', // An existing link has been selected
+  Edit = 'edit', // Editing a new or existing link
 }
 
 export interface AlignmentState {
@@ -43,6 +43,8 @@ const alignmentSlice = createSlice({
     toggleTextSegment: (state, action: PayloadAction<Word>) => {
       if (state.inProgressLink) {
         // There is already an in progress link.
+        state.mode = AlignmentMode.Edit;
+
         const alreadyToggled =
           state.inProgressLink.sources.includes(action.payload.id) ||
           state.inProgressLink.targets.includes(action.payload.id);
@@ -101,7 +103,7 @@ const alignmentSlice = createSlice({
             sources: existingLink.sources,
             targets: existingLink.targets,
           };
-          state.mode = AlignmentMode.Edit;
+          state.mode = AlignmentMode.Select;
         } else {
           // Create new link
           // assume it's a target segment for now
