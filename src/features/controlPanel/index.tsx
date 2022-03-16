@@ -36,8 +36,6 @@ export const ControlPanel = (): ReactElement => {
     );
   });
 
-  console.log('link has both sides?', linkHasBothSides);
-
   const layout = [
     {
       i: 'a',
