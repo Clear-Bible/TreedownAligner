@@ -11,7 +11,7 @@ import { Word, Corpus, CorpusViewType, Alignment } from 'structs';
 
 import cssVar from 'styles/cssVar';
 
-interface TextProps {
+interface CorpusProps {
   corpus: Corpus;
 }
 
@@ -38,7 +38,7 @@ const determineCorpusView = (corpus: Corpus) => {
   }
 };
 
-export const Text = (props: TextProps): ReactElement => {
+export const CorpusComponent = (props: CorpusProps): ReactElement => {
   const { corpus } = props;
   useDebug('TextComponent');
 
@@ -105,4 +105,4 @@ export const Text = (props: TextProps): ReactElement => {
   );
 };
 
-export default Text;
+export default CorpusComponent;

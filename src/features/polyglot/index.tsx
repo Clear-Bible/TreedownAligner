@@ -3,7 +3,7 @@ import GridLayout from 'react-grid-layout';
 
 import { useAppSelector } from 'app/hooks';
 import useDebug from 'hooks/useDebug';
-import TextComponent from 'features/text';
+import CorpusComponent from 'features/corpus';
 import { Corpus } from 'structs';
 
 import cssVar from 'styles/cssVar';
@@ -55,7 +55,7 @@ export const Polyglot = (): ReactElement => {
                 borderColor: cssVar('border-color', theme),
               }}
             >
-              <TextComponent key={corpus.id} corpus={corpus} />
+              <CorpusComponent key={corpus.id} corpus={corpus} />
             </div>
           );
         })}
