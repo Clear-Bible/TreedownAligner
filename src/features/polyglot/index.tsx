@@ -53,6 +53,7 @@ export const Polyglot = (): ReactElement => {
               style={{
                 border: '1px solid',
                 borderColor: cssVar('border-color', theme),
+                overflowY: 'scroll',
               }}
             >
               <CorpusComponent key={corpus.id} corpus={corpus} />
