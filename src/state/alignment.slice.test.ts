@@ -2,8 +2,10 @@ import { Word, Alignment, CorpusRole } from 'structs';
 
 import alignmentSliceReducer, {
   createLink,
+  deleteLink,
   toggleTextSegment,
   initialState,
+  AlignmentMode,
 } from 'state/alignment.slice';
 
 const englishAlignment: Alignment = { source: 'sbl', target: 'leb', links: [] };
@@ -219,6 +221,58 @@ describe('alignmentSlice reducer', () => {
         targets: ['leb_1'],
       });
     });
+
+    it('enters select mode (from blank slate)', () => {
+      const previousState = {
+        ...initialState,
+        alignments: [
+          {
+            source: 'sbl',
+            target: 'leb',
+            links: [
+              { _id: 'sbl-leb-1', sources: ['sbl_0'], targets: ['leb_1'] },
+            ],
+          },
+        ],
+        inProgressLink: null,
+      };
+
+      const resultState = alignmentSliceReducer(
+        previousState,
+        toggleTextSegment(targetWord1)
+      );
+
+      expect(resultState.mode).toEqual(AlignmentMode.Select);
+    });
+
+    it('enters edit mode (from select)', () => {
+      const previousState = {
+        ...initialState,
+        alignments: [
+          {
+            source: 'sbl',
+            target: 'leb',
+            links: [
+              { _id: 'sbl-leb-1', sources: ['sbl_0'], targets: ['leb_1'] },
+            ],
+          },
+        ],
+        inProgressLink: {
+          _id: 'sbl-leb-1',
+          source: 'sbl',
+          target: 'leb',
+          sources: ['sbl_0'],
+          targets: ['leb_1'],
+        },
+      };
+
+      const resultState = alignmentSliceReducer(
+        previousState,
+        toggleTextSegment(targetWord2)
+      );
+
+      expect(resultState.mode).toEqual(AlignmentMode.Edit);
+    });
   });
 
   describe('createLink', () => {
@@ -342,5 +396,153 @@ describe('alignmentSlice reducer', () => {
     });
   });
 
-  //describe('', () => {});
+  describe('deleteLink', () => {
+    it('does nothing when there is no inProgressLink', () => {
+      const previousState = {
+        ...initialState,
+        alignments: [
+          {
+            source: 'sbl',
+            target: 'leb',
+            links: [
+              {
+                _id: 'sbl-leb-1',
+                sources: ['sbl_0'],
+                targets: ['leb_1', 'leb_2'],
+              },
+            ],
+          },
+        ],
+      };
+
+      const resultState = alignmentSliceReducer(previousState, deleteLink());
+
+      expect(resultState).toEqual(previousState);
+    });
+
+    it('deletes a matching link', () => {
+      const previousState = {
+        ...initialState,
+        alignments: [
+          {
+            source: 'sbl',
+            target: 'leb',
+            links: [
+              {
+                _id: 'sbl-leb-1',
+                sources: ['sbl_0'],
+                targets: ['leb_1', 'leb_2'],
+              },
+            ],
+          },
+        ],
+        inProgressLink: {
+          _id: 'sbl-leb-1',
+          source: 'sbl',
+          target: 'leb',
+          sources: ['sbl_0'],
+          targets: ['leb_1'],
+        },
+      };
+
+      const resultState = alignmentSliceReducer(previousState, deleteLink());
+
+      expect(resultState.inProgressLink).toEqual(null);
+      expect(resultState.alignments[0].links).toEqual([]);
+      expect(resultState.mode).toEqual(AlignmentMode.CleanSlate);
+    });
+
+    it('deletes a link that only matches ID', () => {
+      const previousState = {
+        ...initialState,
+        alignments: [
+          {
+            source: 'sbl',
+            target: 'leb',
+            links: [
+              {
+                _id: 'sbl-leb-1',
+                sources: ['sbl_0'],
+                targets: ['leb_1'],
+              },
+
+              {
+                _id: 'sbl-leb-2',
+                sources: ['sbl_3'],
+                targets: ['leb_1', 'leb_2'],
+              },
+
+              {
+                _id: 'sbl-leb-8',
+                sources: ['sbl_7'],
+                targets: ['leb_3', 'leb_8'],
+              },
+            ],
+          },
+        ],
+        inProgressLink: {
+          _id: 'sbl-leb-1',
+          source: 'sbl',
+          target: 'leb',
+          sources: ['sbl_0'],
+          targets: ['leb_1'],
+        },
+      };
+
+      const resultState = alignmentSliceReducer(previousState, deleteLink());
+
+      expect(resultState.inProgressLink).toEqual(null);
+      expect(
+        resultState.alignments[0].links.find((link) => link._id === 'sbl-leb-1')
+      ).toEqual(undefined);
+
+      expect(resultState.alignments[0].links).toEqual([
+        {
+          _id: 'sbl-leb-2',
+          sources: ['sbl_3'],
+          targets: ['leb_1', 'leb_2'],
+        },
+
+        {
+          _id: 'sbl-leb-8',
+          sources: ['sbl_7'],
+          targets: ['leb_3', 'leb_8'],
+        },
+      ]);
+
+      expect(resultState.mode).toEqual(AlignmentMode.CleanSlate);
+    });
+
+    it('deletes the correct link out of several', () => {
+      const previousState = {
+        ...initialState,
+        alignments: [
+          {
+            source: 'sbl',
+            target: 'leb',
+            links: [
+              {
+                _id: 'sbl-leb-1',
+                sources: ['sbl_0'],
+                targets: ['leb_1', 'leb_2'],
+              },
+            ],
+          },
+        ],
+        inProgressLink: {
+          _id: 'sbl-leb-1',
+          source: 'sbl',
+          target: 'leb',
+          sources: ['sbl_30'],
+          targets: ['leb_5'],
+        },
+      };
+
+      const resultState = alignmentSliceReducer(previousState, deleteLink());
+
+      expect(resultState.inProgressLink).toEqual(null);
+      expect(resultState.alignments[0].links).toEqual([]);
+      expect(resultState.mode).toEqual(AlignmentMode.CleanSlate);
+    });
+  });
 });

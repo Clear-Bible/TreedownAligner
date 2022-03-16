@@ -4,7 +4,12 @@ import { ActionCreators } from 'redux-undo';
 
 import { useAppDispatch, useAppSelector } from 'app/hooks';
 import useDebug from 'hooks/useDebug';
-import { resetTextSegments, createLink } from 'state/alignment.slice';
+import {
+  resetTextSegments,
+  createLink,
+  deleteLink,
+  AlignmentMode,
+} from 'state/alignment.slice';
 
 import cssVar from 'styles/cssVar';
 
@@ -18,6 +23,17 @@ export const ControlPanel = (): ReactElement => {
 
   const theme = useAppSelector((state) => {
     return state.app.theme;
+  });
+
+  const mode = useAppSelector((state) => {
+    return state.alignment.present.mode;
+  });
+
+  const linkHasBothSides = useAppSelector((state) => {
+    return (
+      Number(state.alignment.present.inProgressLink?.sources.length) > 0 &&
+      Number(state.alignment.present.inProgressLink?.targets.length) > 0
+    );
   });
 
   const layout = [
@@ -55,17 +71,24 @@ export const ControlPanel = (): ReactElement => {
           }}
         >
           <button
+            disabled={mode !== AlignmentMode.Edit || !linkHasBothSides}
             onClick={() => {
               dispatch(createLink());
             }}
           >
             Link
           </button>
-          <button onClick={() => {}}>Unlink</button>
+          <button
+            disabled={!(mode === AlignmentMode.Select)}
+            onClick={() => {
+              dispatch(deleteLink());
+            }}
+          >
+            Unlink
+          </button>
           <button
             disabled={!anySegmentsSelected}
             onClick={() => {
-              console.log('dispatch the reset');
               dispatch(resetTextSegments());
             }}
           >

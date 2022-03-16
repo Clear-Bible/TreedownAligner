@@ -6,8 +6,9 @@ import removeSegmentFromLink from 'helpers/removeSegmentFromLink';
 import generateLinkId from 'helpers/generateLinkId';
 
 export enum AlignmentMode {
-  CleanSlate = 'cleanSlate',
-  Edit = 'edit',
+  CleanSlate = 'cleanSlate', // Default mode
+  Select = 'select', // An existing link has been selected
+  Edit = 'edit', // Editing a new or existing link
 }
 
 export interface AlignmentState {
@@ -42,6 +43,8 @@ const alignmentSlice = createSlice({
     toggleTextSegment: (state, action: PayloadAction<Word>) => {
       if (state.inProgressLink) {
         // There is already an in progress link.
+        state.mode = AlignmentMode.Edit;
+
         const alreadyToggled =
           state.inProgressLink.sources.includes(action.payload.id) ||
           state.inProgressLink.targets.includes(action.payload.id);
@@ -100,7 +103,7 @@ const alignmentSlice = createSlice({
             sources: existingLink.sources,
             targets: existingLink.targets,
           };
-          state.mode = AlignmentMode.Edit;
+          state.mode = AlignmentMode.Select;
         } else {
           // Create new link
           // assume it's a target segment for now
@@ -170,6 +173,34 @@ const alignmentSlice = createSlice({
         state.mode = AlignmentMode.CleanSlate;
       }
     },
+    deleteLink: (state) => {
+      const inProgressLink = state.inProgressLink;
+
+      if (inProgressLink) {
+        const alignmentIndex = state.alignments.findIndex(
+          (alignment: Alignment) => {
+            return (
+              alignment.source === inProgressLink.source &&
+              alignment.target === inProgressLink.target
+            );
+          }
+        );
+
+        if (Number.isFinite(alignmentIndex)) {
+          const linkToDeleteIndex = state.alignments[
+            alignmentIndex
+          ].links.findIndex((link: Link) => {
+            return link._id === inProgressLink._id;
+          });
+
+          if (Number.isFinite(linkToDeleteIndex)) {
+            state.alignments[alignmentIndex].links.splice(linkToDeleteIndex, 1);
+            state.inProgressLink = null;
+            state.mode = AlignmentMode.CleanSlate;
+          }
+        }
+      }
+    },
   },
 });
 
@@ -178,6 +209,7 @@ export const {
   toggleTextSegment,
   resetTextSegments,
   createLink,
+  deleteLink,
 } = alignmentSlice.actions;
 
 export default alignmentSlice.reducer;

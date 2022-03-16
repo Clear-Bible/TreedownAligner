@@ -286,7 +286,7 @@ export const TextSegment = (props: TextSegmentProps): ReactElement => {
         }}
         onClick={() => {
           if (
-            mode === AlignmentMode.Edit &&
+            (mode === AlignmentMode.Edit || mode === AlignmentMode.Select) &&
             (!isLinked || isCurrentLinkMember) &&
             isInvolved
           ) {
