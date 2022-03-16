@@ -22,7 +22,7 @@ interface EditorProps {
 }
 
 export const Editor = (props: EditorProps): ReactElement => {
-  const { theme } = props;
+  const { corpora, alignments, theme } = props;
   useDebug('Editor');
 
   const dispatch = useAppDispatch();
@@ -32,9 +32,9 @@ export const Editor = (props: EditorProps): ReactElement => {
   }, [dispatch, theme]);
 
   useEffect(() => {
-    dispatch(loadCorpora(props.corpora));
-    dispatch(loadAlignments(props.alignments));
-  }, [dispatch, props.corpora, props.alignments]);
+    dispatch(loadCorpora(corpora));
+    dispatch(loadAlignments(alignments));
+  }, [dispatch, corpora, alignments]);
 
   return (
     <div

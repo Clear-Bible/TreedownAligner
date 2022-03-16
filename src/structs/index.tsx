@@ -5,6 +5,11 @@ export enum CorpusRole {
   Target = 'target',
 }
 
+export enum CorpusViewType {
+  Paragraph = 'paragraph',
+  Treedown = 'treedown',
+}
+
 // Linkable sub-unit of corpus
 export interface Word {
   id: string;
@@ -25,6 +30,7 @@ export interface Corpus {
 
   words: Word[];
   fullText?: string;
+  viewType?: CorpusViewType;
 }
 
 // An instance of alignment
