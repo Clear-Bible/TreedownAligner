@@ -1,6 +1,6 @@
 import { ReactElement, useState } from 'react';
 
-import EditorWrapper from 'features/editor';
+//import EditorWrapper from 'features/editor';
 
 import cssVar from 'styles/cssVar';
 import 'styles/theme.css';
