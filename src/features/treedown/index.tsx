@@ -24,11 +24,10 @@ const parsePosition = (osisId: string): number => {
 const recurseSyntax = (corpus: Corpus, syntax: any, level: number) => {
   return [syntax].map((syntaxNode) => {
     if (syntaxNode.content && syntaxNode.content.elementType === 'wg') {
-
       //if (syntaxNode.content.class === 'cl') {
-        //return syntaxNode.children.map((childSyntaxNode: any) => {
-          //return recurseSyntax(corpus, childSyntaxNode, level + 1);
-        //});
+      //return syntaxNode.children.map((childSyntaxNode: any) => {
+      //return recurseSyntax(corpus, childSyntaxNode, level + 1);
+      //});
       //}
 
       const depth = level * 0.5;
