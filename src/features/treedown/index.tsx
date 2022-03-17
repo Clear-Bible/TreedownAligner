@@ -24,15 +24,34 @@ const parsePosition = (osisId: string): number => {
 const recurseSyntax = (corpus: Corpus, syntax: any, level: number) => {
   return [syntax].map((syntaxNode) => {
     if (syntaxNode.content && syntaxNode.content.elementType === 'wg') {
+
+      //if (syntaxNode.content.class === 'cl') {
+        //return syntaxNode.children.map((childSyntaxNode: any) => {
+          //return recurseSyntax(corpus, childSyntaxNode, level + 1);
+        //});
+      //}
+
+      const depth = level * 0.5;
       return (
         <div
           key={syntaxNode.content.n}
           className="wg"
-          style={{ marginLeft: `0.${level}rem` }}
+          style={{ marginLeft: `${depth}rem`, marginTop: '0.1rem' }}
         >
-          <span style={{ fontSize: '0.7rem', margin: '0.2rem' }}>
-            {syntaxNode.content.class}
-          </span>
+          {syntaxNode.content.class && (
+            <span
+              style={{
+                fontSize: '0.7rem',
+                margin: '0.2rem',
+                backgroundColor: 'lightgrey',
+                borderRadius: '0.1rem',
+                padding: '0.2rem',
+                color: 'black',
+              }}
+            >
+              {syntaxNode.content.class}
+            </span>
+          )}
           {syntaxNode.children.map((childSyntaxNode: any) => {
             return recurseSyntax(corpus, childSyntaxNode, level + 1);
           })}
@@ -41,17 +60,32 @@ const recurseSyntax = (corpus: Corpus, syntax: any, level: number) => {
     }
 
     if (syntaxNode.content && syntaxNode.content.elementType === 'w') {
-      //console.log(syntaxNode.content);
+      console.log(syntaxNode.content);
       return (
-        <TextSegment
-          word={{
-            id: syntaxNode.content.n,
-            corpusId: corpus.id,
-            role: CorpusRole.Source,
-            text: syntaxNode.content.text,
-            position: parsePosition(syntaxNode.content.osisId),
-          }}
-        />
+        <>
+          <span
+            style={{
+              fontSize: '0.7rem',
+              margin: '0.2rem',
+              backgroundColor: 'lightgrey',
+              borderRadius: '0.1rem',
+              padding: '0.2rem',
+              color: 'green',
+            }}
+          >
+            {syntaxNode.content.class}
+          </span>
+
+          <TextSegment
+            word={{
+              id: syntaxNode.content.n,
+              corpusId: corpus.id,
+              role: CorpusRole.Source,
+              text: syntaxNode.content.text,
+              position: parsePosition(syntaxNode.content.osisId),
+            }}
+          />
+        </>
       );
     }
 

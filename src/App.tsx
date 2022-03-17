@@ -147,14 +147,6 @@ function App() {
               role: CorpusRole.Target,
               words: nviWords,
             },
-            {
-              id: 'backTrans',
-              name: 'Back Translation',
-              fullName: 'Back Trans 1 (Espanol)',
-              language: 'eng',
-              role: CorpusRole.Target,
-              words: backTransWords,
-            },
           ]}
           alignments={[
             {

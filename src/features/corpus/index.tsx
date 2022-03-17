@@ -87,8 +87,8 @@ export const CorpusComponent = (props: CorpusProps): ReactElement => {
       <button
         disabled={!isCorpusAligned}
         style={{
-          position: 'absolute',
-          bottom: '0',
+          position: 'sticky',
+          bottom: '0px',
           cursor: 'pointer',
           height: '1rem',
           width: '1rem',
