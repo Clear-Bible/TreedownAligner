@@ -20,6 +20,7 @@ const parsePosition = (osisId: string): number => {
   //Number(/^.*!(\w)/.exec(syntaxNode.content.osisId)[1]
   return 0;
 };
+
 const recurseSyntax = (corpus: Corpus, syntax: any, level: number) => {
   return [syntax].map((syntaxNode) => {
     if (syntaxNode.content && syntaxNode.content.elementType === 'wg') {
@@ -40,11 +41,11 @@ const recurseSyntax = (corpus: Corpus, syntax: any, level: number) => {
     }
 
     if (syntaxNode.content && syntaxNode.content.elementType === 'w') {
-      console.log(syntaxNode.content);
+      //console.log(syntaxNode.content);
       return (
         <TextSegment
           word={{
-            id: syntaxNode.n,
+            id: syntaxNode.content.n,
             corpusId: corpus.id,
             role: CorpusRole.Source,
             text: syntaxNode.content.text,
