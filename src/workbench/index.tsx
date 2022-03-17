@@ -5,6 +5,7 @@ import EditorWrapper from 'features/editor';
 import cssVar from 'styles/cssVar';
 import 'styles/theme.css';
 
+import { querySyntax } from 'workbench/query';
 import books from 'workbench/books';
 
 interface WorkbenchProps {}
@@ -33,7 +34,7 @@ const Workbench = (props: WorkbenchProps): ReactElement => {
 
   const verses = Array.from(Array(200).keys()).map((x) => x + 1);
 
-  console.log('query?: ', book, chapter, verse);
+  querySyntax(book, chapter, verse);
 
   if (theme === 'night') {
     document.body.style.backgroundColor = 'var(--night-background)';
