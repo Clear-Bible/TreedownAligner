@@ -1,7 +1,7 @@
-import { ReactElement, Fragment } from 'react';
+import { ReactElement } from 'react';
 
 import useDebug from 'hooks/useDebug';
-import { useAppDispatch, useAppSelector } from 'app/hooks';
+import { useAppSelector } from 'app/hooks';
 
 import cssVar from 'styles/cssVar';
 
@@ -23,11 +23,13 @@ const parsePosition = (osisId: string): number => {
 
 const recurseSyntax = (corpus: Corpus, syntax: any, level: number) => {
   return [syntax].map((syntaxNode) => {
+
     if (syntaxNode.content && syntaxNode.content.elementType === 'sentence') {
       return syntaxNode.children.map((childSyntaxNode: any) => {
         return recurseSyntax(corpus, childSyntaxNode, 0);
       });
     }
+
     if (syntaxNode.content && syntaxNode.content.elementType === 'wg') {
       //if (syntaxNode.content.class === 'cl') {
       //return syntaxNode.children.map((childSyntaxNode: any) => {
@@ -96,6 +98,8 @@ const recurseSyntax = (corpus: Corpus, syntax: any, level: number) => {
     if (syntaxNode.content && syntaxNode.content.elementType === 'pc') {
       return <span>{syntaxNode.content.text}</span>;
     }
+
+    return null;
   });
 };
 

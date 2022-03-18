@@ -1,4 +1,4 @@
-import { Word, Corpus, CorpusRole } from 'structs';
+import { Corpus, CorpusRole } from 'structs';
 
 export const querySyntax = (
   bookNum: number,
@@ -54,16 +54,14 @@ const availableCorpora: Corpus[] = [
     role: CorpusRole.Target,
     words: [],
   },
-{
+  {
     id: 'backTrans',
     name: 'BT 1',
     fullName: 'Back Translation 1',
     language: 'eng',
     role: CorpusRole.Target,
     words: [],
-  }
-
-  ,
+  },
 ];
 
 export const queryText = (
@@ -100,7 +98,7 @@ export const queryText = (
 
   const words = text.split(' ').map((word: string, index: number) => {
     let id = '';
-    
+
     if (corpus.role === CorpusRole.Source) {
       const bookString = String(book).padStart(2, '0');
       const chapterString = String(chapter).padStart(3, '0');
@@ -108,7 +106,7 @@ export const queryText = (
       const positionString = String(index + 1).padStart(3, '0');
       id = `${bookString}${chapterString}${verseString}${positionString}0010`;
     } else {
-      id = `${corpusId}_${index}`
+      id = `${corpusId}_${index}`;
     }
 
     return {

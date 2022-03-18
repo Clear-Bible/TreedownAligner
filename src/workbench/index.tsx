@@ -2,7 +2,7 @@ import { ReactElement, useState, useEffect } from 'react';
 
 //import EditorWrapper from 'features/editor';
 
-import { Corpus, CorpusRole } from 'structs';
+import { Corpus } from 'structs';
 
 import cssVar from 'styles/cssVar';
 import 'styles/theme.css';
@@ -83,7 +83,6 @@ const Workbench = (props: WorkbenchProps): ReactElement => {
               'strong',
               'osisId',
             ],
-            ['p'],
             'sentence'
           );
           setSyntaxData(JSON.stringify(jsonizedXml));

@@ -1,7 +1,6 @@
 import parseXml from '@rgrove/parse-xml';
 
 let attrsToKeep = [];
-let elementsToIgnore = [];
 
 const attrMapper = (attrs) => {
   const keys = Object.keys(attrs).filter((key) => attrsToKeep.includes(key));
@@ -73,9 +72,8 @@ const mapper = (parsedXml) => {
   return { content, children };
 };
 
-const convert = async (xmlData, requestedAttrs, ignoredElements, rootNode) => {
+const convert = async (xmlData, requestedAttrs, rootNode) => {
   attrsToKeep = requestedAttrs;
-  elementsToIgnore = ignoredElements;
 
   const parserResult = parseXml(xmlData);
 
