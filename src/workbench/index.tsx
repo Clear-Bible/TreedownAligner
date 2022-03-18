@@ -2,7 +2,7 @@ import { ReactElement, useState, useEffect } from 'react';
 
 //import EditorWrapper from 'features/editor';
 
-import { CorpusRole } from 'structs';
+import { Corpus, CorpusRole } from 'structs';
 
 import cssVar from 'styles/cssVar';
 import 'styles/theme.css';
@@ -10,7 +10,7 @@ import 'styles/theme.css';
 import EditorWrapper from 'features/editor';
 import xmlToJson from 'workbench/xmlToJson';
 
-//import { queryText } from 'workbench/query';
+import { queryText } from 'workbench/query';
 import books from 'workbench/books';
 
 interface WorkbenchProps {}
@@ -41,8 +41,6 @@ const Workbench = (props: WorkbenchProps): ReactElement => {
 
   const verses = Array.from(Array(200).keys()).map((x) => x + 1);
 
-  console.log('syntaxData', syntaxData);
-
   useEffect(() => {
     const fetchData = async () => {
       if (bookDoc) {
@@ -52,7 +50,7 @@ const Workbench = (props: WorkbenchProps): ReactElement => {
           `${maculaEnv}/api/GNT/Nestle1904/lowfat?osis-ref=${osisRef}`
         );
         const xmlDoc = await response.text();
-        console.log(xmlDoc);
+        //console.log(xmlDoc);
         //const parser = new DOMParser();
         //const xml = await parser.parseFromString(xmlDoc, 'text/xml');
         //const wgNode = Array.from(
@@ -106,31 +104,28 @@ const Workbench = (props: WorkbenchProps): ReactElement => {
     document.body.style.backgroundColor = 'var(--day-background)';
   }
 
-  const sblText =
-    'οὐ μόνον δέ, ἀλλὰ καὶ καυχώμεθα ἐν ταῖς θλίψεσιν, εἰδότες ὅτι ἡ θλῖψις ὑπομονὴν κατεργάζεται,';
-  const lebText =
-    'And not only this, but we also boast in our afflictions, because we know that affliction produces patient endurance,';
+  const corpora: Corpus[] = [];
 
-  const sblWords = sblText.split(' ').map((word: string, index: number) => {
-    const position = String(index + 1).padStart(3, '0');
+  if (showSourceText) {
+    const sourceCorpus = {
+      ...queryText('sbl', book, chapter, verse),
+      syntax: syntaxData,
+    };
 
-    return {
-      id: `45005003${position}0010`,
-      corpusId: 'sbl',
-      role: CorpusRole.Source,
-      position: index,
-      text: word,
-    };
-  });
-  const lebWords = lebText.split(' ').map((word: string, index: number) => {
-    return {
-      id: `leb_${index}`,
-      corpusId: 'leb',
-      role: CorpusRole.Target,
-      position: index,
-      text: word,
-    };
-  });
+    corpora.push(sourceCorpus);
+  }
+
+  if (showTargetText) {
+    corpora.push(queryText('nvi', book, chapter, verse));
+  }
+
+  if (showLwcText) {
+    corpora.push(queryText('leb', book, chapter, verse));
+  }
+
+  if (showBackText) {
+    corpora.push(queryText('backTrans', book, chapter, verse));
+  }
 
   return (
     <div
@@ -314,33 +309,7 @@ const Workbench = (props: WorkbenchProps): ReactElement => {
       >
         <EditorWrapper
           theme={theme as 'night' | 'day'}
-          corpora={[
-            {
-              id: 'sbl',
-              name: 'SBL GNT',
-              fullName: 'SBL Greek New Testament',
-              language: 'grc',
-              role: CorpusRole.Source,
-              words: sblWords,
-              syntax: syntaxData,
-            },
-            {
-              id: 'leb',
-              name: 'LEB',
-              fullName: 'Lexham English Bible',
-              language: 'eng',
-              role: CorpusRole.Target,
-              words: lebWords,
-            },
-            //{
-            //id: 'nvi',
-            //name: 'NVI',
-            //fullName: 'Nueva Versión Internacional',
-            //language: 'spa',
-            //role: CorpusRole.Target,
-            //words: nviWords,
-            //},
-          ]}
+          corpora={corpora}
           alignments={[
             {
               source: 'sbl',
@@ -364,28 +333,28 @@ const Workbench = (props: WorkbenchProps): ReactElement => {
                 { sources: ['450050030150010'], targets: ['leb_16'] },
               ],
             },
-            //{
-            //source: 'sbl',
-            //target: 'nvi',
-            //links: [
-            //{ sources: ['450050030010010'], targets: ['nvi_1'] },
-            //{ sources: ['450050030020010'], targets: ['nvi_2'] },
-            //{ sources: ['450050030030010'], targets: ['nvi_0'] },
-            //{ sources: ['450050030040010'], targets: ['nvi_5'] },
-            //{ sources: ['450050030050010'], targets: ['nvi_6'] },
-            //{ sources: ['450050030070010'], targets: ['nvi_7'] },
-            //{
-            //sources: ['450050030080010', '450050030090010'],
-            //targets: ['nvi_8', 'nvi_9'],
-            //},
-            //{ sources: ['450050030100010'], targets: ['nvi_11'] },
-            //{ sources: ['450050030110010'], targets: ['nvi_12'] },
-            //{ sources: ['450050030120010'], targets: ['nvi_13'] },
-            //{ sources: ['450050030130010'], targets: ['nvi_14'] },
-            //{ sources: ['450050030140010'], targets: ['nvi_16'] },
-            //{ sources: ['450050030150010'], targets: ['nvi_15'] },
-            //],
-            //},
+            {
+              source: 'sbl',
+              target: 'nvi',
+              links: [
+                { sources: ['450050030010010'], targets: ['nvi_1'] },
+                { sources: ['450050030020010'], targets: ['nvi_2'] },
+                { sources: ['450050030030010'], targets: ['nvi_0'] },
+                { sources: ['450050030040010'], targets: ['nvi_5'] },
+                { sources: ['450050030050010'], targets: ['nvi_6'] },
+                { sources: ['450050030070010'], targets: ['nvi_7'] },
+                {
+                  sources: ['450050030080010', '450050030090010'],
+                  targets: ['nvi_8', 'nvi_9'],
+                },
+                { sources: ['450050030100010'], targets: ['nvi_11'] },
+                { sources: ['450050030110010'], targets: ['nvi_12'] },
+                { sources: ['450050030120010'], targets: ['nvi_13'] },
+                { sources: ['450050030130010'], targets: ['nvi_14'] },
+                { sources: ['450050030140010'], targets: ['nvi_16'] },
+                { sources: ['450050030150010'], targets: ['nvi_15'] },
+              ],
+            },
           ]}
         />
       </div>
