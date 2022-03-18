@@ -8,7 +8,7 @@ import cssVar from 'styles/cssVar';
 import { Corpus, CorpusRole } from 'structs';
 import TextSegment from 'features/textSegment';
 
-import syntax from 'features/treedown/syntax.json';
+//import syntax from 'features/treedown/syntax.json';
 
 import 'features/treedown/styles.css';
 
@@ -23,6 +23,11 @@ const parsePosition = (osisId: string): number => {
 
 const recurseSyntax = (corpus: Corpus, syntax: any, level: number) => {
   return [syntax].map((syntaxNode) => {
+    if (syntaxNode.content && syntaxNode.content.elementType === 'sentence') {
+      return syntaxNode.children.map((childSyntaxNode: any) => {
+        return recurseSyntax(corpus, childSyntaxNode, 0);
+      });
+    }
     if (syntaxNode.content && syntaxNode.content.elementType === 'wg') {
       //if (syntaxNode.content.class === 'cl') {
       //return syntaxNode.children.map((childSyntaxNode: any) => {
@@ -51,7 +56,7 @@ const recurseSyntax = (corpus: Corpus, syntax: any, level: number) => {
               {syntaxNode.content.class}
             </span>
           )}
-          {syntaxNode.children.map((childSyntaxNode: any) => {
+          {syntax.children.map((childSyntaxNode: any) => {
             return recurseSyntax(corpus, childSyntaxNode, level + 1);
           })}
         </div>
@@ -113,7 +118,7 @@ export const TreedownComponent = (props: TreedownProps): ReactElement => {
         color: cssVar('font-color', theme),
       }}
     >
-      {recurseSyntax(corpus, syntax, 0)}
+      {recurseSyntax(corpus, JSON.parse(corpus.syntax), 0)}
     </div>
   );
 };

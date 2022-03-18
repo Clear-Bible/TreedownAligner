@@ -1325,6 +1325,11 @@
     redux-thunk "^2.4.1"
     reselect "^4.1.5"
 
+"@rgrove/parse-xml@^3.0.0":
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/@rgrove/parse-xml/-/parse-xml-3.0.0.tgz#29d45eadeb6c9a701038cfb9fab2356a7bdc71d5"
+  integrity sha512-GFGDywRwGbuGq9yeL8wTjjLOsZ5Ps4O5tQ71eDcAfaZrZeA7Oe8QJzrnmFgplWtnoaBIBaFBB3n5Ht9iU4jLLw==
+
 "@rollup/plugin-babel@^5.2.0":
   version "5.3.0"
   resolved "https://registry.yarnpkg.com/@rollup/plugin-babel/-/plugin-babel-5.3.0.tgz#9cb1c5146ddd6a4968ad96f209c50c62f92f9879"

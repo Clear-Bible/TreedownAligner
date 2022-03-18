@@ -31,7 +31,7 @@ export interface Corpus {
   words: Word[];
   fullText?: string;
   viewType?: CorpusViewType;
-  syntax?: SyntaxNode;
+  syntax?: any;
 }
 
 // An instance of alignment
