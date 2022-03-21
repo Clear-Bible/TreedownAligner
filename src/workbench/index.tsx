@@ -8,7 +8,8 @@ import cssVar from 'styles/cssVar';
 import 'styles/theme.css';
 
 import EditorWrapper from 'features/editor';
-import xmlToJson from 'workbench/xmlToJson';
+
+import fetchSyntaxData from 'workbench/fetchSyntaxData';
 
 import { queryText } from 'workbench/query';
 import books from 'workbench/books';
@@ -17,6 +18,7 @@ interface WorkbenchProps {}
 
 const Workbench = (props: WorkbenchProps): ReactElement => {
   const [theme, setTheme] = useState('night');
+
   const themeVar = theme as 'night' | 'day';
 
   const [showSourceText, setShowSourceText] = useState(true);
@@ -42,57 +44,18 @@ const Workbench = (props: WorkbenchProps): ReactElement => {
   const verses = Array.from(Array(200).keys()).map((x) => x + 1);
 
   useEffect(() => {
-    const fetchData = async () => {
-      if (bookDoc) {
-        const maculaEnv = 'https://macula-dev.herokuapp.com';
-        const osisRef = `${bookDoc.OSIS}.${chapter}.${verse}`;
-        const response = await fetch(
-          `${maculaEnv}/api/GNT/Nestle1904/lowfat?osis-ref=${osisRef}`
-        );
-        const xmlDoc = await response.text();
-        //console.log(xmlDoc);
-        //const parser = new DOMParser();
-        //const xml = await parser.parseFromString(xmlDoc, 'text/xml');
-        //const wgNode = Array.from(
-        //xml.getElementsByTagName('sentence')[0].children
-        //).find((element) => {
-        //return element.nodeName === 'wg';
-        //});
-        //console.log(wgNode?.getAtribute('role'));
-        try {
-          const jsonizedXml = await xmlToJson(
-            xmlDoc,
-            [
-              'class',
-              'role',
-              'head',
-              'discontinuous',
-              'lemma',
-              'person',
-              'number',
-              'gender',
-              'case',
-              'tense',
-              'voice',
-              'mood',
-              'articular',
-              'det',
-              'type',
-              'n',
-              'gloss',
-              'strong',
-              'osisId',
-            ],
-            'sentence'
-          );
-          setSyntaxData(JSON.stringify(jsonizedXml));
-        } catch (error) {
-          console.error(error);
+    const loadSyntaxData = async () => {
+      try {
+        const syntaxData = await fetchSyntaxData(bookDoc, chapter, verse);
+        if (syntaxData) {
+          setSyntaxData(syntaxData);
         }
+      } catch (error) {
+        console.error(error);
       }
     };
 
-    fetchData().catch(console.error);
+    loadSyntaxData().catch(console.error);
   }, [bookDoc, book, chapter, verse]);
 
   if (theme === 'night') {

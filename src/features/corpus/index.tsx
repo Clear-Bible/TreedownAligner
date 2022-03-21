@@ -88,7 +88,7 @@ export const CorpusComponent = (props: CorpusProps): ReactElement => {
         disabled={!isCorpusAligned}
         style={{
           position: 'sticky',
-          bottom: '0px',
+          bottom: '0',
           cursor: 'pointer',
           height: '1rem',
           width: '1rem',
@@ -96,9 +96,7 @@ export const CorpusComponent = (props: CorpusProps): ReactElement => {
         onClick={() => {
           dispatch(toggleCorpusView(corpus.id));
         }}
-      >
-        t
-      </button>
+      ></button>
 
       <DragHandle />
     </Fragment>

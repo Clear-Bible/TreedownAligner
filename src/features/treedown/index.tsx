@@ -8,13 +8,13 @@ import cssVar from 'styles/cssVar';
 import { Corpus, CorpusRole } from 'structs';
 import TextSegment from 'features/textSegment';
 
-//import syntax from 'features/treedown/syntax.json';
-
 import 'features/treedown/styles.css';
 
 interface TreedownProps {
   corpus: Corpus;
 }
+
+let theme: 'night' | 'day' = 'night';
 
 const parsePosition = (osisId: string): number => {
   //Number(/^.*!(\w)/.exec(syntaxNode.content.osisId)[1]
@@ -23,7 +23,6 @@ const parsePosition = (osisId: string): number => {
 
 const recurseSyntax = (corpus: Corpus, syntax: any, level: number) => {
   return [syntax].map((syntaxNode) => {
-
     if (syntaxNode.content && syntaxNode.content.elementType === 'sentence') {
       return syntaxNode.children.map((childSyntaxNode: any) => {
         return recurseSyntax(corpus, childSyntaxNode, 0);
@@ -49,10 +48,10 @@ const recurseSyntax = (corpus: Corpus, syntax: any, level: number) => {
               style={{
                 fontSize: '0.7rem',
                 margin: '0.2rem',
-                backgroundColor: 'lightgrey',
+                backgroundColor: cssVar('syntax-label-background', theme),
                 borderRadius: '0.1rem',
                 padding: '0.2rem',
-                color: 'black',
+                color: cssVar('font-color', theme),
               }}
             >
               {syntaxNode.content.class}
@@ -66,14 +65,14 @@ const recurseSyntax = (corpus: Corpus, syntax: any, level: number) => {
     }
 
     if (syntaxNode.content && syntaxNode.content.elementType === 'w') {
-      console.log(syntaxNode.content);
       return (
         <>
           <span
+            key={syntaxNode.content.n}
             style={{
               fontSize: '0.7rem',
               margin: '0.2rem',
-              backgroundColor: 'lightgrey',
+              backgroundColor: cssVar('syntax-label-background', theme),
               borderRadius: '0.1rem',
               padding: '0.2rem',
               color: 'green',
@@ -96,7 +95,7 @@ const recurseSyntax = (corpus: Corpus, syntax: any, level: number) => {
     }
 
     if (syntaxNode.content && syntaxNode.content.elementType === 'pc') {
-      return <span>{syntaxNode.content.text}</span>;
+      return <span key={syntaxNode.content.n}>{syntaxNode.content.text}</span>;
     }
 
     return null;
@@ -108,23 +107,40 @@ export const TreedownComponent = (props: TreedownProps): ReactElement => {
 
   useDebug('TreedownComponent');
 
-  const theme = useAppSelector((state) => {
+  const reactTheme = useAppSelector((state) => {
     return state.app.theme;
   });
 
-  return (
-    <div
-      style={{
-        paddingTop: '0.5rem',
-        paddingBottom: '0.5rem',
-        paddingLeft: '0.7rem',
-        paddingRight: '0.7rem',
-        color: cssVar('font-color', theme),
-      }}
-    >
-      {recurseSyntax(corpus, JSON.parse(corpus.syntax), 0)}
-    </div>
-  );
+  theme = reactTheme as 'night' | 'day';
+
+  let parsedSyntax = null;
+  try {
+    if (corpus.syntax) {
+      parsedSyntax = JSON.parse(corpus.syntax);
+    }
+  } catch (error) {
+    console.error('Could not parse syntax.');
+    console.error(corpus.syntax);
+    console.error(error);
+  }
+  if (parsedSyntax) {
+    return (
+      <div
+        key={`corpus_${corpus.id}_treedown`}
+        style={{
+          paddingTop: '0.5rem',
+          paddingBottom: '0.5rem',
+          paddingLeft: '0.7rem',
+          paddingRight: '0.7rem',
+          color: cssVar('font-color', theme),
+        }}
+      >
+        {recurseSyntax(corpus, parsedSyntax, 0)}
+      </div>
+    );
+  }
+
+  return <></>;
 };
 
 export default TreedownComponent;

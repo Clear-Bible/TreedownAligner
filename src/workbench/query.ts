@@ -112,7 +112,7 @@ export const queryText = (
     return {
       id,
       corpusId: corpusId,
-      role: CorpusRole.Source,
+      role: corpus.role,
       position: index,
       text: word,
     };

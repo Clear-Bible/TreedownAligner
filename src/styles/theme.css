@@ -6,6 +6,7 @@
   --night-unlinked-font-color: darkgrey;
   --night-selected-segment-background-color: white;
   --night-selected-segment-font-color: black;
+  --night-syntax-label-background: #313537;
 
   --day-background: white;
   --day-border-color: black;
@@ -14,4 +15,5 @@
   --day-unlinked-font-color: dimgrey;
   --day-selected-segment-background-color: black;
   --day-selected-segment-font-color: white;
+  --day-syntax-label-background: lightgrey;
 }
