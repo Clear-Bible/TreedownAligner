@@ -23,64 +23,105 @@ const parsePosition = (osisId: string): number => {
 
 const recurseSyntax = (corpus: Corpus, syntax: any, level: number) => {
   return [syntax].map((syntaxNode) => {
+    const depth = level * 0.5;
+
+    if (syntaxNode.content.elementType === 'pc') {
+      console.log('PC', syntaxNode);
+      return <span className="pc">{syntaxNode.content.text}</span>;
+    }
+
     if (syntaxNode.content && syntaxNode.content.elementType === 'sentence') {
+      console.log('Sentence', syntaxNode);
       return syntaxNode.children.map((childSyntaxNode: any) => {
         return recurseSyntax(corpus, childSyntaxNode, 0);
       });
     }
 
-    if (syntaxNode.content && syntaxNode.content.elementType === 'wg') {
-      //if (syntaxNode.content.class === 'cl') {
-      //return syntaxNode.children.map((childSyntaxNode: any) => {
-      //return recurseSyntax(corpus, childSyntaxNode, level + 1);
-      //});
-      //}
-
-      const depth = level * 0.5;
+    if (syntaxNode.content.class === 'cl' || syntaxNode.content.role === 'cl') {
+      console.log('CL', syntaxNode);
       return (
-        <div
-          key={syntaxNode.content.n}
-          className="wg"
-          style={{ marginLeft: `${depth}rem`, marginTop: '0.1rem' }}
-        >
-          {syntaxNode.content.class && (
-            <span
-              style={{
-                fontSize: '0.7rem',
-                margin: '0.2rem',
-                backgroundColor: cssVar('syntax-label-background', theme),
-                borderRadius: '0.1rem',
-                padding: '0.2rem',
-                color: cssVar('font-color', theme),
-              }}
-            >
-              {syntaxNode.content.class}
-            </span>
-          )}
-          {syntax.children.map((childSyntaxNode: any) => {
-            return recurseSyntax(corpus, childSyntaxNode, level + 1);
-          })}
+        <div className="cl" style={{ marginLeft: `${depth}rem` }}>
+          {syntaxNode.children &&
+            syntaxNode.children.map((childSyntaxNode: any) => {
+              return recurseSyntax(corpus, childSyntaxNode, level + 1);
+            })}
         </div>
       );
     }
 
-    if (syntaxNode.content && syntaxNode.content.elementType === 'w') {
+    if (syntaxNode.content.role) {
       return (
-        <>
+        <div
+          className="constituent"
+          style={{ marginTop: '5px', marginBottom: '5px' }}
+        >
           <span
-            key={syntaxNode.content.n}
             style={{
               fontSize: '0.7rem',
               margin: '0.2rem',
               backgroundColor: cssVar('syntax-label-background', theme),
               borderRadius: '0.1rem',
               padding: '0.2rem',
-              color: 'green',
+              color: cssVar('font-color', theme),
             }}
           >
-            {syntaxNode.content.class}
+            {syntaxNode.content.role}
           </span>
+          {syntaxNode.children &&
+            syntaxNode.children.map((childSyntaxNode: any) => {
+              return recurseSyntax(corpus, childSyntaxNode, level);
+            })}
 
+          {syntaxNode.content.elementType === 'w' && (
+            <TextSegment
+              word={{
+                id: syntaxNode.content.n,
+                corpusId: corpus.id,
+                role: CorpusRole.Source,
+                text: syntaxNode.content.text,
+                position: parsePosition(syntaxNode.content.osisId),
+              }}
+            />
+          )}
+        </div>
+      );
+    }
+
+    //return (
+    //<div
+    //key={syntaxNode.content.n}
+    //className="wg"
+    //style={{ marginLeft: `${depth}rem`, marginTop: '0.1rem' }}
+    //>
+    //{syntaxNode.content.class && (
+    //<span
+    //style={{
+    //fontSize: '0.7rem',
+    //margin: '0.2rem',
+    //backgroundColor: cssVar('syntax-label-background', theme),
+    //borderRadius: '0.1rem',
+    //padding: '0.2rem',
+    //color: cssVar('font-color', theme),
+    //}}
+    //>
+    //{syntaxNode.content.class}
+    //</span>
+    //)}
+    //{syntax.children.map((childSyntaxNode: any) => {
+    //return recurseSyntax(corpus, childSyntaxNode, level + 1);
+    //})}
+    //</div>
+    //);
+
+    if (syntaxNode.children && syntaxNode.children.length) {
+      return syntaxNode.children.map((childSyntaxNode: any) => {
+        return recurseSyntax(corpus, childSyntaxNode, level);
+      });
+    }
+
+    if (syntaxNode.content && syntaxNode.content.elementType === 'w') {
+      return (
+        <>
           <TextSegment
             word={{
               id: syntaxNode.content.n,
@@ -92,10 +133,6 @@ const recurseSyntax = (corpus: Corpus, syntax: any, level: number) => {
           />
         </>
       );
-    }
-
-    if (syntaxNode.content && syntaxNode.content.elementType === 'pc') {
-      return <span key={syntaxNode.content.n}>{syntaxNode.content.text}</span>;
     }
 
     return null;
