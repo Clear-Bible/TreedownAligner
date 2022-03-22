@@ -21,9 +21,21 @@ const parsePosition = (osisId: string): number => {
   return 0;
 };
 
-const recurseSyntax = (corpus: Corpus, syntax: any, level: number) => {
+const isClause = (syntaxNode: any) => {
+  return syntaxNode.content.role === 'cl' || syntaxNode.content.class === 'cl';
+};
+
+const nextDepth = (nextSyntaxNode: any, currentDepth: number): number => {
+  if (!isClause(nextSyntaxNode)) {
+    return currentDepth;
+  }
+
+  return currentDepth + 1;
+};
+
+const recurseSyntax = (corpus: Corpus, syntax: any, depth: number) => {
   return [syntax].map((syntaxNode) => {
-    const depth = level * 0.5;
+    const graduatedDepth = depth * 0.5;
 
     if (syntaxNode.content.elementType === 'pc') {
       console.log('PC', syntaxNode);
@@ -37,13 +49,22 @@ const recurseSyntax = (corpus: Corpus, syntax: any, level: number) => {
       });
     }
 
-    if (syntaxNode.content.class === 'cl' || syntaxNode.content.role === 'cl') {
+    if (isClause(syntaxNode)) {
       console.log('CL', syntaxNode);
       return (
-        <div className="cl" style={{ marginLeft: `${depth}rem` }}>
+        <div
+          className="cl"
+          style={{
+            marginLeft: `${graduatedDepth}rem`,
+          }}
+        >
           {syntaxNode.children &&
             syntaxNode.children.map((childSyntaxNode: any) => {
-              return recurseSyntax(corpus, childSyntaxNode, level + 1);
+              return recurseSyntax(
+                corpus,
+                childSyntaxNode,
+                nextDepth(childSyntaxNode, graduatedDepth)
+              );
             })}
         </div>
       );
@@ -69,7 +90,11 @@ const recurseSyntax = (corpus: Corpus, syntax: any, level: number) => {
           </span>
           {syntaxNode.children &&
             syntaxNode.children.map((childSyntaxNode: any) => {
-              return recurseSyntax(corpus, childSyntaxNode, level);
+              return recurseSyntax(
+                corpus,
+                childSyntaxNode,
+                nextDepth(childSyntaxNode, graduatedDepth)
+              );
             })}
 
           {syntaxNode.content.elementType === 'w' && (
@@ -115,7 +140,11 @@ const recurseSyntax = (corpus: Corpus, syntax: any, level: number) => {
 
     if (syntaxNode.children && syntaxNode.children.length) {
       return syntaxNode.children.map((childSyntaxNode: any) => {
-        return recurseSyntax(corpus, childSyntaxNode, level);
+        return recurseSyntax(
+          corpus,
+          childSyntaxNode,
+          nextDepth(childSyntaxNode, graduatedDepth)
+        );
       });
     }
 
