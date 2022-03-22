@@ -1,7 +1,7 @@
 import xmlToJson from 'workbench/xmlToJson';
 import cachedSyntaxData from 'workbench/cachedSyntaxData';
 
-const MACULA_ENV = 'https://macula-dev.herokuapp.com';
+const MACULA_ENV = 'http://labs.clear.bible/symphony-dev';
 
 const jsonizeXml = async (xmlString: string): Promise<object | null> => {
   try {
