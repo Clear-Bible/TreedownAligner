@@ -8,6 +8,8 @@ import { Corpus } from 'structs';
 
 import cssVar from 'styles/cssVar';
 
+import 'features/polyglot/styles.css';
+
 export const Polyglot = (): ReactElement => {
   useDebug('PolyglotComponent');
   const corpora = useAppSelector((state) => state.polyglot.corpora);
@@ -49,6 +51,7 @@ export const Polyglot = (): ReactElement => {
           const key = `text_${index}`;
           return (
             <div
+              className="corpus-container"
               key={key}
               style={{
                 border: '1px solid',

@@ -1,0 +1,3 @@
+.corpus-container::-webkit-scrollbar {
+  display: none;
+}

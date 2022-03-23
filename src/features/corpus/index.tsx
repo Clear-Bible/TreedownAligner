@@ -57,29 +57,20 @@ export const CorpusComponent = (props: CorpusProps): ReactElement => {
   );
 
   return (
-    <Fragment>
+    <div>
+      <DragHandle />
       <div
         style={{
           textAlign: 'right',
           padding: '0.5rem',
           fontWeight: 'regular',
           color: cssVar('font-color', theme),
+          position: 'sticky',
+          top: '0',
+          backgroundColor: cssVar('--background', theme),
         }}
       >
         {corpus.name}
-      </div>
-      <div
-        style={{
-          textAlign: 'right',
-          padding: '0.5rem',
-          marginTop: '-0.75rem',
-          fontSize: 'small',
-          fontVariant: 'small-caps',
-          fontStyle: 'small-caps',
-          color: cssVar('font-color', theme),
-        }}
-      >
-        {corpus.fullName}
       </div>
 
       {determineCorpusView(corpus)}
@@ -89,6 +80,7 @@ export const CorpusComponent = (props: CorpusProps): ReactElement => {
         style={{
           position: 'sticky',
           bottom: '0',
+          left: '0',
           cursor: 'pointer',
           height: '1rem',
           width: '1rem',
@@ -97,9 +89,7 @@ export const CorpusComponent = (props: CorpusProps): ReactElement => {
           dispatch(toggleCorpusView(corpus.id));
         }}
       ></button>
-
-      <DragHandle />
-    </Fragment>
+    </div>
   );
 };
 
