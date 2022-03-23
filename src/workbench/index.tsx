@@ -16,7 +16,61 @@ import books from 'workbench/books';
 
 interface WorkbenchProps {}
 
+const documentTitle = '🌲⬇️';
+
+const getBookNumber = (bookName: string) => {
+  const bookDoc = books.find(
+    (bookItem) => bookItem.OSIS.toLowerCase() === bookName.toLowerCase()
+  );
+  if (bookDoc) {
+    return bookDoc.BookNumber;
+  }
+};
+const getRefParam = (): string | null => {
+  const params = new URLSearchParams(window.location.search);
+  return params.get('ref');
+};
+
+const getDefaultRef = (): number[] => {
+  let book = 45;
+  let chapter = 5;
+  let verse = 3;
+
+  const refParam = getRefParam();
+
+  if (refParam) {
+    const parsedRegex = /^(\w+)(\.)(\w+)(\.)(\w+)$/.exec(refParam);
+
+    if (parsedRegex) {
+      const parsedBook = getBookNumber(parsedRegex[1]);
+
+      if (parsedBook) {
+        book = parsedBook;
+      }
+      const parsedChapter = Number(parsedRegex[3] ?? undefined);
+
+      if (parsedChapter && Number.isFinite(parsedChapter)) {
+        chapter = parsedChapter;
+      }
+
+      const parsedVerse = Number(parsedRegex[5]);
+      if (parsedVerse && Number.isFinite(parsedVerse)) {
+        verse = parsedVerse;
+      }
+    }
+  }
+
+  return [book, chapter, verse];
+};
+
 const Workbench = (props: WorkbenchProps): ReactElement => {
+  const [defaultBook, defaultChapter, defaultVerse] = getDefaultRef();
+  console.log(defaultBook, defaultChapter, defaultVerse);
+
+  document.title = getRefParam()
+    ? `${documentTitle} ${getRefParam()}`
+    : documentTitle;
+
   const [theme, setTheme] = useState('night');
 
   const themeVar = theme as 'night' | 'day';
@@ -26,9 +80,9 @@ const Workbench = (props: WorkbenchProps): ReactElement => {
   const [showLwcText, setShowLwcText] = useState(true);
   const [showBackText, setShowBackText] = useState(true);
 
-  const [book, setBook] = useState(45);
-  const [chapter, setChapter] = useState(5);
-  const [verse, setVerse] = useState(3);
+  const [book, setBook] = useState(defaultBook);
+  const [chapter, setChapter] = useState(defaultChapter);
+  const [verse, setVerse] = useState(defaultVerse);
 
   const [syntaxData, setSyntaxData] = useState('');
 
@@ -49,6 +103,9 @@ const Workbench = (props: WorkbenchProps): ReactElement => {
         const syntaxData = await fetchSyntaxData(bookDoc, chapter, verse);
         if (syntaxData) {
           setSyntaxData(syntaxData);
+          document.title = `${documentTitle} ${
+            bookDoc ? bookDoc.OSIS : book
+          }.${chapter}.${verse}`;
         }
       } catch (error) {
         console.error(error);
