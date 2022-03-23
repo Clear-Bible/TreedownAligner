@@ -33,7 +33,16 @@ const nextDepth = (nextSyntaxNode: any, currentDepth: number): number => {
   return currentDepth + 1;
 };
 
-const recurseSyntax = (corpus: Corpus, syntax: any, depth: number) => {
+const isPunctuation = (syntaxNode: any): boolean => {
+  return Boolean(syntaxNode?.content.elementType === 'pc');
+};
+
+const recurseSyntax = (
+  corpus: Corpus,
+  syntax: any,
+  depth: number,
+  hasTrailingPunctuation: boolean = false
+) => {
   return [syntax].map((syntaxNode) => {
     const graduatedDepth = depth * 0.5;
 
@@ -44,8 +53,13 @@ const recurseSyntax = (corpus: Corpus, syntax: any, depth: number) => {
 
     if (syntaxNode.content && syntaxNode.content.elementType === 'sentence') {
       console.log('Sentence', syntaxNode);
-      return syntaxNode.children.map((childSyntaxNode: any) => {
-        return recurseSyntax(corpus, childSyntaxNode, 0);
+      return syntaxNode.children.map((childSyntaxNode: any, index: number) => {
+        return recurseSyntax(
+          corpus,
+          childSyntaxNode,
+          0,
+          isPunctuation(syntaxNode.children[index + 1])
+        );
       });
     }
 
@@ -59,11 +73,12 @@ const recurseSyntax = (corpus: Corpus, syntax: any, depth: number) => {
           }}
         >
           {syntaxNode.children &&
-            syntaxNode.children.map((childSyntaxNode: any) => {
+            syntaxNode.children.map((childSyntaxNode: any, index: number) => {
               return recurseSyntax(
                 corpus,
                 childSyntaxNode,
-                nextDepth(childSyntaxNode, graduatedDepth)
+                nextDepth(childSyntaxNode, graduatedDepth),
+                isPunctuation(syntaxNode.children[index + 1])
               );
             })}
         </div>
@@ -71,10 +86,22 @@ const recurseSyntax = (corpus: Corpus, syntax: any, depth: number) => {
     }
 
     if (syntaxNode.content.role) {
+      let calculatedWidth = '100%';
+      const calculatedDisplay = 'inline-block';
+
+      if (hasTrailingPunctuation) {
+        calculatedWidth = 'fit-content';
+      }
+
       return (
         <div
           className="constituent"
-          style={{ marginTop: '5px', marginBottom: '5px' }}
+          style={{
+            marginTop: '7px',
+            marginBottom: '7px',
+            width: calculatedWidth,
+            display: calculatedDisplay,
+          }}
         >
           <span
             style={{
@@ -89,11 +116,12 @@ const recurseSyntax = (corpus: Corpus, syntax: any, depth: number) => {
             {syntaxNode.content.role}
           </span>
           {syntaxNode.children &&
-            syntaxNode.children.map((childSyntaxNode: any) => {
+            syntaxNode.children.map((childSyntaxNode: any, index: number) => {
               return recurseSyntax(
                 corpus,
                 childSyntaxNode,
-                nextDepth(childSyntaxNode, graduatedDepth)
+                nextDepth(childSyntaxNode, graduatedDepth),
+                isPunctuation(syntaxNode.children[index + 1])
               );
             })}
 
@@ -139,11 +167,12 @@ const recurseSyntax = (corpus: Corpus, syntax: any, depth: number) => {
     //);
 
     if (syntaxNode.children && syntaxNode.children.length) {
-      return syntaxNode.children.map((childSyntaxNode: any) => {
+      return syntaxNode.children.map((childSyntaxNode: any, index: number) => {
         return recurseSyntax(
           corpus,
           childSyntaxNode,
-          nextDepth(childSyntaxNode, graduatedDepth)
+          nextDepth(childSyntaxNode, graduatedDepth),
+          isPunctuation(syntaxNode.children[index + 1])
         );
       });
     }
