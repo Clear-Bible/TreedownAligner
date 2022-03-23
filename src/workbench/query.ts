@@ -33,7 +33,7 @@ const availableCorpora: Corpus[] = [
     name: 'SBL GNT',
     fullName: 'SBL Greek New Testament',
     language: 'grc',
-    role: CorpusRole.Source,
+    role: CorpusRole.Target,
     words: [],
     syntax: null,
   },
@@ -51,7 +51,7 @@ const availableCorpora: Corpus[] = [
     name: 'NVI',
     fullName: 'Nueva Versión Internacional',
     language: 'spa',
-    role: CorpusRole.Target,
+    role: CorpusRole.Source,
     words: [],
   },
   {
@@ -99,7 +99,7 @@ export const queryText = (
   const words = text.split(' ').map((word: string, index: number) => {
     let id = '';
 
-    if (corpus.role === CorpusRole.Source) {
+    if (corpus.id === 'sbl') {
       const bookString = String(book).padStart(2, '0');
       const chapterString = String(chapter).padStart(3, '0');
       const verseString = String(verse).padStart(3, '0');
