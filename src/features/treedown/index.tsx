@@ -25,14 +25,6 @@ const isClause = (syntaxNode: any) => {
   return syntaxNode.content.role === 'cl' || syntaxNode.content.class === 'cl';
 };
 
-const nextDepth = (nextSyntaxNode: any, currentDepth: number): number => {
-  if (!isClause(nextSyntaxNode)) {
-    return currentDepth;
-  }
-
-  return currentDepth + 1;
-};
-
 const isPunctuation = (syntaxNode: any): boolean => {
   return Boolean(syntaxNode?.content.elementType === 'pc');
 };
@@ -70,6 +62,8 @@ const recurseSyntax = (
           className="cl"
           style={{
             marginLeft: `${graduatedDepth}rem`,
+            marginTop: '5px',
+            marginBottom: '5px',
           }}
         >
           {syntaxNode.children &&
@@ -77,7 +71,7 @@ const recurseSyntax = (
               return recurseSyntax(
                 corpus,
                 childSyntaxNode,
-                nextDepth(childSyntaxNode, graduatedDepth),
+                graduatedDepth + 1,
                 isPunctuation(syntaxNode.children[index + 1])
               );
             })}
@@ -87,7 +81,6 @@ const recurseSyntax = (
 
     if (syntaxNode.content.role) {
       let calculatedWidth = '100%';
-      const calculatedDisplay = 'inline-block';
 
       if (hasTrailingPunctuation) {
         calculatedWidth = 'fit-content';
@@ -97,10 +90,10 @@ const recurseSyntax = (
         <div
           className="constituent"
           style={{
-            marginTop: '7px',
-            marginBottom: '7px',
+            marginTop: '5px',
+            marginBottom: '5px',
             width: calculatedWidth,
-            display: calculatedDisplay,
+            display: 'inline-block',
           }}
         >
           <span
@@ -120,58 +113,34 @@ const recurseSyntax = (
               return recurseSyntax(
                 corpus,
                 childSyntaxNode,
-                nextDepth(childSyntaxNode, graduatedDepth),
+                graduatedDepth + 1,
                 isPunctuation(syntaxNode.children[index + 1])
               );
             })}
 
           {syntaxNode.content.elementType === 'w' && (
-            <TextSegment
-              word={{
-                id: syntaxNode.content.n,
-                corpusId: corpus.id,
-                role: CorpusRole.Source,
-                text: syntaxNode.content.text,
-                position: parsePosition(syntaxNode.content.osisId),
-              }}
-            />
+            <span style={{ textIndent: `${graduatedDepth}rem` }}>
+              <TextSegment
+                word={{
+                  id: syntaxNode.content.n,
+                  corpusId: corpus.id,
+                  role: CorpusRole.Source,
+                  text: syntaxNode.content.text,
+                  position: parsePosition(syntaxNode.content.osisId),
+                }}
+              />
+            </span>
           )}
         </div>
       );
     }
-
-    //return (
-    //<div
-    //key={syntaxNode.content.n}
-    //className="wg"
-    //style={{ marginLeft: `${depth}rem`, marginTop: '0.1rem' }}
-    //>
-    //{syntaxNode.content.class && (
-    //<span
-    //style={{
-    //fontSize: '0.7rem',
-    //margin: '0.2rem',
-    //backgroundColor: cssVar('syntax-label-background', theme),
-    //borderRadius: '0.1rem',
-    //padding: '0.2rem',
-    //color: cssVar('font-color', theme),
-    //}}
-    //>
-    //{syntaxNode.content.class}
-    //</span>
-    //)}
-    //{syntax.children.map((childSyntaxNode: any) => {
-    //return recurseSyntax(corpus, childSyntaxNode, level + 1);
-    //})}
-    //</div>
-    //);
 
     if (syntaxNode.children && syntaxNode.children.length) {
       return syntaxNode.children.map((childSyntaxNode: any, index: number) => {
         return recurseSyntax(
           corpus,
           childSyntaxNode,
-          nextDepth(childSyntaxNode, graduatedDepth),
+          graduatedDepth + 1,
           isPunctuation(syntaxNode.children[index + 1])
         );
       });
@@ -179,17 +148,15 @@ const recurseSyntax = (
 
     if (syntaxNode.content && syntaxNode.content.elementType === 'w') {
       return (
-        <>
-          <TextSegment
-            word={{
-              id: syntaxNode.content.n,
-              corpusId: corpus.id,
-              role: CorpusRole.Source,
-              text: syntaxNode.content.text,
-              position: parsePosition(syntaxNode.content.osisId),
-            }}
-          />
-        </>
+        <TextSegment
+          word={{
+            id: syntaxNode.content.n,
+            corpusId: corpus.id,
+            role: CorpusRole.Source,
+            text: syntaxNode.content.text,
+            position: parsePosition(syntaxNode.content.osisId),
+          }}
+        />
       );
     }
 
