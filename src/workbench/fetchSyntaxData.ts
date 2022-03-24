@@ -58,6 +58,7 @@ const fetchSyntaxData = async (
       const jsonizedXml = await xmlToJson(
         xmlDoc,
         [
+          'rule',
           'class',
           'role',
           'head',

@@ -203,6 +203,7 @@ export const TreedownComponent = (props: TreedownProps): ReactElement => {
 
   useDebug('TreedownComponent');
 
+  console.log(JSON.parse(corpus.syntax));
   const reactTheme = useAppSelector((state) => {
     return state.app.theme;
   });
@@ -210,6 +211,7 @@ export const TreedownComponent = (props: TreedownProps): ReactElement => {
   theme = reactTheme as 'night' | 'day';
 
   let parsedSyntax = null;
+
   try {
     if (corpus.syntax) {
       parsedSyntax = JSON.parse(corpus.syntax);
