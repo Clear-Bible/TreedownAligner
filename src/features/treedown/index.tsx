@@ -29,6 +29,14 @@ const isPunctuation = (syntaxNode: any): boolean => {
   return Boolean(syntaxNode?.content.elementType === 'pc');
 };
 
+const isAdjunct = (syntaxNode: any): boolean => {
+  return (
+    syntaxNode.content.role === 'adv' ||
+    syntaxNode.content.rule === 'sub-CL' ||
+    syntaxNode.content.rule === 'that-VP'
+  );
+};
+
 const recurseSyntax = (
   corpus: Corpus,
   syntax: any,
@@ -66,6 +74,19 @@ const recurseSyntax = (
             marginBottom: '5px',
           }}
         >
+          {isAdjunct(syntaxNode) && (
+            <span
+              style={{
+                fontSize: '0.7rem',
+                margin: '0.2rem',
+                borderRadius: '0.1rem',
+                padding: '0.2rem',
+                color: cssVar('font-color', theme),
+              }}
+            >
+              +
+            </span>
+          )}
           {syntaxNode.children &&
             syntaxNode.children.map((childSyntaxNode: any, index: number) => {
               return recurseSyntax(
@@ -96,6 +117,19 @@ const recurseSyntax = (
             display: 'inline-block',
           }}
         >
+          {isAdjunct(syntaxNode) && (
+            <span
+              style={{
+                fontSize: '0.7rem',
+                margin: '0.2rem',
+                borderRadius: '0.1rem',
+                padding: '0.2rem',
+                color: cssVar('font-color', theme),
+              }}
+            >
+              +
+            </span>
+          )}
           <span
             style={{
               fontSize: '0.7rem',
