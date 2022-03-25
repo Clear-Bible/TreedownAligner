@@ -2,7 +2,7 @@ import { ReactElement, useState, useEffect } from 'react';
 
 //import EditorWrapper from 'features/editor';
 
-import { Corpus } from 'structs';
+import { Corpus, SyntaxNode } from 'structs';
 
 import cssVar from 'styles/cssVar';
 import 'styles/theme.css';
@@ -84,7 +84,7 @@ const Workbench = (props: WorkbenchProps): ReactElement => {
   const [chapter, setChapter] = useState(defaultChapter);
   const [verse, setVerse] = useState(defaultVerse);
 
-  const [syntaxData, setSyntaxData] = useState('');
+  const [syntaxData, setSyntaxData] = useState({} as SyntaxNode);
 
   const bookDoc = books.find((bookItem) => bookItem.BookNumber === book);
 
@@ -135,7 +135,10 @@ const Workbench = (props: WorkbenchProps): ReactElement => {
   }
 
   if (showTargetText) {
-    corpora.push(queryText('nvi', book, chapter, verse));
+    corpora.push({
+      ...queryText('nvi', book, chapter, verse),
+      syntax: syntaxData,
+    });
   }
 
   if (showLwcText) {

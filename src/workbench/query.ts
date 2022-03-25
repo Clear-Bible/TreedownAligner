@@ -35,7 +35,7 @@ const availableCorpora: Corpus[] = [
     language: 'grc',
     role: CorpusRole.Target,
     words: [],
-    syntax: null,
+    syntax: undefined,
   },
 
   {

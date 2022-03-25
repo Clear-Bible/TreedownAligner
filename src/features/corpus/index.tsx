@@ -7,7 +7,7 @@ import DragHandle from 'features/dragHandle';
 import Treedown from 'features/treedown';
 
 import { toggleCorpusView } from 'state/polyglot.slice';
-import { Word, Corpus, CorpusViewType, Alignment } from 'structs';
+import { Word, Corpus, CorpusViewType, Alignment, TreedownType } from 'structs';
 
 import cssVar from 'styles/cssVar';
 
@@ -34,7 +34,9 @@ const determineCorpusView = (corpus: Corpus) => {
   }
 
   if (corpus.viewType === CorpusViewType.Treedown) {
-    return <Treedown corpus={corpus} />;
+    const treedownType =
+      corpus.id === 'sbl' ? TreedownType.Source : TreedownType.Mapped;
+    return <Treedown corpus={corpus} treedownType={treedownType} />;
   }
 };
 

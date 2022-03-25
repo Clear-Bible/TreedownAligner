@@ -7,7 +7,7 @@ import useDebug from 'hooks/useDebug';
 import Treedown from 'features/treedown';
 import LinkBuilderComponent from 'features/linkBuilder';
 
-import { Corpus } from 'structs';
+import { Corpus, TreedownType } from 'structs';
 import cssVar from 'styles/cssVar';
 
 export const ContextPanel = (): ReactElement => {
@@ -52,7 +52,7 @@ export const ContextPanel = (): ReactElement => {
         draggableHandle=".drag-handle"
         layout={layout}
         cols={24}
-        rowHeight={12}
+        rowHeight={48}
         width={1200}
         maxRows={1}
         compactType="horizontal"
@@ -76,7 +76,7 @@ export const ContextPanel = (): ReactElement => {
             overflow: 'scroll',
           }}
         >
-          <Treedown corpus={greekCorpus} />;
+          <Treedown corpus={greekCorpus} treedownType={TreedownType.Source} />;
         </div>
       </GridLayout>
     </div>

@@ -12,6 +12,8 @@ import ContextPanel from 'features/contextPanel';
 
 import { Alignment, Corpus } from 'structs';
 
+import syntaxMapper from 'features/treedown/syntaxMapper';
+
 import cssVar from 'styles/cssVar';
 import 'styles/theme.css';
 
@@ -32,6 +34,14 @@ export const Editor = (props: EditorProps): ReactElement => {
   }, [dispatch, theme]);
 
   useEffect(() => {
+    const syntax = corpora[0].syntax;
+
+    if (syntax && Object.keys(syntax).length) {
+      console.log('mapper time');
+      const mappedCorporaSyntax = syntaxMapper(syntax, alignments[1]);
+      corpora[1].syntax = mappedCorporaSyntax;
+    }
+
     dispatch(loadCorpora(corpora));
     dispatch(loadAlignments(alignments));
   }, [dispatch, corpora, alignments]);
