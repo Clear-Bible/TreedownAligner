@@ -1,4 +1,4 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction, Draft } from '@reduxjs/toolkit';
 
 import {
   Word,
@@ -33,6 +33,43 @@ export const initialState: AlignmentState = {
   corpora: [],
   inProgressLink: null,
   mode: AlignmentMode.CleanSlate,
+};
+
+const remapSyntax = (state: Draft<AlignmentState>, alignmentIndex: number) => {
+  const sourceCorpusId = state.alignments[alignmentIndex].source;
+  const targetCorpusId = state.alignments[alignmentIndex].target;
+  const sourceCorpusIndex = state.corpora.findIndex((corpus: Corpus) => {
+    return corpus.id === sourceCorpusId;
+  });
+  const targetCorpusIndex = state.corpora.findIndex((corpus: Corpus) => {
+    return corpus.id === targetCorpusId;
+  });
+
+  if (
+    state.corpora[sourceCorpusIndex]?.syntax?._syntaxType === SyntaxType.Mapped
+  ) {
+    const oldSyntax = state.corpora[sourceCorpusIndex].syntax;
+
+    if (oldSyntax) {
+      state.corpora[sourceCorpusIndex].syntax = syntaxMapper(
+        oldSyntax,
+        state.alignments[alignmentIndex]
+      );
+    }
+  }
+
+  if (
+    state.corpora[targetCorpusIndex]?.syntax?._syntaxType === SyntaxType.Mapped
+  ) {
+    const oldSyntax = state.corpora[targetCorpusIndex].syntax;
+
+    if (oldSyntax) {
+      state.corpora[targetCorpusIndex].syntax = syntaxMapper(
+        oldSyntax,
+        state.alignments[alignmentIndex]
+      );
+    }
+  }
 };
 
 const alignmentSlice = createSlice({
@@ -220,10 +257,10 @@ const alignmentSlice = createSlice({
 
         state.inProgressLink = null;
         state.mode = AlignmentMode.CleanSlate;
+        remapSyntax(state, state.alignments.indexOf(alignment));
       }
     },
     deleteLink: (state) => {
-      console.log('delete link');
       const inProgressLink = state.inProgressLink;
 
       if (inProgressLink) {
@@ -247,61 +284,7 @@ const alignmentSlice = createSlice({
             state.alignments[alignmentIndex].links.splice(linkToDeleteIndex, 1);
             state.inProgressLink = null;
             state.mode = AlignmentMode.CleanSlate;
-
-            // remap syntax for involved corpus
-            console.log('begin remap');
-            const sourceCorpusId = state.alignments[alignmentIndex].source;
-            const targetCorpusId = state.alignments[alignmentIndex].target;
-            const sourceCorpusIndex = state.corpora.findIndex(
-              (corpus: Corpus) => {
-                return corpus.id === sourceCorpusId;
-              }
-            );
-            const targetCorpusIndex = state.corpora.findIndex(
-              (corpus: Corpus) => {
-                return corpus.id === targetCorpusId;
-              }
-            );
-
-            console.log(
-              'source syntax type',
-              state.corpora[sourceCorpusIndex].syntax?._syntaxType
-            );
-            if (
-              state.corpora[sourceCorpusIndex].syntax?._syntaxType ===
-              SyntaxType.Mapped
-            ) {
-              const oldSyntax = state.corpora[sourceCorpusIndex].syntax;
-
-              if (oldSyntax) {
-                console.log('REMAP syntax');
-                state.corpora[sourceCorpusIndex].syntax = syntaxMapper(
-                  oldSyntax,
-                  state.alignments[alignmentIndex]
-                );
-              }
-            }
-
-            console.log(
-              'target syntax type',
-              state.corpora[targetCorpusIndex].syntax?._syntaxType
-            );
-            if (
-              state.corpora[targetCorpusIndex].syntax?._syntaxType ===
-              SyntaxType.Mapped
-            ) {
-              const oldSyntax = state.corpora[targetCorpusIndex].syntax;
-
-              if (oldSyntax) {
-                console.log('REMAP syntax');
-                state.corpora[targetCorpusIndex].syntax = syntaxMapper(
-                  oldSyntax,
-                  state.alignments[alignmentIndex]
-                );
-              }
-            }
-
-            //state.corpora[?].syntax = syntaxMapper(syntax, state.alignments[alignmentIndex]);
+            remapSyntax(state, alignmentIndex);
           }
         }
       }

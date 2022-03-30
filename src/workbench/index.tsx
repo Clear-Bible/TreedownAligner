@@ -65,7 +65,6 @@ const getDefaultRef = (): number[] => {
 
 const Workbench = (props: WorkbenchProps): ReactElement => {
   const [defaultBook, defaultChapter, defaultVerse] = getDefaultRef();
-  console.log(defaultBook, defaultChapter, defaultVerse);
 
   document.title = getRefParam()
     ? `${documentTitle} ${getRefParam()}`
@@ -101,11 +100,9 @@ const Workbench = (props: WorkbenchProps): ReactElement => {
 
   useEffect(() => {
     const loadSyntaxData = async () => {
-      console.log('LOAD SYNTAX DATA');
       try {
         const syntaxData = await fetchSyntaxData(bookDoc, chapter, verse);
         if (syntaxData) {
-          console.log('found syntax data', syntaxData);
           setSyntaxData(syntaxData as SyntaxRoot);
           document.title = `${documentTitle} ${
             bookDoc ? bookDoc.OSIS : book

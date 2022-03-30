@@ -46,7 +46,6 @@ const renderMappedTextSegment = (syntaxNode: SyntaxNode, corpus: Corpus) => {
     syntaxNode.content.alignedWordIds.length > 0
   ) {
     return syntaxNode.content.alignedWordIds.map((alignedWordId) => {
-      console.log('MAPPED baby');
       return (
         <TextSegment
           word={findWordById([corpus], alignedWordId) ?? ({} as Word)}
@@ -67,12 +66,10 @@ const recurseSyntax = (
     const graduatedDepth = depth * 0.5;
 
     if (syntaxNode.content.elementType === 'pc') {
-      console.log('PC', syntaxNode);
       return <span className="pc">{syntaxNode.content.text}</span>;
     }
 
     if (syntaxNode.content && syntaxNode.content.elementType === 'sentence') {
-      console.log('Sentence', syntaxNode);
       return syntaxNode.children.map(
         (childSyntaxNode: SyntaxNode, index: number) => {
           return recurseSyntax(
@@ -87,7 +84,6 @@ const recurseSyntax = (
     }
 
     if (isClause(syntaxNode)) {
-      console.log('CL', syntaxNode);
       return (
         <div
           className="cl"

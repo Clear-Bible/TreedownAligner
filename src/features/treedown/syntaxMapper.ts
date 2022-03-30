@@ -30,8 +30,7 @@ const _syntaxMapper = (syntaxNode: SyntaxNode, alignment: Alignment): any => {
 };
 
 const syntaxMapper = (syntax: SyntaxRoot, alignment: Alignment) => {
-  console.log('mapper alignment', alignment);
-  const _syntax = Object.assign({ ...syntax }, {});
+  const _syntax = JSON.parse(JSON.stringify(syntax));
 
   _syntaxMapper(_syntax, alignment);
 
