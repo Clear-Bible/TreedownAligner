@@ -5,6 +5,11 @@ export enum CorpusRole {
   Target = 'target',
 }
 
+export enum SyntaxType {
+  Source = 'source',
+  Mapped = 'mapped',
+}
+
 export enum CorpusViewType {
   Paragraph = 'paragraph',
   Treedown = 'treedown',
@@ -36,7 +41,7 @@ export interface Corpus {
   words: Word[];
   fullText?: string;
   viewType?: CorpusViewType;
-  syntax?: SyntaxNode;
+  syntax?: SyntaxRoot;
 }
 
 // An instance of alignment
@@ -62,7 +67,7 @@ export interface Alignment {
 
 export interface SyntaxContent {
   elementType: string;
-  class: string;
+  class?: string;
 
   n?: string;
   osisId?: string;
@@ -92,4 +97,8 @@ export interface SyntaxContent {
 export interface SyntaxNode {
   content: SyntaxContent;
   children: SyntaxNode[];
+}
+
+export interface SyntaxRoot extends SyntaxNode {
+  _syntaxType: SyntaxType;
 }

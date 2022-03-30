@@ -1,6 +1,6 @@
 import xmlToJson from 'workbench/xmlToJson';
 import cachedSyntaxData from 'workbench/cachedSyntaxData';
-import { SyntaxNode } from 'structs';
+import { SyntaxRoot } from 'structs';
 
 const MACULA_ENV = 'http://labs.clear.bible/symphony-dev';
 
@@ -42,14 +42,14 @@ const fetchSyntaxData = async (
   bookDoc: any,
   chapterNum: number,
   verseNum: number
-): Promise<SyntaxNode | null> => {
+): Promise<SyntaxRoot | null> => {
   if (bookDoc) {
     const osisRef = `${bookDoc.OSIS}.${chapterNum}.${verseNum}`;
 
     if (Object.keys(cachedSyntaxData).includes(osisRef)) {
       const cachedSyntaxDatum = cachedSyntaxData[osisRef];
       const jsonizedXml = await jsonizeXml(cachedSyntaxDatum);
-      return jsonizedXml as unknown as SyntaxNode;
+      return jsonizedXml as unknown as SyntaxRoot;
     }
 
     const response = await fetch(
@@ -83,7 +83,7 @@ const fetchSyntaxData = async (
         ],
         'sentence'
       );
-      return jsonizedXml as SyntaxNode;
+      return jsonizedXml as SyntaxRoot;
     } catch (error) {
       console.error('There was an error when fetching data from macula.');
       console.error(xmlDoc);

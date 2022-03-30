@@ -1,8 +1,6 @@
 import { ReactElement, useState, useEffect } from 'react';
 
-//import EditorWrapper from 'features/editor';
-
-import { Corpus, SyntaxNode } from 'structs';
+import { Corpus, SyntaxType, SyntaxRoot } from 'structs';
 
 import cssVar from 'styles/cssVar';
 import 'styles/theme.css';
@@ -13,6 +11,8 @@ import fetchSyntaxData from 'workbench/fetchSyntaxData';
 
 import { queryText } from 'workbench/query';
 import books from 'workbench/books';
+
+import placeholderTreedown from 'features/treedown/treedown.json';
 
 interface WorkbenchProps {}
 
@@ -84,7 +84,9 @@ const Workbench = (props: WorkbenchProps): ReactElement => {
   const [chapter, setChapter] = useState(defaultChapter);
   const [verse, setVerse] = useState(defaultVerse);
 
-  const [syntaxData, setSyntaxData] = useState({} as SyntaxNode);
+  const [syntaxData, setSyntaxData] = useState(
+    placeholderTreedown as SyntaxRoot
+  );
 
   const bookDoc = books.find((bookItem) => bookItem.BookNumber === book);
 
@@ -99,10 +101,12 @@ const Workbench = (props: WorkbenchProps): ReactElement => {
 
   useEffect(() => {
     const loadSyntaxData = async () => {
+      console.log('LOAD SYNTAX DATA');
       try {
         const syntaxData = await fetchSyntaxData(bookDoc, chapter, verse);
         if (syntaxData) {
-          setSyntaxData(syntaxData);
+          console.log('found syntax data', syntaxData);
+          setSyntaxData(syntaxData as SyntaxRoot);
           document.title = `${documentTitle} ${
             bookDoc ? bookDoc.OSIS : book
           }.${chapter}.${verse}`;
@@ -128,7 +132,7 @@ const Workbench = (props: WorkbenchProps): ReactElement => {
   if (showSourceText) {
     const sourceCorpus = {
       ...queryText('sbl', book, chapter, verse),
-      syntax: syntaxData,
+      syntax: { ...syntaxData, _syntaxType: SyntaxType.Source },
     };
 
     corpora.push(sourceCorpus);
@@ -137,12 +141,15 @@ const Workbench = (props: WorkbenchProps): ReactElement => {
   if (showTargetText) {
     corpora.push({
       ...queryText('nvi', book, chapter, verse),
-      syntax: syntaxData,
+      syntax: { ...syntaxData, _syntaxType: SyntaxType.Mapped },
     });
   }
 
   if (showLwcText) {
-    corpora.push(queryText('leb', book, chapter, verse));
+    corpora.push({
+      ...queryText('leb', book, chapter, verse),
+      syntax: { ...syntaxData, _syntaxType: SyntaxType.Mapped },
+    });
   }
 
   if (showBackText) {

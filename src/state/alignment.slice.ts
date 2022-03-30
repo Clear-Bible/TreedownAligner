@@ -8,10 +8,12 @@ import {
   CorpusRole,
   Corpus,
   CorpusViewType,
+  SyntaxType,
 } from 'structs';
 
 import removeSegmentFromLink from 'helpers/removeSegmentFromLink';
 import generateLinkId from 'helpers/generateLinkId';
+import syntaxMapper from 'features/treedown/syntaxMapper';
 
 export enum AlignmentMode {
   CleanSlate = 'cleanSlate', // Default mode
@@ -56,6 +58,19 @@ const alignmentSlice = createSlice({
         const viewType = corpus.viewType
           ? corpus.viewType
           : CorpusViewType.Paragraph;
+
+        let syntax = corpus.syntax;
+        if (syntax && syntax._syntaxType === SyntaxType.Mapped) {
+          const alignment = state.alignments.find((alignment: Alignment) => {
+            // This is waiting to break.
+            // TODO: relate an alignment to mapped syntax
+            // TODO: know which side of the related alignment to use
+            return alignment.source === 'nvi' && alignment.target === 'sbl';
+          });
+          if (alignment) {
+            syntax = syntaxMapper(syntax, alignment);
+          }
+        }
 
         return { ...corpus, viewType };
       });
@@ -208,6 +223,7 @@ const alignmentSlice = createSlice({
       }
     },
     deleteLink: (state) => {
+      console.log('delete link');
       const inProgressLink = state.inProgressLink;
 
       if (inProgressLink) {
@@ -231,6 +247,61 @@ const alignmentSlice = createSlice({
             state.alignments[alignmentIndex].links.splice(linkToDeleteIndex, 1);
             state.inProgressLink = null;
             state.mode = AlignmentMode.CleanSlate;
+
+            // remap syntax for involved corpus
+            console.log('begin remap');
+            const sourceCorpusId = state.alignments[alignmentIndex].source;
+            const targetCorpusId = state.alignments[alignmentIndex].target;
+            const sourceCorpusIndex = state.corpora.findIndex(
+              (corpus: Corpus) => {
+                return corpus.id === sourceCorpusId;
+              }
+            );
+            const targetCorpusIndex = state.corpora.findIndex(
+              (corpus: Corpus) => {
+                return corpus.id === targetCorpusId;
+              }
+            );
+
+            console.log(
+              'source syntax type',
+              state.corpora[sourceCorpusIndex].syntax?._syntaxType
+            );
+            if (
+              state.corpora[sourceCorpusIndex].syntax?._syntaxType ===
+              SyntaxType.Mapped
+            ) {
+              const oldSyntax = state.corpora[sourceCorpusIndex].syntax;
+
+              if (oldSyntax) {
+                console.log('REMAP syntax');
+                state.corpora[sourceCorpusIndex].syntax = syntaxMapper(
+                  oldSyntax,
+                  state.alignments[alignmentIndex]
+                );
+              }
+            }
+
+            console.log(
+              'target syntax type',
+              state.corpora[targetCorpusIndex].syntax?._syntaxType
+            );
+            if (
+              state.corpora[targetCorpusIndex].syntax?._syntaxType ===
+              SyntaxType.Mapped
+            ) {
+              const oldSyntax = state.corpora[targetCorpusIndex].syntax;
+
+              if (oldSyntax) {
+                console.log('REMAP syntax');
+                state.corpora[targetCorpusIndex].syntax = syntaxMapper(
+                  oldSyntax,
+                  state.alignments[alignmentIndex]
+                );
+              }
+            }
+
+            //state.corpora[?].syntax = syntaxMapper(syntax, state.alignments[alignmentIndex]);
           }
         }
       }

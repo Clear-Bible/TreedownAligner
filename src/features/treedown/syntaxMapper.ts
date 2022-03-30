@@ -1,4 +1,4 @@
-import { SyntaxNode, Alignment, Link } from 'structs';
+import { SyntaxRoot, SyntaxNode, Alignment, Link } from 'structs';
 
 const mapAlignedWords = (sourceId: string, alignment: Alignment): string[] => {
   const matchedLinks = alignment.links.filter((link: Link) => {
@@ -29,7 +29,7 @@ const _syntaxMapper = (syntaxNode: SyntaxNode, alignment: Alignment): any => {
   return syntaxNode;
 };
 
-const syntaxMapper = (syntax: SyntaxNode, alignment: Alignment) => {
+const syntaxMapper = (syntax: SyntaxRoot, alignment: Alignment) => {
   console.log('mapper alignment', alignment);
   const _syntax = Object.assign({ ...syntax }, {});
 
