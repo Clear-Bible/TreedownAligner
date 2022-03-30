@@ -6,7 +6,7 @@ import TextSegment from 'features/textSegment';
 import DragHandle from 'features/dragHandle';
 import Treedown from 'features/treedown';
 
-import { toggleCorpusView } from 'state/polyglot.slice';
+import { toggleCorpusView } from 'state/alignment.slice';
 import { Word, Corpus, CorpusViewType, Alignment, TreedownType } from 'structs';
 
 import cssVar from 'styles/cssVar';

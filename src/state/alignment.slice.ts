@@ -1,6 +1,14 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-import { Word, Alignment, Link, InProgressLink, CorpusRole } from 'structs';
+import {
+  Word,
+  Alignment,
+  Link,
+  InProgressLink,
+  CorpusRole,
+  Corpus,
+  CorpusViewType,
+} from 'structs';
 
 import removeSegmentFromLink from 'helpers/removeSegmentFromLink';
 import generateLinkId from 'helpers/generateLinkId';
@@ -15,10 +23,12 @@ export interface AlignmentState {
   alignments: Alignment[];
   inProgressLink: InProgressLink | null;
   mode: AlignmentMode;
+  corpora: Corpus[];
 }
 
 export const initialState: AlignmentState = {
   alignments: [],
+  corpora: [],
   inProgressLink: null,
   mode: AlignmentMode.CleanSlate,
 };
@@ -40,6 +50,30 @@ const alignmentSlice = createSlice({
       }
       state.alignments = alignments;
     },
+
+    loadCorpora: (state, action: PayloadAction<Corpus[]>) => {
+      state.corpora = action.payload.map((corpus: Corpus) => {
+        const viewType = corpus.viewType
+          ? corpus.viewType
+          : CorpusViewType.Paragraph;
+
+        return { ...corpus, viewType };
+      });
+    },
+
+    toggleCorpusView: (state, action: PayloadAction<string>) => {
+      const corpusIndex = state.corpora.findIndex(
+        (corpus) => corpus.id === action.payload
+      );
+      const oldViewType = state.corpora[corpusIndex].viewType;
+      const newViewType =
+        oldViewType === CorpusViewType.Paragraph
+          ? CorpusViewType.Treedown
+          : CorpusViewType.Paragraph;
+
+      state.corpora[corpusIndex].viewType = newViewType;
+    },
+
     toggleTextSegment: (state, action: PayloadAction<Word>) => {
       if (state.inProgressLink) {
         // There is already an in progress link.
@@ -206,6 +240,8 @@ const alignmentSlice = createSlice({
 
 export const {
   loadAlignments,
+  loadCorpora,
+  toggleCorpusView,
   toggleTextSegment,
   resetTextSegments,
   createLink,

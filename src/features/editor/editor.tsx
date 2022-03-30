@@ -3,8 +3,7 @@ import { ReactElement, useEffect } from 'react';
 import useDebug from 'hooks/useDebug';
 import { useAppDispatch } from 'app/hooks';
 import { setTheme } from 'state/app.slice';
-import { loadCorpora } from 'state/polyglot.slice';
-import { loadAlignments } from 'state/alignment.slice';
+import { loadAlignments, loadCorpora } from 'state/alignment.slice';
 
 import Polyglot from 'features/polyglot';
 import ControlPanel from 'features/controlPanel';

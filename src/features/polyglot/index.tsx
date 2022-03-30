@@ -12,7 +12,7 @@ import 'features/polyglot/styles.css';
 
 export const Polyglot = (): ReactElement => {
   useDebug('PolyglotComponent');
-  const corpora = useAppSelector((state) => state.polyglot.corpora);
+  const corpora = useAppSelector((state) => state.alignment.present.corpora);
 
   const layoutRange = Array.from({ length: corpora.length }, (x, i) => i);
 

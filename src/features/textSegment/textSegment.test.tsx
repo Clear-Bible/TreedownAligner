@@ -11,6 +11,7 @@ const testState: RootState = {
     ...preloadedState.alignment,
     present: {
       alignments: [{ source: 'sbl', target: 'leb', links: [] }],
+      corpora: [],
       inProgressLink: {
         source: 'sbl',
         target: 'leb',

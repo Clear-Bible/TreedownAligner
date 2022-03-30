@@ -41,7 +41,7 @@ export const ContextPanel = (): ReactElement => {
 
   const greekCorpus =
     useAppSelector((state) => {
-      return state.polyglot.corpora.find((corpus: Corpus) => {
+      return state.alignment.present.corpora.find((corpus: Corpus) => {
         return corpus.id === 'sbl';
       });
     }) ?? ({} as Corpus);
