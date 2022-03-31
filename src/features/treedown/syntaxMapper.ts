@@ -30,11 +30,8 @@ const _syntaxMapper = (syntaxNode: SyntaxNode, alignment: Alignment): any => {
 };
 
 const syntaxMapper = (syntax: SyntaxRoot, alignment: Alignment) => {
-  const _syntax = JSON.parse(JSON.stringify(syntax));
-
-  _syntaxMapper(_syntax, alignment);
-
-  return _syntax;
+  _syntaxMapper(syntax, alignment);
+  return syntax;
 };
 
 export default syntaxMapper;

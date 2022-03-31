@@ -10,6 +10,7 @@ import ControlPanel from 'features/controlPanel';
 import ContextPanel from 'features/contextPanel';
 
 import { Alignment, Corpus } from 'structs';
+import copySyntaxData from 'helpers/copySyntaxData';
 
 import cssVar from 'styles/cssVar';
 import 'styles/theme.css';
@@ -32,7 +33,7 @@ export const Editor = (props: EditorProps): ReactElement => {
 
   useEffect(() => {
     dispatch(loadAlignments(alignments));
-    dispatch(loadCorpora(corpora));
+    dispatch(loadCorpora(copySyntaxData(corpora)));
   }, [dispatch, corpora, alignments]);
 
   return (
