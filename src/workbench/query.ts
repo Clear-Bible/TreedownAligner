@@ -1,23 +1,5 @@
 import { Corpus, CorpusRole } from 'structs';
 
-export const querySyntax = (
-  bookNum: number,
-  chapterNum: number,
-  verseNum: number
-) => {
-  console.log('QUERY', bookNum, chapterNum, verseNum);
-  //console.log(matthew);
-  //console.log(mark);
-  //console.log(luke);
-  //console.log(john);
-  //console.log(acts);
-  //console.log(romans);
-  //console.log('axios get');
-  //axios.get(matthew).then((response: any) => {
-  //console.log('Your xml file as string', response.data);
-  //});
-};
-
 const sblText =
   'οὐ μόνον δέ, ἀλλὰ καὶ καυχώμεθα ἐν ταῖς θλίψεσιν, εἰδότες ὅτι ἡ θλῖψις ὑπομονὴν κατεργάζεται,';
 const lebText =
