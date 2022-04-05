@@ -52,7 +52,7 @@ export const ContextPanel = (): ReactElement => {
         draggableHandle=".drag-handle"
         layout={layout}
         cols={24}
-        rowHeight={48}
+        rowHeight={12}
         width={1200}
         maxRows={1}
         compactType="horizontal"
