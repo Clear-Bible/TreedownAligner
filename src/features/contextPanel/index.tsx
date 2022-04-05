@@ -3,9 +3,11 @@ import GridLayout from 'react-grid-layout';
 
 import { useAppSelector } from 'app/hooks';
 import useDebug from 'hooks/useDebug';
-import Context from 'features/context';
+//import Context from 'features/context';
+import Treedown from 'features/treedown';
 import LinkBuilderComponent from 'features/linkBuilder';
 
+import { Corpus, TreedownType } from 'structs';
 import cssVar from 'styles/cssVar';
 
 export const ContextPanel = (): ReactElement => {
@@ -37,6 +39,13 @@ export const ContextPanel = (): ReactElement => {
     return state.app.theme;
   });
 
+  const greekCorpus =
+    useAppSelector((state) => {
+      return state.alignment.present.corpora.find((corpus: Corpus) => {
+        return corpus.id === 'sbl';
+      });
+    }) ?? ({} as Corpus);
+
   return (
     <div style={{ position: 'relative' }}>
       <GridLayout
@@ -52,25 +61,22 @@ export const ContextPanel = (): ReactElement => {
           key="a"
           style={{
             border: '1px solid',
-            borderColor: cssVar('border-color', theme),
-          }}
-        >
-          <Context
-            anteText="Therefore, because we have been declared righteous by faith, we have peace with God through our Lord Jesus Christ, through whom also we have obtained access by faith into this grace in which we stand, and we boast in the hope of the glory of God."
-            text="And not only this, but we also boast in our afflictions, because we know that affliction produces patient endurance,"
-            postText="and patient endurance, proven character, and proven character, hope, and hope does not disappoint, because the love of God has been poured out in our hearts through the Holy Spirit who was given to us."
-            name="LEB"
-          />
-        </div>
-        <div
-          key="b"
-          style={{
-            border: '1px solid',
 
             borderColor: cssVar('border-color', theme),
           }}
         >
           <LinkBuilderComponent />
+        </div>
+
+        <div
+          key="b"
+          style={{
+            border: '1px solid',
+            borderColor: cssVar('border-color', theme),
+            overflow: 'scroll',
+          }}
+        >
+          <Treedown corpus={greekCorpus} treedownType={TreedownType.Source} />;
         </div>
       </GridLayout>
     </div>

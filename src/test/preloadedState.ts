@@ -8,6 +8,7 @@ const preloadedState: RootState = {
     past: [],
     present: {
       alignments: [],
+      corpora: [],
       inProgressLink: null,
       mode: AlignmentMode.CleanSlate,
     },
@@ -15,6 +16,7 @@ const preloadedState: RootState = {
     group: null,
     _latestUnfiltered: {
       alignments: [],
+      corpora: [],
       inProgressLink: null,
       mode: AlignmentMode.CleanSlate,
     },
@@ -22,7 +24,6 @@ const preloadedState: RootState = {
     limit: 1,
   },
   textSegmentHover: { hovered: null, relatedAlignments: [] },
-  polyglot: { corpora: [] },
 };
 
 export default preloadedState;

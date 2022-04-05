@@ -3,14 +3,14 @@ import { ReactElement, useEffect } from 'react';
 import useDebug from 'hooks/useDebug';
 import { useAppDispatch } from 'app/hooks';
 import { setTheme } from 'state/app.slice';
-import { loadCorpora } from 'state/polyglot.slice';
-import { loadAlignments } from 'state/alignment.slice';
+import { loadAlignments, loadCorpora } from 'state/alignment.slice';
 
 import Polyglot from 'features/polyglot';
 import ControlPanel from 'features/controlPanel';
 import ContextPanel from 'features/contextPanel';
 
 import { Alignment, Corpus } from 'structs';
+import copySyntaxData from 'helpers/copySyntaxData';
 
 import cssVar from 'styles/cssVar';
 import 'styles/theme.css';
@@ -22,7 +22,7 @@ interface EditorProps {
 }
 
 export const Editor = (props: EditorProps): ReactElement => {
-  const { theme } = props;
+  const { corpora, alignments, theme } = props;
   useDebug('Editor');
 
   const dispatch = useAppDispatch();
@@ -32,9 +32,9 @@ export const Editor = (props: EditorProps): ReactElement => {
   }, [dispatch, theme]);
 
   useEffect(() => {
-    dispatch(loadCorpora(props.corpora));
-    dispatch(loadAlignments(props.alignments));
-  }, [dispatch, props.corpora, props.alignments]);
+    dispatch(loadAlignments(alignments));
+    dispatch(loadCorpora(copySyntaxData(corpora)));
+  }, [dispatch, corpora, alignments]);
 
   return (
     <div

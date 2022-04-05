@@ -302,7 +302,6 @@ export const TextSegment = (props: TextSegmentProps): ReactElement => {
       >
         {props.word.text}
       </span>
-      <span> </span>
     </React.Fragment>
   );
 };

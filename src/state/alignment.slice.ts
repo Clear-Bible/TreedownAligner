@@ -1,9 +1,19 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction, Draft } from '@reduxjs/toolkit';
 
-import { Word, Alignment, Link, InProgressLink, CorpusRole } from 'structs';
+import {
+  Word,
+  Alignment,
+  Link,
+  InProgressLink,
+  CorpusRole,
+  Corpus,
+  CorpusViewType,
+  SyntaxType,
+} from 'structs';
 
 import removeSegmentFromLink from 'helpers/removeSegmentFromLink';
 import generateLinkId from 'helpers/generateLinkId';
+import syntaxMapper from 'features/treedown/syntaxMapper';
 
 export enum AlignmentMode {
   CleanSlate = 'cleanSlate', // Default mode
@@ -15,12 +25,51 @@ export interface AlignmentState {
   alignments: Alignment[];
   inProgressLink: InProgressLink | null;
   mode: AlignmentMode;
+  corpora: Corpus[];
 }
 
 export const initialState: AlignmentState = {
   alignments: [],
+  corpora: [],
   inProgressLink: null,
   mode: AlignmentMode.CleanSlate,
+};
+
+const remapSyntax = (state: Draft<AlignmentState>, alignmentIndex: number) => {
+  const sourceCorpusId = state.alignments[alignmentIndex].source;
+  const targetCorpusId = state.alignments[alignmentIndex].target;
+  const sourceCorpusIndex = state.corpora.findIndex((corpus: Corpus) => {
+    return corpus.id === sourceCorpusId;
+  });
+  const targetCorpusIndex = state.corpora.findIndex((corpus: Corpus) => {
+    return corpus.id === targetCorpusId;
+  });
+
+  if (
+    state.corpora[sourceCorpusIndex]?.syntax?._syntaxType === SyntaxType.Mapped
+  ) {
+    const oldSyntax = state.corpora[sourceCorpusIndex].syntax;
+
+    if (oldSyntax) {
+      state.corpora[sourceCorpusIndex].syntax = syntaxMapper(
+        oldSyntax,
+        state.alignments[alignmentIndex]
+      );
+    }
+  }
+
+  if (
+    state.corpora[targetCorpusIndex]?.syntax?._syntaxType === SyntaxType.Mapped
+  ) {
+    const oldSyntax = state.corpora[targetCorpusIndex].syntax;
+
+    if (oldSyntax) {
+      state.corpora[targetCorpusIndex].syntax = syntaxMapper(
+        oldSyntax,
+        state.alignments[alignmentIndex]
+      );
+    }
+  }
 };
 
 const alignmentSlice = createSlice({
@@ -40,6 +89,43 @@ const alignmentSlice = createSlice({
       }
       state.alignments = alignments;
     },
+
+    loadCorpora: (state, action: PayloadAction<Corpus[]>) => {
+      state.corpora = action.payload.map((corpus: Corpus) => {
+        const viewType = corpus.viewType
+          ? corpus.viewType
+          : CorpusViewType.Paragraph;
+
+        let syntax = corpus.syntax;
+        if (syntax && syntax._syntaxType === SyntaxType.Mapped) {
+          const alignment = state.alignments.find((alignment: Alignment) => {
+            // This is waiting to break.
+            // TODO: relate an alignment to mapped syntax
+            // TODO: know which side of the related alignment to use
+            return alignment.source === 'nvi' && alignment.target === 'sbl';
+          });
+          if (alignment) {
+            syntax = syntaxMapper(syntax, alignment);
+          }
+        }
+
+        return { ...corpus, viewType };
+      });
+    },
+
+    toggleCorpusView: (state, action: PayloadAction<string>) => {
+      const corpusIndex = state.corpora.findIndex(
+        (corpus) => corpus.id === action.payload
+      );
+      const oldViewType = state.corpora[corpusIndex].viewType;
+      const newViewType =
+        oldViewType === CorpusViewType.Paragraph
+          ? CorpusViewType.Treedown
+          : CorpusViewType.Paragraph;
+
+      state.corpora[corpusIndex].viewType = newViewType;
+    },
+
     toggleTextSegment: (state, action: PayloadAction<Word>) => {
       if (state.inProgressLink) {
         // There is already an in progress link.
@@ -171,6 +257,7 @@ const alignmentSlice = createSlice({
 
         state.inProgressLink = null;
         state.mode = AlignmentMode.CleanSlate;
+        remapSyntax(state, state.alignments.indexOf(alignment));
       }
     },
     deleteLink: (state) => {
@@ -197,6 +284,7 @@ const alignmentSlice = createSlice({
             state.alignments[alignmentIndex].links.splice(linkToDeleteIndex, 1);
             state.inProgressLink = null;
             state.mode = AlignmentMode.CleanSlate;
+            remapSyntax(state, alignmentIndex);
           }
         }
       }
@@ -206,6 +294,8 @@ const alignmentSlice = createSlice({
 
 export const {
   loadAlignments,
+  loadCorpora,
+  toggleCorpusView,
   toggleTextSegment,
   resetTextSegments,
   createLink,

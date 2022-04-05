@@ -11,11 +11,9 @@ export const DragHandle = () => {
     <div
       className="drag-handle"
       style={{
-        marginRight: '-1px',
-        marginBottom: '-1px',
-        position: 'absolute',
-        bottom: '0',
-        right: '0',
+        position: 'sticky',
+        top: '0',
+        left: '0',
         cursor: 'grab',
         height: '0.7rem',
         width: '0.7rem',

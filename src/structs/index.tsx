@@ -5,6 +5,21 @@ export enum CorpusRole {
   Target = 'target',
 }
 
+export enum SyntaxType {
+  Source = 'source',
+  Mapped = 'mapped',
+}
+
+export enum CorpusViewType {
+  Paragraph = 'paragraph',
+  Treedown = 'treedown',
+}
+
+export enum TreedownType {
+  Source = 'source',
+  Mapped = 'mapped',
+}
+
 // Linkable sub-unit of corpus
 export interface Word {
   id: string;
@@ -25,6 +40,8 @@ export interface Corpus {
 
   words: Word[];
   fullText?: string;
+  viewType?: CorpusViewType;
+  syntax?: SyntaxRoot;
 }
 
 // An instance of alignment
@@ -46,4 +63,42 @@ export interface Alignment {
   source: string;
   target: string;
   links: Link[];
+}
+
+export interface SyntaxContent {
+  elementType: string;
+  class?: string;
+
+  n?: string;
+  osisId?: string;
+  lemma?: string;
+  strong?: string;
+  gloss?: string;
+  text?: string;
+  rule?: string;
+  role?: string;
+
+  head?: string;
+  discontinuous?: string;
+  person?: string;
+  number?: string;
+  gender?: string;
+  case?: string;
+  tense?: string;
+  voice?: string;
+  mood?: string;
+  articular?: string;
+  det?: string;
+  type?: string;
+
+  alignedWordIds?: string[];
+}
+
+export interface SyntaxNode {
+  content: SyntaxContent;
+  children: SyntaxNode[];
+}
+
+export interface SyntaxRoot extends SyntaxNode {
+  _syntaxType: SyntaxType;
 }

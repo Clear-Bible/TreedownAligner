@@ -19,11 +19,15 @@ export const LinkBuilderComponent = (props: LinkBuilderProps): ReactElement => {
 
     if (inProgressLink) {
       const sourceWords: Word[] = inProgressLink.sources
-        .map((sourceId) => findWordById(state.polyglot.corpora, sourceId))
+        .map((sourceId) =>
+          findWordById(state.alignment.present.corpora, sourceId)
+        )
         .filter((x): x is Word => x !== null);
 
       const targetWords: Word[] = inProgressLink.targets
-        .map((targetId) => findWordById(state.polyglot.corpora, targetId))
+        .map((targetId) =>
+          findWordById(state.alignment.present.corpora, targetId)
+        )
         .filter((x): x is Word => x !== null);
 
       return {
@@ -35,7 +39,7 @@ export const LinkBuilderComponent = (props: LinkBuilderProps): ReactElement => {
     return {};
   });
 
-  const corpora = useAppSelector((state) => state.polyglot.corpora);
+  const corpora = useAppSelector((state) => state.alignment.present.corpora);
 
   const theme = useAppSelector((state) => {
     return state.app.theme;
