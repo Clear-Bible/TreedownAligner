@@ -4,10 +4,21 @@ TreedownAligner is a react component library. Its components enable users to vie
 
 [View Demo](https://treedown-aligner.netlify.app).
 
-TreedownAligner contains React components written in Typesript using Redux for state management.
+TreedownAligner is a react component written in Typesript using Redux for state management.
+Included is a `<Workbench />` component that wraps TreedownAligner for local development and testing.
 
-## Quickstart
+## Consuming Application Quickstart
+
+- Install: `npm install treedown-aligner`
+- Import: `import TreedownAligner from 'treedown-aligner';`
+- Render: `() => { return <TreedownAligner /> }` (see below for proper usage)
+
+## Local development Quickstart
 
 - Install dependencies: `yarn`
-- Run local server: `yarn start`
+- Run local server: `yarn start` (starts local CRA server with component wrapper in a UI workbench)
 - Build: `yarn build`
+
+## Usage
+
+TBD.
