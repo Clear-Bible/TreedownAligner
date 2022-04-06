@@ -8,7 +8,7 @@ import { Corpus } from 'structs';
 
 import cssVar from 'styles/cssVar';
 
-import 'features/polyglot/styles.css';
+import './styles.css';
 
 export const Polyglot = (): ReactElement => {
   useDebug('PolyglotComponent');

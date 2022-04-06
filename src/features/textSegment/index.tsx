@@ -9,7 +9,7 @@ import { hover, relatedAlignments } from 'state/textSegmentHover.slice';
 import { Alignment, Word, CorpusRole, Link } from 'structs';
 import findRelatedAlignments from 'helpers/findRelatedAlignments';
 
-import 'styles/theme.css';
+import '../../styles/theme.css';
 import cssVar from 'styles/cssVar';
 
 interface TextSegmentProps {

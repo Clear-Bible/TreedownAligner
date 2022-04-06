@@ -3,7 +3,7 @@ import { ReactElement, useState, useEffect } from 'react';
 import { Corpus, SyntaxType, SyntaxRoot } from 'structs';
 
 import cssVar from 'styles/cssVar';
-import 'styles/theme.css';
+import '../styles/theme.css';
 
 import EditorWrapper from 'features/editor';
 
