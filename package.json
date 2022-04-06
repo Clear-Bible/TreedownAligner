@@ -1,6 +1,6 @@
 {
   "name": "treedown-aligner",
-  "version": "0.0.4",
+  "version": "0.0.6",
   "private": false,
   "dependencies": {
     "@reduxjs/toolkit": "^1.8.1",
@@ -60,5 +60,6 @@
   },
   "files": [
     "dist/"
-  ]
+  ],
+  "main": "src/bundle.js"
 }
