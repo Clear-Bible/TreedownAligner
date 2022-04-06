@@ -1,6 +1,6 @@
 {
   "name": "treedown-aligner",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "private": false,
   "dependencies": {
     "@reduxjs/toolkit": "^1.8.1",
@@ -20,7 +20,7 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "prettier": "prettier --write .",
-    "prepublishOnly": "rollup -c"
+    "prepublishOnly": "rm -rf dist/ && rollup -c"
   },
   "eslintConfig": {
     "extends": [
@@ -61,5 +61,5 @@
   "files": [
     "dist/"
   ],
-  "main": "src/bundle.js"
+  "main": "dist/bundle.js"
 }
