@@ -22,3 +22,8 @@ Included is a `<Workbench />` component that wraps TreedownAligner for local dev
 ## Usage
 
 TBD.
+
+## Expected Peer Dependencies
+
+- `react`
+- `react-dom`

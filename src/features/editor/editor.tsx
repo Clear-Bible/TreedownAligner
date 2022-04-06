@@ -43,6 +43,7 @@ export const Editor = (props: EditorProps): ReactElement => {
 
   return (
     <div
+      className="editor-container"
       style={{
         backgroundColor: cssVar('background', theme),
         width: '1200px',
