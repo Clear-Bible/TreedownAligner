@@ -31,4 +31,5 @@ export default {
     typescript(),
     css(),
   ],
+  external: ['react', 'react-dom'],
 };

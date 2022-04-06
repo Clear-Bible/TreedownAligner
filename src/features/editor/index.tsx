@@ -12,7 +12,7 @@ interface EditorWrapperProps {
   theme: 'night' | 'day';
 }
 
-export const EditorWrapper = (props: EditorWrapperProps): ReactElement => {
+const EditorWrapper = (props: EditorWrapperProps): ReactElement => {
   return (
     <Fragment>
       <Provider store={store}>

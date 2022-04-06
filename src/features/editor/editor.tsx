@@ -32,8 +32,13 @@ export const Editor = (props: EditorProps): ReactElement => {
   }, [dispatch, theme]);
 
   useEffect(() => {
-    dispatch(loadAlignments(alignments));
-    dispatch(loadCorpora(copySyntaxData(corpora)));
+    if (alignments) {
+      dispatch(loadAlignments(alignments));
+    }
+
+    if (corpora) {
+      dispatch(loadCorpora(copySyntaxData(corpora)));
+    }
   }, [dispatch, corpora, alignments]);
 
   return (
