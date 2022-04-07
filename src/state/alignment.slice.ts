@@ -14,6 +14,7 @@ import {
 import removeSegmentFromLink from 'helpers/removeSegmentFromLink';
 import generateLinkId from 'helpers/generateLinkId';
 import syntaxMapper from 'features/treedown/syntaxMapper';
+import { CorpusType } from 'structs';
 
 export enum AlignmentMode {
   CleanSlate = 'cleanSlate', // Default mode
@@ -99,10 +100,19 @@ const alignmentSlice = createSlice({
         let syntax = corpus.syntax;
         if (syntax && syntax._syntaxType === SyntaxType.Mapped) {
           const alignment = state.alignments.find((alignment: Alignment) => {
-            // This is waiting to break.
-            // TODO: relate an alignment to mapped syntax
-            // TODO: know which side of the related alignment to use
-            return alignment.source === 'nvi' && alignment.target === 'sbl';
+            const sourceCorpusType = state.corpora.find((corpus) => {
+              return corpus.id === alignment.source;
+            })?.type;
+            const targetCorpusType = state.corpora.find((corpus) => {
+              return corpus.id === alignment.target;
+            })?.type;
+
+            return (
+              (sourceCorpusType === CorpusType.Primary &&
+                alignment.target === corpus.id) ||
+              (targetCorpusType === CorpusType.Primary &&
+                alignment.source === corpus.id)
+            );
           });
           if (alignment) {
             syntax = syntaxMapper(syntax, alignment);

@@ -5,6 +5,11 @@ export enum CorpusRole {
   Target = 'target',
 }
 
+export enum CorpusType {
+  Primary = 'primary',
+  Translation = 'translation',
+}
+
 export enum SyntaxType {
   Source = 'source',
   Mapped = 'mapped',
@@ -37,6 +42,7 @@ export interface Corpus {
   fullName: string;
   language: string;
   role: CorpusRole;
+  type: CorpusType;
 
   words: Word[];
   fullText?: string;
