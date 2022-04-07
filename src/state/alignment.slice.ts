@@ -77,18 +77,17 @@ const alignmentSlice = createSlice({
   initialState,
   reducers: {
     loadAlignments: (state, action: PayloadAction<Alignment[]>) => {
-      //const alignments = action.payload.concat([]);
-      state.alignments = action.payload;
-
-      for (const alignment of state.alignments) {
-        alignment.links = alignment.links.map((link: Link, index: number) => {
-          return {
-            ...link,
-            _id: `${alignment.source}-${alignment.target}-${index}`,
-          };
-        });
-      }
-      //state.alignments = alignments;
+      state.alignments = action.payload.map((alignment) => {
+        return {
+          ...alignment,
+          links: alignment.links.map((link, index) => {
+            return {
+              ...link,
+              _id: `${alignment.source}-${alignment.target}-${index}`,
+            };
+          }),
+        };
+      });
     },
 
     loadCorpora: (state, action: PayloadAction<Corpus[]>) => {
