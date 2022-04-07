@@ -24,7 +24,7 @@ export const Polyglot = (): ReactElement => {
       i: `text_${key}`,
       x,
       y: 0,
-      w: width,
+      w: width === 24 ? 8 : width,
       h: 12,
       minW: width,
       maxW: width,
