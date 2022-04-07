@@ -1,6 +1,6 @@
 {
   "name": "treedown-aligner",
-  "version": "0.0.12",
+  "version": "0.0.13",
   "private": false,
   "dependencies": {
     "@reduxjs/toolkit": "^1.8.1",
