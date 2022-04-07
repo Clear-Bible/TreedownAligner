@@ -41,8 +41,9 @@ export const ContextPanel = (): ReactElement => {
 
   const greekCorpus =
     useAppSelector((state) => {
+      const syntaxCorpora = ['sbl', 'nestle1904'];
       return state.alignment.present.corpora.find((corpus: Corpus) => {
-        return corpus.id === 'sbl';
+        return syntaxCorpora.includes(corpus.id);
       });
     }) ?? ({} as Corpus);
 
