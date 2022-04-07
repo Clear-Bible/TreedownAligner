@@ -17,3 +17,7 @@
   --day-selected-segment-font-color: white;
   --day-syntax-label-background: lightgrey;
 }
+
+::-webkit-scrollbar {
+  width: 0;
+}

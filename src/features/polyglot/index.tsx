@@ -51,7 +51,7 @@ export const Polyglot = (): ReactElement => {
           const key = `text_${index}`;
           return (
             <div
-              className="corpus-container"
+              className="corpus-container corpus-scroll-container"
               key={key}
               style={{
                 border: '1px solid',

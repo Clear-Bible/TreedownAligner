@@ -61,7 +61,7 @@ export const CorpusComponent = (props: CorpusProps): ReactElement => {
   );
 
   return (
-    <div>
+    <div className="corpus-scroll-container">
       <DragHandle />
       <div
         style={{
