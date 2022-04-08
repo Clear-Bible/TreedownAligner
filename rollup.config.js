@@ -1,5 +1,5 @@
 import typescript from '@rollup/plugin-typescript';
-import css from 'rollup-plugin-import-css';
+import postcss from 'rollup-plugin-postcss';
 
 export default {
   input: 'src/bundle.ts',
@@ -10,6 +10,6 @@ export default {
       dir: 'dist',
     },
   ],
-  plugins: [typescript(), css()],
+  plugins: [typescript(), postcss()],
   external: ['react', 'react-dom'],
 };
