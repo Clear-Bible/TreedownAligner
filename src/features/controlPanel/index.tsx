@@ -13,7 +13,11 @@ import {
 
 import cssVar from 'styles/cssVar';
 
-export const ControlPanel = (): ReactElement => {
+interface ControlPanelProps {
+  alignmentUpdated: Function;
+}
+
+export const ControlPanel = (props: ControlPanelProps): ReactElement => {
   useDebug('ControlPanel');
   const dispatch = useAppDispatch();
 
@@ -34,6 +38,10 @@ export const ControlPanel = (): ReactElement => {
       Number(state.alignment.present.inProgressLink?.sources.length) > 0 &&
       Number(state.alignment.present.inProgressLink?.targets.length) > 0
     );
+  });
+
+  const alignmentState = useAppSelector((state) => {
+    return state.alignment.present.alignments;
   });
 
   const layout = [
@@ -108,6 +116,16 @@ export const ControlPanel = (): ReactElement => {
             }}
           >
             Redo
+          </button>
+
+          <button
+            onClick={() => {
+              if (props.alignmentUpdated) {
+                props.alignmentUpdated(alignmentState);
+              }
+            }}
+          >
+            Save
           </button>
         </div>
       </GridLayout>

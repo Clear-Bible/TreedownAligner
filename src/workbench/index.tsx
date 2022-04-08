@@ -66,6 +66,8 @@ const getDefaultRef = (): number[] => {
 const Workbench = (props: WorkbenchProps): ReactElement => {
   const [defaultBook, defaultChapter, defaultVerse] = getDefaultRef();
 
+  const [updatedAlignments, setUpdatedAlignments] = useState(null);
+
   document.title = getRefParam()
     ? `${documentTitle} ${getRefParam()}`
     : documentTitle;
@@ -380,8 +382,12 @@ const Workbench = (props: WorkbenchProps): ReactElement => {
               ],
             },
           ]}
+          alignmentUpdated={(alignments: any) => {
+            setUpdatedAlignments(alignments);
+          }}
         />
       </div>
+      <div>{JSON.stringify(updatedAlignments, null, 2)}</div>
     </div>
   );
 };

@@ -19,10 +19,11 @@ interface EditorProps {
   corpora: Corpus[];
   alignments: Alignment[];
   theme: 'night' | 'day';
+  alignmentUpdated: Function;
 }
 
 export const Editor = (props: EditorProps): ReactElement => {
-  const { corpora, alignments, theme } = props;
+  const { corpora, alignments, theme, alignmentUpdated } = props;
   useDebug('Editor');
 
   const dispatch = useAppDispatch();
@@ -50,7 +51,7 @@ export const Editor = (props: EditorProps): ReactElement => {
       }}
     >
       <Polyglot />
-      <ControlPanel />
+      <ControlPanel alignmentUpdated={alignmentUpdated} />
       <ContextPanel />
     </div>
   );

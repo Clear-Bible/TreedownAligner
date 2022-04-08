@@ -10,6 +10,7 @@ interface EditorWrapperProps {
   corpora: Corpus[];
   alignments: Alignment[];
   theme: 'night' | 'day';
+  alignmentUpdated: Function;
 }
 
 const EditorWrapper = (props: EditorWrapperProps): ReactElement => {
@@ -20,6 +21,7 @@ const EditorWrapper = (props: EditorWrapperProps): ReactElement => {
           corpora={props.corpora}
           alignments={props.alignments}
           theme={props.theme}
+          alignmentUpdated={props.alignmentUpdated}
         />
       </Provider>
     </Fragment>
