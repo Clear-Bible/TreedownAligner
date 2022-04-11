@@ -1,4 +1,4 @@
-import { createSlice, PayloadAction, Draft } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction, Draft, current } from '@reduxjs/toolkit';
 
 import {
   Word,
@@ -20,6 +20,7 @@ export enum AlignmentMode {
   CleanSlate = 'cleanSlate', // Default mode
   Select = 'select', // An existing link has been selected
   Edit = 'edit', // Editing a new or existing link
+  PartialEdit = 'partialEdit', // Only one 'side' has been selected
 }
 
 export interface AlignmentState {
@@ -137,6 +138,51 @@ const alignmentSlice = createSlice({
     },
 
     toggleTextSegment: (state, action: PayloadAction<Word>) => {
+      if (state.inProgressLink?._id === '?') {
+        console.log("Partial time");
+        // There is a partial in-progress link.
+        const emptySide =
+          state.inProgressLink.sources.length === 0
+            ? CorpusRole.Source
+            : CorpusRole.Target;
+
+        const sideInView = action.payload.role;
+
+        if (sideInView === CorpusRole.Source) {
+          state.inProgressLink.source = action.payload.corpusId;
+          state.inProgressLink.sources.push(action.payload.id);
+        }
+
+        if (sideInView === CorpusRole.Target) {
+          state.inProgressLink.target = action.payload.corpusId;
+          state.inProgressLink.targets.push(action.payload.id);
+        }
+
+        if (sideInView === emptySide) {
+          state.mode = AlignmentMode.Edit;
+          const relatedAlignment = state.alignments.find((alignment) => {
+            return (
+              alignment.source === state.inProgressLink?.source &&
+              alignment.target === state.inProgressLink?.target
+            );
+          });
+
+          if (!relatedAlignment) {
+            throw new Error(
+              `Unable to find alignment for proposed link: ${current(
+                state.inProgressLink
+              )}`
+            );
+          }
+          state.inProgressLink._id = String(
+            generateLinkId(relatedAlignment.links)
+          );
+        } else if (sideInView !== emptySide) {
+          state.mode = AlignmentMode.PartialEdit;
+        }
+        return;
+      }
+
       if (state.inProgressLink) {
         // There is already an in progress link.
         state.mode = AlignmentMode.Edit;
@@ -180,8 +226,37 @@ const alignmentSlice = createSlice({
         );
 
         if (!alignment) {
-          throw new Error('Could not determine alignment pair for link.');
+          console.error('Could not determine alignment pair for link.');
+          let source = '?';
+          let target = '?';
+          const sources = [];
+          const targets = [];
+
+          console.log(action.payload);
+
+          if (action.payload.role === CorpusRole.Source) {
+            source = action.payload.corpusId;
+            sources.push(action.payload.id);
+            console.log(source, sources);
+          }
+
+          if (action.payload.role === CorpusRole.Target) {
+            target = action.payload.corpusId;
+            targets.push(action.payload.id);
+          }
+
+          state.inProgressLink = {
+            _id: '?',
+            source,
+            target,
+            sources,
+            targets,
+          };
+
+          state.mode = AlignmentMode.PartialEdit;
+          return;
         }
+        console.log('after return');
 
         const existingLink = alignment.links.find((link: Link) => {
           return (
@@ -209,6 +284,7 @@ const alignmentSlice = createSlice({
 
           if (action.payload.role === CorpusRole.Source) {
             newSources.push(action.payload.id);
+            //source =
           }
 
           if (action.payload.role === CorpusRole.Target) {

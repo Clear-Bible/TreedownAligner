@@ -285,13 +285,20 @@ export const TextSegment = (props: TextSegmentProps): ReactElement => {
           dispatch(relatedAlignments([]));
         }}
         onClick={() => {
+          console.log('click', isInvolved, word);
           if (
             (mode === AlignmentMode.Edit || mode === AlignmentMode.Select) &&
             (!isLinked || isCurrentLinkMember) &&
             isInvolved
           ) {
             dispatch(toggleTextSegment(word));
+          } else if (mode === AlignmentMode.PartialEdit) {
+            dispatch(toggleTextSegment(word));
           } else if (word.role === 'source') {
+            dispatch(toggleTextSegment(word));
+            // Now that we allow partial edit, what do we do here?
+            // Previously:
+            //
             // ...do nothing...
             // for now users have to create / edit
             // by going to a target first.
