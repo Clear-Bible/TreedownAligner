@@ -1,5 +1,6 @@
 import React from 'react';
 //import ReactDOM from 'react-dom';
+// @ts-ignore
 import { createRoot } from 'react-dom/client';
 
 import './index.css';
