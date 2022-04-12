@@ -14,6 +14,7 @@ import {
 import removeSegmentFromLink from 'helpers/removeSegmentFromLink';
 import generateLinkId from 'helpers/generateLinkId';
 import syntaxMapper from 'features/treedown/syntaxMapper';
+import cachedSyntax from 'features/treedown/cachedSyntax';
 import { CorpusType } from 'structs';
 
 export enum AlignmentMode {
@@ -122,7 +123,16 @@ const alignmentSlice = createSlice({
             );
           });
           if (alignment) {
+            //console.log('cached', cachedSyntax);
+            //console.log('cachedMapped', syntaxMapper(cachedSyntax, alignment));
+            
+            //syntax = cachedSyntax;
+            //if (corpus.id === 'nvi') {
+            //console.log('cached');
+            //} else {
             syntax = syntaxMapper(syntax, alignment);
+            //console.log(corpus.id, syntax);
+            //}
           }
         }
 

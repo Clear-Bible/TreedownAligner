@@ -38,6 +38,7 @@ const determineCorpusView = (corpus: Corpus) => {
     const treedownType = syntaxCorpora.includes(corpus.id)
       ? TreedownType.Source
       : TreedownType.Mapped;
+      console.log(corpus);
     return <Treedown corpus={corpus} treedownType={treedownType} />;
   }
 };

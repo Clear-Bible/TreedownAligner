@@ -45,6 +45,10 @@ const renderMappedTextSegment = (syntaxNode: SyntaxNode, corpus: Corpus) => {
     syntaxNode.content.alignedWordIds &&
     syntaxNode.content.alignedWordIds.length > 0
   ) {
+      //console.log(corpus.id);
+    //if (corpus.id === 'nvi') {
+      //console.log('mapped?', syntaxNode.content);
+    //}
     return syntaxNode.content.alignedWordIds.map((alignedWordId) => {
       return (
         <TextSegment
@@ -127,6 +131,9 @@ const recurseSyntax = (
         calculatedWidth = 'fit-content';
       }
 
+      //if (corpus.id === 'nvi' && syntaxNode.content.elementType === 'w') {
+          //console.log(syntaxNode);
+      //}
       return (
         <div
           className="constituent"
