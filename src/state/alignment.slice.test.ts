@@ -273,6 +273,67 @@ describe('alignmentSlice reducer', () => {
 
       expect(resultState.mode).toEqual(AlignmentMode.Edit);
     });
+
+    it('enters partial edit mode (from clean)', () => {
+      const previousState = {
+        ...initialState,
+        alignments: [
+          {
+            source: 'nvi',
+            target: 'sbl',
+            links: [
+              { _id: 'nvi-sbl-1', sources: ['nvi_0'], targets: ['sbl_1'] },
+            ],
+          },
+        ],
+        inProgressLink: null,
+      };
+
+      const resultState = alignmentSliceReducer(
+        previousState,
+        toggleTextSegment(targetWord2)
+      );
+
+      expect(resultState.inProgressLink).toBeTruthy();
+      expect(resultState.inProgressLink?._id).toEqual('?');
+      expect(resultState.mode).toEqual(AlignmentMode.PartialEdit);
+    });
+
+    it('enters edit mode (from partial edit)', () => {
+      const previousState = {
+        ...initialState,
+        alignments: [
+          {
+            source: 'nvi',
+            target: 'sbl',
+            links: [
+              { _id: 'nvi-sbl-1', sources: ['nvi_0'], targets: ['sbl_1'] },
+            ],
+          },
+        ],
+        inProgressLink: {
+          _id: '?',
+          source: 'nvi',
+          target: '',
+          sources: ['nvi_1'],
+          targets: [],
+        },
+      };
+
+      const resultState = alignmentSliceReducer(
+        previousState,
+        toggleTextSegment({
+          id: 'sbl_2',
+          corpusId: 'sbl',
+          role: CorpusRole.Target,
+          text: 'asdf',
+          position: 3,
+        })
+      );
+
+      expect(resultState.inProgressLink?._id).toEqual('nvi-sbl-2');
+      expect(resultState.mode).toEqual(AlignmentMode.Edit);
+    });
   });
 
   describe('createLink', () => {

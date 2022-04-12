@@ -294,14 +294,10 @@ export const TextSegment = (props: TextSegmentProps): ReactElement => {
             dispatch(toggleTextSegment(word));
           } else if (mode === AlignmentMode.PartialEdit) {
             dispatch(toggleTextSegment(word));
-          } else if (word.role === 'source') {
-            dispatch(toggleTextSegment(word));
-            // Now that we allow partial edit, what do we do here?
-            // Previously:
-            //
+          } else if (word.role === 'source' && isLinked) {
             // ...do nothing...
-            // for now users have to create / edit
-            // by going to a target first.
+            // we can't enter edit mode this way.
+            // need a way to disambiguate between alignment data.
           } else if (mode === AlignmentMode.CleanSlate) {
             dispatch(toggleTextSegment(word));
           }

@@ -37,6 +37,12 @@ export const initialState: AlignmentState = {
   mode: AlignmentMode.CleanSlate,
 };
 
+const createNextLinkId = (alignment: Alignment) => {
+  return `${alignment.source}-${alignment.target}-${generateLinkId(
+    alignment.links
+  )}`;
+};
+
 const remapSyntax = (state: Draft<AlignmentState>, alignmentIndex: number) => {
   const sourceCorpusId = state.alignments[alignmentIndex].source;
   const targetCorpusId = state.alignments[alignmentIndex].target;
@@ -139,7 +145,7 @@ const alignmentSlice = createSlice({
 
     toggleTextSegment: (state, action: PayloadAction<Word>) => {
       if (state.inProgressLink?._id === '?') {
-        console.log("Partial time");
+        console.log('Partial time');
         // There is a partial in-progress link.
         const emptySide =
           state.inProgressLink.sources.length === 0
@@ -174,9 +180,7 @@ const alignmentSlice = createSlice({
               )}`
             );
           }
-          state.inProgressLink._id = String(
-            generateLinkId(relatedAlignment.links)
-          );
+          state.inProgressLink._id = createNextLinkId(relatedAlignment);
         } else if (sideInView !== emptySide) {
           state.mode = AlignmentMode.PartialEdit;
         }
@@ -226,7 +230,8 @@ const alignmentSlice = createSlice({
         );
 
         if (!alignment) {
-          console.error('Could not determine alignment pair for link.');
+          // Both sides are not known.
+          // Enter partial edit mode.
           let source = '?';
           let target = '?';
           const sources = [];
@@ -256,7 +261,6 @@ const alignmentSlice = createSlice({
           state.mode = AlignmentMode.PartialEdit;
           return;
         }
-        console.log('after return');
 
         const existingLink = alignment.links.find((link: Link) => {
           return (
@@ -292,9 +296,7 @@ const alignmentSlice = createSlice({
           }
 
           state.inProgressLink = {
-            _id: `${alignment.source}-${alignment.target}-${generateLinkId(
-              alignment.links
-            )}`,
+            _id: createNextLinkId(alignment),
             source: alignment.source,
             target: alignment.target,
             sources: newSources,
