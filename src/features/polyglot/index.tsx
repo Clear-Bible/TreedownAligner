@@ -8,7 +8,7 @@ import { Corpus } from 'structs';
 
 import cssVar from 'styles/cssVar';
 
-import 'features/polyglot/styles.css';
+import './styles.css';
 
 export const Polyglot = (): ReactElement => {
   useDebug('PolyglotComponent');
@@ -24,7 +24,7 @@ export const Polyglot = (): ReactElement => {
       i: `text_${key}`,
       x,
       y: 0,
-      w: width,
+      w: width === 24 ? 8 : width,
       h: 12,
       minW: width,
       maxW: width,
@@ -51,7 +51,7 @@ export const Polyglot = (): ReactElement => {
           const key = `text_${index}`;
           return (
             <div
-              className="corpus-container"
+              className="corpus-container corpus-scroll-container"
               key={key}
               style={{
                 border: '1px solid',

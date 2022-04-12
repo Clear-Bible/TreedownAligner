@@ -273,6 +273,67 @@ describe('alignmentSlice reducer', () => {
 
       expect(resultState.mode).toEqual(AlignmentMode.Edit);
     });
+
+    it('enters partial edit mode (from clean)', () => {
+      const previousState = {
+        ...initialState,
+        alignments: [
+          {
+            source: 'nvi',
+            target: 'sbl',
+            links: [
+              { _id: 'nvi-sbl-1', sources: ['nvi_0'], targets: ['sbl_1'] },
+            ],
+          },
+        ],
+        inProgressLink: null,
+      };
+
+      const resultState = alignmentSliceReducer(
+        previousState,
+        toggleTextSegment(targetWord2)
+      );
+
+      expect(resultState.inProgressLink).toBeTruthy();
+      expect(resultState.inProgressLink?._id).toEqual('?');
+      expect(resultState.mode).toEqual(AlignmentMode.PartialEdit);
+    });
+
+    it('enters edit mode (from partial edit)', () => {
+      const previousState = {
+        ...initialState,
+        alignments: [
+          {
+            source: 'nvi',
+            target: 'sbl',
+            links: [
+              { _id: 'nvi-sbl-1', sources: ['nvi_0'], targets: ['sbl_1'] },
+            ],
+          },
+        ],
+        inProgressLink: {
+          _id: '?',
+          source: 'nvi',
+          target: '',
+          sources: ['nvi_1'],
+          targets: [],
+        },
+      };
+
+      const resultState = alignmentSliceReducer(
+        previousState,
+        toggleTextSegment({
+          id: 'sbl_2',
+          corpusId: 'sbl',
+          role: CorpusRole.Target,
+          text: 'asdf',
+          position: 3,
+        })
+      );
+
+      expect(resultState.inProgressLink?._id).toEqual('nvi-sbl-2');
+      expect(resultState.mode).toEqual(AlignmentMode.Edit);
+    });
   });
 
   describe('createLink', () => {
@@ -281,7 +342,7 @@ describe('alignmentSlice reducer', () => {
         ...initialState,
         alignments: [englishAlignment],
         inProgressLink: {
-          _id: '',
+          _id: 'sbl-leb-0',
           source: 'sbl',
           target: 'leb',
           sources: ['sbl_1'],
@@ -296,6 +357,7 @@ describe('alignmentSlice reducer', () => {
       expect(resultState.alignments[0].source).toBe('sbl');
       expect(resultState.alignments[0].target).toBe('leb');
       expect(resultState.alignments[0].links[0]).toEqual({
+        _id: 'sbl-leb-0',
         sources: ['sbl_1'],
         targets: ['leb_1'],
       });
@@ -306,7 +368,7 @@ describe('alignmentSlice reducer', () => {
         ...initialState,
         alignments: [spanishAlignment],
         inProgressLink: {
-          _id: '',
+          _id: 'sbl-nvi-1',
           source: 'sbl',
           target: 'nvi',
           sources: ['sbl_1'],
@@ -320,6 +382,7 @@ describe('alignmentSlice reducer', () => {
       expect(resultState.alignments[0].source).toBe('sbl');
       expect(resultState.alignments[0].target).toBe('nvi');
       expect(resultState.alignments[0].links[0]).toEqual({
+        _id: 'sbl-nvi-1',
         sources: ['sbl_1'],
         targets: ['nvi_1'],
       });

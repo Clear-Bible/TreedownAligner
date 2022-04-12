@@ -1,4 +1,4 @@
-import { createSlice, PayloadAction, Draft } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction, Draft, current } from '@reduxjs/toolkit';
 
 import {
   Word,
@@ -14,11 +14,13 @@ import {
 import removeSegmentFromLink from 'helpers/removeSegmentFromLink';
 import generateLinkId from 'helpers/generateLinkId';
 import syntaxMapper from 'features/treedown/syntaxMapper';
+import { CorpusType } from 'structs';
 
 export enum AlignmentMode {
   CleanSlate = 'cleanSlate', // Default mode
   Select = 'select', // An existing link has been selected
   Edit = 'edit', // Editing a new or existing link
+  PartialEdit = 'partialEdit', // Only one 'side' has been selected
 }
 
 export interface AlignmentState {
@@ -33,6 +35,12 @@ export const initialState: AlignmentState = {
   corpora: [],
   inProgressLink: null,
   mode: AlignmentMode.CleanSlate,
+};
+
+const createNextLinkId = (alignment: Alignment) => {
+  return `${alignment.source}-${alignment.target}-${generateLinkId(
+    alignment.links
+  )}`;
 };
 
 const remapSyntax = (state: Draft<AlignmentState>, alignmentIndex: number) => {
@@ -77,17 +85,17 @@ const alignmentSlice = createSlice({
   initialState,
   reducers: {
     loadAlignments: (state, action: PayloadAction<Alignment[]>) => {
-      const alignments = action.payload.concat([]);
-
-      for (const alignment of alignments) {
-        alignment.links = alignment.links.map((link: Link, index: number) => {
-          return {
-            ...link,
-            _id: `${alignment.source}-${alignment.target}-${index}`,
-          };
-        });
-      }
-      state.alignments = alignments;
+      state.alignments = action.payload.map((alignment) => {
+        return {
+          ...alignment,
+          links: alignment.links.map((link, index) => {
+            return {
+              ...link,
+              _id: `${alignment.source}-${alignment.target}-${index}`,
+            };
+          }),
+        };
+      });
     },
 
     loadCorpora: (state, action: PayloadAction<Corpus[]>) => {
@@ -99,10 +107,19 @@ const alignmentSlice = createSlice({
         let syntax = corpus.syntax;
         if (syntax && syntax._syntaxType === SyntaxType.Mapped) {
           const alignment = state.alignments.find((alignment: Alignment) => {
-            // This is waiting to break.
-            // TODO: relate an alignment to mapped syntax
-            // TODO: know which side of the related alignment to use
-            return alignment.source === 'nvi' && alignment.target === 'sbl';
+            const sourceCorpusType = state.corpora.find((corpus) => {
+              return corpus.id === alignment.source;
+            })?.type;
+            const targetCorpusType = state.corpora.find((corpus) => {
+              return corpus.id === alignment.target;
+            })?.type;
+
+            return (
+              (sourceCorpusType === CorpusType.Primary &&
+                alignment.target === corpus.id) ||
+              (targetCorpusType === CorpusType.Primary &&
+                alignment.source === corpus.id)
+            );
           });
           if (alignment) {
             syntax = syntaxMapper(syntax, alignment);
@@ -127,6 +144,48 @@ const alignmentSlice = createSlice({
     },
 
     toggleTextSegment: (state, action: PayloadAction<Word>) => {
+      if (state.inProgressLink?._id === '?') {
+        // There is a partial in-progress link.
+        const emptySide =
+          state.inProgressLink.sources.length === 0
+            ? CorpusRole.Source
+            : CorpusRole.Target;
+
+        const sideInView = action.payload.role;
+
+        if (sideInView === CorpusRole.Source) {
+          state.inProgressLink.source = action.payload.corpusId;
+          state.inProgressLink.sources.push(action.payload.id);
+        }
+
+        if (sideInView === CorpusRole.Target) {
+          state.inProgressLink.target = action.payload.corpusId;
+          state.inProgressLink.targets.push(action.payload.id);
+        }
+
+        if (sideInView === emptySide) {
+          state.mode = AlignmentMode.Edit;
+          const relatedAlignment = state.alignments.find((alignment) => {
+            return (
+              alignment.source === state.inProgressLink?.source &&
+              alignment.target === state.inProgressLink?.target
+            );
+          });
+
+          if (!relatedAlignment) {
+            throw new Error(
+              `Unable to find alignment for proposed link: ${current(
+                state.inProgressLink
+              )}`
+            );
+          }
+          state.inProgressLink._id = createNextLinkId(relatedAlignment);
+        } else if (sideInView !== emptySide) {
+          state.mode = AlignmentMode.PartialEdit;
+        }
+        return;
+      }
+
       if (state.inProgressLink) {
         // There is already an in progress link.
         state.mode = AlignmentMode.Edit;
@@ -170,7 +229,34 @@ const alignmentSlice = createSlice({
         );
 
         if (!alignment) {
-          throw new Error('Could not determine alignment pair for link.');
+          // Both sides are not known.
+          // Enter partial edit mode.
+          let source = '?';
+          let target = '?';
+          const sources = [];
+          const targets = [];
+
+          if (action.payload.role === CorpusRole.Source) {
+            source = action.payload.corpusId;
+            sources.push(action.payload.id);
+            console.log(source, sources);
+          }
+
+          if (action.payload.role === CorpusRole.Target) {
+            target = action.payload.corpusId;
+            targets.push(action.payload.id);
+          }
+
+          state.inProgressLink = {
+            _id: '?',
+            source,
+            target,
+            sources,
+            targets,
+          };
+
+          state.mode = AlignmentMode.PartialEdit;
+          return;
         }
 
         const existingLink = alignment.links.find((link: Link) => {
@@ -199,6 +285,7 @@ const alignmentSlice = createSlice({
 
           if (action.payload.role === CorpusRole.Source) {
             newSources.push(action.payload.id);
+            //source =
           }
 
           if (action.payload.role === CorpusRole.Target) {
@@ -206,9 +293,7 @@ const alignmentSlice = createSlice({
           }
 
           state.inProgressLink = {
-            _id: `${alignment.source}-${alignment.target}-${generateLinkId(
-              alignment.links
-            )}`,
+            _id: createNextLinkId(alignment),
             source: alignment.source,
             target: alignment.target,
             sources: newSources,
@@ -250,6 +335,7 @@ const alignmentSlice = createSlice({
 
         if (!updated) {
           alignment.links.push({
+            _id: state.inProgressLink._id,
             sources: state.inProgressLink.sources,
             targets: state.inProgressLink.targets,
           });

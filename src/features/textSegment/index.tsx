@@ -9,7 +9,7 @@ import { hover, relatedAlignments } from 'state/textSegmentHover.slice';
 import { Alignment, Word, CorpusRole, Link } from 'structs';
 import findRelatedAlignments from 'helpers/findRelatedAlignments';
 
-import 'styles/theme.css';
+import '../../styles/theme.css';
 import cssVar from 'styles/cssVar';
 
 interface TextSegmentProps {
@@ -291,10 +291,12 @@ export const TextSegment = (props: TextSegmentProps): ReactElement => {
             isInvolved
           ) {
             dispatch(toggleTextSegment(word));
-          } else if (word.role === 'source') {
+          } else if (mode === AlignmentMode.PartialEdit) {
+            dispatch(toggleTextSegment(word));
+          } else if (word.role === 'source' && isLinked) {
             // ...do nothing...
-            // for now users have to create / edit
-            // by going to a target first.
+            // we can't enter edit mode this way.
+            // need a way to disambiguate between alignment data.
           } else if (mode === AlignmentMode.CleanSlate) {
             dispatch(toggleTextSegment(word));
           }

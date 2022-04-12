@@ -13,16 +13,17 @@ import { Alignment, Corpus } from 'structs';
 import copySyntaxData from 'helpers/copySyntaxData';
 
 import cssVar from 'styles/cssVar';
-import 'styles/theme.css';
+import '../../styles/theme.css';
 
 interface EditorProps {
   corpora: Corpus[];
   alignments: Alignment[];
   theme: 'night' | 'day';
+  alignmentUpdated: Function;
 }
 
 export const Editor = (props: EditorProps): ReactElement => {
-  const { corpora, alignments, theme } = props;
+  const { corpora, alignments, theme, alignmentUpdated } = props;
   useDebug('Editor');
 
   const dispatch = useAppDispatch();
@@ -32,19 +33,25 @@ export const Editor = (props: EditorProps): ReactElement => {
   }, [dispatch, theme]);
 
   useEffect(() => {
-    dispatch(loadAlignments(alignments));
-    dispatch(loadCorpora(copySyntaxData(corpora)));
+    if (alignments) {
+      dispatch(loadAlignments(alignments));
+    }
+
+    if (corpora) {
+      dispatch(loadCorpora(copySyntaxData(corpora)));
+    }
   }, [dispatch, corpora, alignments]);
 
   return (
     <div
+      className="editor-container"
       style={{
         backgroundColor: cssVar('background', theme),
         width: '1200px',
       }}
     >
       <Polyglot />
-      <ControlPanel />
+      <ControlPanel alignmentUpdated={alignmentUpdated} />
       <ContextPanel />
     </div>
   );

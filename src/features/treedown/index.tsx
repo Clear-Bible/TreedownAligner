@@ -10,7 +10,7 @@ import TextSegment from 'features/textSegment';
 
 import { findWordById } from 'helpers/findWord';
 
-import 'features/treedown/styles.css';
+import './styles.css';
 
 interface TreedownProps {
   corpus: Corpus;

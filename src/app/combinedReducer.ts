@@ -7,7 +7,7 @@ import TextSegmentHoverReducer from 'state/textSegmentHover.slice';
 export const reducer = {
   reducer: {
     app: AppReducer,
-    alignment: undoable(AlignmentReducer),
+    alignment: undoable(AlignmentReducer, { limit: 10 }),
     textSegmentHover: TextSegmentHoverReducer,
   },
 };

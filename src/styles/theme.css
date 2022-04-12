@@ -1,4 +1,4 @@
-:root {
+.editor-container {
   --night-background: black;
   --night-border-color: white;
   --night-drag-handle-color: white;
@@ -16,4 +16,8 @@
   --day-selected-segment-background-color: black;
   --day-selected-segment-font-color: white;
   --day-syntax-label-background: lightgrey;
+}
+
+::-webkit-scrollbar {
+  width: 0;
 }
