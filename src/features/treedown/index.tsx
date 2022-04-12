@@ -45,9 +45,9 @@ const renderMappedTextSegment = (syntaxNode: SyntaxNode, corpus: Corpus) => {
     syntaxNode.content.alignedWordIds &&
     syntaxNode.content.alignedWordIds.length > 0
   ) {
-      //console.log(corpus.id);
+    //console.log(corpus.id);
     //if (corpus.id === 'nvi') {
-      //console.log('mapped?', syntaxNode.content);
+    //console.log('mapped?', syntaxNode.content);
     //}
     return syntaxNode.content.alignedWordIds.map((alignedWordId) => {
       return (
@@ -70,7 +70,11 @@ const recurseSyntax = (
     const graduatedDepth = depth * 0.5;
 
     if (syntaxNode.content.elementType === 'pc') {
-      return <span className="pc">{syntaxNode.content.text}</span>;
+      return (
+        treedownType === TreedownType.Source && (
+          <span className="pc">{syntaxNode.content.text}</span>
+        )
+      );
     }
 
     if (syntaxNode.content && syntaxNode.content.elementType === 'sentence') {
@@ -132,7 +136,7 @@ const recurseSyntax = (
       }
 
       //if (corpus.id === 'nvi' && syntaxNode.content.elementType === 'w') {
-          //console.log(syntaxNode);
+      //console.log(syntaxNode);
       //}
       return (
         <div
