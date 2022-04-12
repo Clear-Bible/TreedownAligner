@@ -285,7 +285,6 @@ export const TextSegment = (props: TextSegmentProps): ReactElement => {
           dispatch(relatedAlignments([]));
         }}
         onClick={() => {
-          console.log('click', isInvolved, word);
           if (
             (mode === AlignmentMode.Edit || mode === AlignmentMode.Select) &&
             (!isLinked || isCurrentLinkMember) &&
