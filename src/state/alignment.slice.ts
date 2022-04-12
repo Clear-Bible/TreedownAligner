@@ -145,7 +145,6 @@ const alignmentSlice = createSlice({
 
     toggleTextSegment: (state, action: PayloadAction<Word>) => {
       if (state.inProgressLink?._id === '?') {
-        console.log('Partial time');
         // There is a partial in-progress link.
         const emptySide =
           state.inProgressLink.sources.length === 0
@@ -236,8 +235,6 @@ const alignmentSlice = createSlice({
           let target = '?';
           const sources = [];
           const targets = [];
-
-          console.log(action.payload);
 
           if (action.payload.role === CorpusRole.Source) {
             source = action.payload.corpusId;

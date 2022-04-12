@@ -368,7 +368,7 @@ describe('alignmentSlice reducer', () => {
         ...initialState,
         alignments: [spanishAlignment],
         inProgressLink: {
-          _id: '',
+          _id: 'sbl-nvi-1',
           source: 'sbl',
           target: 'nvi',
           sources: ['sbl_1'],
@@ -382,6 +382,7 @@ describe('alignmentSlice reducer', () => {
       expect(resultState.alignments[0].source).toBe('sbl');
       expect(resultState.alignments[0].target).toBe('nvi');
       expect(resultState.alignments[0].links[0]).toEqual({
+        _id: 'sbl-nvi-1',
         sources: ['sbl_1'],
         targets: ['nvi_1'],
       });
