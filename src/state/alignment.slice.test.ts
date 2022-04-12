@@ -342,7 +342,7 @@ describe('alignmentSlice reducer', () => {
         ...initialState,
         alignments: [englishAlignment],
         inProgressLink: {
-          _id: '',
+          _id: 'sbl-leb-0',
           source: 'sbl',
           target: 'leb',
           sources: ['sbl_1'],
@@ -357,6 +357,7 @@ describe('alignmentSlice reducer', () => {
       expect(resultState.alignments[0].source).toBe('sbl');
       expect(resultState.alignments[0].target).toBe('leb');
       expect(resultState.alignments[0].links[0]).toEqual({
+        _id: 'sbl-leb-0',
         sources: ['sbl_1'],
         targets: ['leb_1'],
       });

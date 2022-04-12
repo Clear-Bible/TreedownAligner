@@ -338,6 +338,7 @@ const alignmentSlice = createSlice({
 
         if (!updated) {
           alignment.links.push({
+            _id: state.inProgressLink._id,
             sources: state.inProgressLink.sources,
             targets: state.inProgressLink.targets,
           });
