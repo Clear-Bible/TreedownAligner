@@ -36,8 +36,9 @@ const refactorLinks = (links: Link[]) => {
   return links
     .map((link) => {
       console.log(link);
-      if (link.sources.length > 1 && link.targets.length > 1) {
-        // MANY:MANY
+      if (link.targets.length > 1) {
+        // MANY:1 || MANY
+        // Split links to 1:MANY
         return link.targets.map((target: string, index: number) => {
           if (
             link.targets.length === index + 1 &&

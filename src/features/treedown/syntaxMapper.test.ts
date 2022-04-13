@@ -30,57 +30,135 @@ describe('syntaxMapper', () => {
     ).toEqual(['en_4', 'en_5', 'en_7']);
   });
 
-  it('refactors many:many links into 1:many (symmetric)', () => {
-    const result = syntaxMapper(treedownSyntax as unknown as SyntaxRoot, {
-      target: 'an interesting greek source',
-      source: 'a very good english translation',
-      links: [
-        {
-          targets: ['410160010010010', '410160010020010', '410160010030010'],
-          sources: ['en_4', 'en_5', 'en_7'],
-        },
-      ],
+  describe('link refactoring', () => {
+    it('refactors many:many links into 1:many (symmetric)', () => {
+      const result = syntaxMapper(treedownSyntax as unknown as SyntaxRoot, {
+        target: 'an interesting greek source',
+        source: 'a very good english translation',
+        links: [
+          {
+            targets: ['410160010010010', '410160010020010', '410160010030010'],
+            sources: ['en_4', 'en_5', 'en_7'],
+          },
+        ],
+      });
+
+      expect(
+        result.children[0].children[0].children[0].content.alignedWordIds
+      ).toEqual(['en_4']);
+
+      expect(
+        result.children[0].children[0].children[1].children[0].content
+          .alignedWordIds
+      ).toEqual(['en_5']);
+
+      expect(
+        result.children[0].children[0].children[1].children[1].children[0]
+          .content.alignedWordIds
+      ).toEqual(['en_7']);
     });
 
-    expect(
-      result.children[0].children[0].children[0].content.alignedWordIds
-    ).toEqual(['en_4']);
+    it('refactors many:many links into 1:many (asymmetric)', () => {
+      const result = syntaxMapper(treedownSyntax as unknown as SyntaxRoot, {
+        target: 'an interesting greek source',
+        source: 'a very good english translation',
+        links: [
+          {
+            targets: ['410160010010010', '410160010020010', '410160010030010'],
+            sources: ['en_4', 'en_5', 'en_7', 'en_8'],
+          },
+        ],
+      });
 
-    expect(
-      result.children[0].children[0].children[1].children[0].content
-        .alignedWordIds
-    ).toEqual(['en_5']);
+      expect(
+        result.children[0].children[0].children[0].content.alignedWordIds
+      ).toEqual(['en_4']);
 
-    expect(
-      result.children[0].children[0].children[1].children[1].children[0].content
-        .alignedWordIds
-    ).toEqual(['en_7']);
-  });
+      expect(
+        result.children[0].children[0].children[1].children[0].content
+          .alignedWordIds
+      ).toEqual(['en_5']);
 
-  it('refactors many:many links into 1:many (asymmetric)', () => {
-    const result = syntaxMapper(treedownSyntax as unknown as SyntaxRoot, {
-      target: 'an interesting greek source',
-      source: 'a very good english translation',
-      links: [
-        {
-          targets: ['410160010010010', '410160010020010', '410160010030010'],
-          sources: ['en_4', 'en_5', 'en_7', 'en_8'],
-        },
-      ],
+      expect(
+        result.children[0].children[0].children[1].children[1].children[0]
+          .content.alignedWordIds
+      ).toEqual(['en_7', 'en_8']);
     });
 
-    expect(
-      result.children[0].children[0].children[0].content.alignedWordIds
-    ).toEqual(['en_4']);
+    it('refactors many:many links into 1:many (asymmetric surplus)', () => {
+      const result = syntaxMapper(treedownSyntax as unknown as SyntaxRoot, {
+        target: 'an interesting greek source',
+        source: 'a very good english translation',
+        links: [
+          {
+            targets: ['410160010010010', '410160010020010', '410160010030010'],
+            sources: ['en_4', 'en_5', 'en_7', 'en_8'],
+          },
+        ],
+      });
 
-    expect(
-      result.children[0].children[0].children[1].children[0].content
-        .alignedWordIds
-    ).toEqual(['en_5']);
+      expect(
+        result.children[0].children[0].children[0].content.alignedWordIds
+      ).toEqual(['en_4']);
 
-    expect(
-      result.children[0].children[0].children[1].children[1].children[0].content
-        .alignedWordIds
-    ).toEqual(['en_7', 'en_8']);
+      expect(
+        result.children[0].children[0].children[1].children[0].content
+          .alignedWordIds
+      ).toEqual(['en_5']);
+
+      expect(
+        result.children[0].children[0].children[1].children[1].children[0]
+          .content.alignedWordIds
+      ).toEqual(['en_7', 'en_8']);
+    });
+
+    it('refactors many:many links into 1:many (asymmetric deficit)', () => {
+      const result = syntaxMapper(treedownSyntax as unknown as SyntaxRoot, {
+        target: 'an interesting greek source',
+        source: 'a very good english translation',
+        links: [
+          {
+            targets: ['410160010010010', '410160010020010', '410160010030010'],
+            sources: ['en_4', 'en_5'],
+          },
+        ],
+      });
+
+      expect(
+        result.children[0].children[0].children[0].content.alignedWordIds
+      ).toEqual(['en_4']);
+
+      expect(
+        result.children[0].children[0].children[1].children[0].content
+          .alignedWordIds
+      ).toEqual(['en_5']);
+
+      expect(
+        result.children[0].children[0].children[1].children[1].children[0]
+          .content.alignedWordIds
+      ).toEqual([undefined]);
+    });
+
+    it('does not duplicate 1 many:1 link to multiple', () => {
+      const result = syntaxMapper(treedownSyntax as unknown as SyntaxRoot, {
+        target: 'an interesting greek source',
+        source: 'a very good english translation',
+        links: [
+          {
+            targets: ['410160010010010', '410160010020010'],
+            sources: ['en_4'],
+          },
+        ],
+      });
+
+      expect(
+        result.children[0].children[0].children[0].content.alignedWordIds
+      ).toEqual(['en_4']);
+
+      expect(
+        result.children[0].children[0].children[1].children[0].content
+          .alignedWordIds
+      ).toEqual([undefined]);
+    });
   });
 });
