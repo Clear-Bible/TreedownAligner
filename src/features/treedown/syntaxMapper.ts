@@ -35,11 +35,21 @@ const _syntaxMapper = (syntaxNode: SyntaxNode, alignment: Alignment): any => {
 const refactorLinks = (links: Link[]) => {
   return links
     .map((link) => {
+      console.log(link);
       if (link.sources.length > 1 && link.targets.length > 1) {
-        return link.sources.map((source: string, index: number) => {
-          // Bug: the last source needs to grab all remaining targets.
-          // Or something better than this ^.
-          return { sources: [source], targets: [link.targets[index]] };
+        // MANY:MANY
+        return link.targets.map((target: string, index: number) => {
+          if (
+            link.targets.length === index + 1 &&
+            link.sources.length > link.targets.length
+          ) {
+            // For the last target, grab all remaining sources.
+            return {
+              sources: [...link.sources].splice(index),
+              targets: [target],
+            };
+          }
+          return { sources: [link.sources[index]], targets: [target] };
         });
       }
       return link;
@@ -49,6 +59,7 @@ const refactorLinks = (links: Link[]) => {
 
 const syntaxMapper = (syntax: SyntaxRoot, alignment: Alignment) => {
   const refactoredLinks = refactorLinks(alignment.links);
+  console.log('refactor', refactoredLinks);
   _syntaxMapper(syntax, { ...alignment, links: refactoredLinks });
   return syntax;
 };
