@@ -136,7 +136,7 @@ describe('syntaxMapper', () => {
       expect(
         result.children[0].children[0].children[1].children[1].children[0]
           .content.alignedWordIds
-      ).toEqual([undefined]);
+      ).toEqual([]);
     });
 
     it('does not duplicate 1 many:1 link to multiple', () => {
@@ -158,7 +158,39 @@ describe('syntaxMapper', () => {
       expect(
         result.children[0].children[0].children[1].children[0].content
           .alignedWordIds
-      ).toEqual([undefined]);
+      ).toEqual([]);
+    });
+  });
+
+  describe('mapping secondary alignments', () => {
+    it('works', () => {
+      const result = syntaxMapper(
+        treedownSyntax as unknown as SyntaxRoot,
+        {
+          target: 'an interesting greek source',
+          source: 'a very good english translation',
+          links: [
+            {
+              targets: ['410160010010010', '410160010020010'],
+              sources: ['en_4'],
+            },
+          ],
+        },
+        {
+          source: 'a very good english translation',
+          target: 'an excellent spanish translation',
+          links: [{ targets: ['spa_2'], sources: ['en_4'] }],
+        }
+      );
+
+      expect(
+        result.children[0].children[0].children[0].content.alignedWordIds
+      ).toEqual(['spa_2']);
+
+      //expect(
+      //result.children[0].children[0].children[1].children[0].content
+      //.alignedWordIds
+      //).toEqual([undefined]);
     });
   });
 });

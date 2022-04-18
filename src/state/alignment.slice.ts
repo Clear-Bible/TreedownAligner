@@ -101,12 +101,14 @@ const alignmentSlice = createSlice({
 
     loadCorpora: (state, action: PayloadAction<Corpus[]>) => {
       state.corpora = action.payload.map((corpus: Corpus) => {
+        console.log('loadCorpus', corpus.id);
         const viewType = corpus.viewType
           ? corpus.viewType
           : CorpusViewType.Paragraph;
 
         let syntax = corpus.syntax;
         if (syntax && syntax._syntaxType === SyntaxType.Mapped) {
+          console.log('mapped', corpus.id);
           const alignment = state.alignments.find((alignment: Alignment) => {
             const sourceCorpusType = state.corpora.find((corpus) => {
               return corpus.id === alignment.source;
@@ -123,16 +125,85 @@ const alignmentSlice = createSlice({
             );
           });
           if (alignment) {
-            //console.log('cached', cachedSyntax);
-            //console.log('cachedMapped', syntaxMapper(cachedSyntax, alignment));
-            
-            //syntax = cachedSyntax;
-            //if (corpus.id === 'nvi') {
-            //console.log('cached');
-            //} else {
             syntax = syntaxMapper(syntax, alignment);
-            //console.log(corpus.id, syntax);
-            //}
+          }
+        } else if (
+          syntax &&
+          syntax._syntaxType === SyntaxType.MappedSecondary
+        ) {
+          console.log('mappedSecondary', corpus.id);
+          const secondaryAlignment = state.alignments.find((alignment) => {
+            //console.log('findSecondary', alignment.source, alignment.target);
+            //console.log('secondary options', action.payload.length);
+            const sourceCorpus = action.payload.find((corpus) => {
+              //console.log('findSource', corpus.id);
+              return corpus.id === alignment.source;
+            });
+            const targetCorpus = action.payload.find((corpus) => {
+              return corpus.id === alignment.target;
+            });
+
+            if (alignment.source === corpus.id) {
+              return targetCorpus?.syntax?._syntaxType === SyntaxType.Mapped;
+            }
+
+            if (alignment.target === corpus.id) {
+              //console.log('check', sourceCorpus);
+              return sourceCorpus?.syntax?._syntaxType === SyntaxType.Mapped;
+            }
+
+            return false;
+          });
+
+          if (!secondaryAlignment) {
+            throw new Error(
+              `Error determining the secondary alignment data for Corpus: ${corpus.id}`
+            );
+          }
+
+          if (secondaryAlignment) {
+            console.log(
+              'secondary',
+              secondaryAlignment.source,
+              secondaryAlignment.target
+            );
+            const mappedAlignmentCorpus =
+              secondaryAlignment.source === corpus.id
+                ? secondaryAlignment.target
+                : secondaryAlignment.source;
+
+            console.log(
+              'findPrimary',
+              mappedAlignmentCorpus,
+              state.alignments.length
+            );
+
+            const primaryAlignment = state.alignments.find((alignment) => {
+              const sourceCorpusType = action.payload.find((corpus) => {
+                return corpus.id === alignment.source;
+              })?.type;
+              const targetCorpusType = action.payload.find((corpus) => {
+                return corpus.id === alignment.target;
+              })?.type;
+
+              console.log(sourceCorpusType, targetCorpusType);
+              return (
+                (alignment.source === mappedAlignmentCorpus ||
+                  alignment.target === mappedAlignmentCorpus) &&
+                (sourceCorpusType === CorpusType.Primary ||
+                  targetCorpusType === CorpusType.Primary)
+              );
+            });
+
+            if (!primaryAlignment) {
+              throw new Error(
+                `Error determining the primary alignment data for Corpus: ${corpus.id}`
+              );
+            }
+
+            console.log('primary', primaryAlignment);
+            console.log('secondary', secondaryAlignment);
+            syntax = syntaxMapper(syntax, primaryAlignment, secondaryAlignment);
           }
         }
 

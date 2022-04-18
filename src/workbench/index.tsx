@@ -147,7 +147,7 @@ const Workbench = (props: WorkbenchProps): ReactElement => {
   if (showLwcText) {
     corpora.push({
       ...queryText('leb', book, chapter, verse),
-      syntax: { ...syntaxData, _syntaxType: SyntaxType.Mapped },
+      syntax: { ...syntaxData, _syntaxType: SyntaxType.MappedSecondary },
     });
   }
 

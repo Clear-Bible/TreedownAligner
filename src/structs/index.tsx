@@ -11,8 +11,12 @@ export enum CorpusType {
 }
 
 export enum SyntaxType {
+  // Has syntax data.
   Source = 'source',
+  // Mapped to a corpus with syntax data.
   Mapped = 'mapped',
+  // Mapped to a corpus that is mapped to a corpus with syntax data.
+  MappedSecondary = 'mappedSecondary',
 }
 
 export enum CorpusViewType {

@@ -1,9 +1,41 @@
 import { SyntaxRoot, SyntaxNode, Alignment, Link } from 'structs';
 
-const mapAlignedWords = (sourceId: string, alignment: Alignment): string[] => {
+const mapAlignedWords = (
+  sourceId: string,
+  alignment: Alignment,
+  secondaryAlignment: Alignment | null
+): string[] => {
+  //console.log(alignment.links);
   const matchedLinks = alignment.links.filter((link: Link) => {
     return link.targets.includes(sourceId);
   });
+
+  let secondaryMatchedLinks: Link[] = [];
+
+  if (secondaryAlignment) {
+    //console.log('matched links?', matchedLinks);
+    secondaryMatchedLinks = matchedLinks
+      .map((matchedLink: Link) => {
+        const secondaryLink = secondaryAlignment.links.find(
+          (secondaryLink: Link) => {
+            return secondaryLink.sources.find((secondaryLinkSource: string) => {
+              //console.log(matchedLink.sources, secondaryLinkSource);
+              return matchedLink.sources.includes(secondaryLinkSource);
+            });
+          }
+        );
+
+        return secondaryLink;
+      })
+      .filter((x): x is Link => Boolean(x));
+  }
+
+  if (secondaryMatchedLinks.length > 0) {
+    console.log(secondaryMatchedLinks);
+    return secondaryMatchedLinks.reduce((acc, curr) => {
+      return acc.concat(curr.targets);
+    }, [] as string[]);
+}
 
   if (matchedLinks.length > 0) {
     return matchedLinks.reduce((acc, curr) => {
@@ -13,17 +45,22 @@ const mapAlignedWords = (sourceId: string, alignment: Alignment): string[] => {
   return [];
 };
 
-const _syntaxMapper = (syntaxNode: SyntaxNode, alignment: Alignment): any => {
+const _syntaxMapper = (
+  syntaxNode: SyntaxNode,
+  alignment: Alignment,
+  secondaryAlignment: Alignment | null
+): any => {
   if (syntaxNode.content?.elementType === 'w' && syntaxNode.content.n) {
     syntaxNode.content.alignedWordIds = mapAlignedWords(
       syntaxNode.content.n,
-      alignment
+      alignment,
+      secondaryAlignment
     );
   }
 
   if (syntaxNode.children.length > 0) {
     return syntaxNode.children.map((childSyntaxNode: SyntaxNode) => {
-      return _syntaxMapper(childSyntaxNode, alignment);
+      return _syntaxMapper(childSyntaxNode, alignment, secondaryAlignment);
     });
   }
   return syntaxNode;
@@ -35,7 +72,6 @@ const _syntaxMapper = (syntaxNode: SyntaxNode, alignment: Alignment): any => {
 const refactorLinks = (links: Link[]) => {
   return links
     .map((link) => {
-      console.log(link);
       if (link.targets.length > 1) {
         // MANY:1 || MANY
         // Split links to 1:MANY
@@ -50,18 +86,29 @@ const refactorLinks = (links: Link[]) => {
               targets: [target],
             };
           }
-          return { sources: [link.sources[index]], targets: [target] };
+          if (link.sources[index]) {
+            return { sources: [link.sources[index]], targets: [target] };
+          }
         });
       }
       return link;
     })
-    .flat();
+    .flat()
+    .filter((x): x is Link => Boolean(x));
 };
 
-const syntaxMapper = (syntax: SyntaxRoot, alignment: Alignment) => {
+const syntaxMapper = (
+  syntax: SyntaxRoot,
+  alignment: Alignment,
+  secondaryAlignment: Alignment | null = null
+) => {
   const refactoredLinks = refactorLinks(alignment.links);
   console.log('refactor', refactoredLinks);
-  _syntaxMapper(syntax, { ...alignment, links: refactoredLinks });
+  _syntaxMapper(
+    syntax,
+    { ...alignment, links: refactoredLinks },
+    secondaryAlignment
+  );
   return syntax;
 };
 
