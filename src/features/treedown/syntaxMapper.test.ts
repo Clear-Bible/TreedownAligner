@@ -11,15 +11,13 @@ describe('syntaxMapper', () => {
         target: 'an interesting greek source',
         source: 'a very good english translation',
         links: [{ targets: ['410160010010010'], sources: ['en_6'] }],
-      },
-      null,
-      {
-        primary: {
+        polarity: {
+          type: 'primary',
           syntaxSide: 'targets',
           nonSyntaxSide: 'sources',
         },
-        secondary: {},
-      }
+      },
+      null
     );
 
     expect(
@@ -36,15 +34,13 @@ describe('syntaxMapper', () => {
         links: [
           { targets: ['410160010010010'], sources: ['en_4', 'en_5', 'en_7'] },
         ],
-      },
-      null,
-      {
-        primary: {
+        polarity: {
+          type: 'primary',
           syntaxSide: 'targets',
           nonSyntaxSide: 'sources',
         },
-        secondary: {},
-      }
+      },
+      null
     );
 
     expect(
@@ -69,15 +65,13 @@ describe('syntaxMapper', () => {
               sources: ['en_4', 'en_5', 'en_7'],
             },
           ],
-        },
-        null,
-        {
-          primary: {
+          polarity: {
+            type: 'primary',
             syntaxSide: 'targets',
             nonSyntaxSide: 'sources',
           },
-          secondary: {},
-        }
+        },
+        null
       );
 
       expect(
@@ -111,15 +105,13 @@ describe('syntaxMapper', () => {
               sources: ['en_4', 'en_5', 'en_7', 'en_8'],
             },
           ],
-        },
-        null,
-        {
-          primary: {
+          polarity: {
+            type: 'primary',
             syntaxSide: 'targets',
             nonSyntaxSide: 'sources',
           },
-          secondary: {},
-        }
+        },
+        null
       );
 
       expect(
@@ -153,15 +145,13 @@ describe('syntaxMapper', () => {
               sources: ['en_4', 'en_5', 'en_7', 'en_8'],
             },
           ],
-        },
-        null,
-        {
-          primary: {
+          polarity: {
+            type: 'primary',
             syntaxSide: 'targets',
             nonSyntaxSide: 'sources',
           },
-          secondary: {},
-        }
+        },
+        null
       );
 
       expect(
@@ -195,15 +185,13 @@ describe('syntaxMapper', () => {
               sources: ['en_4', 'en_5'],
             },
           ],
-        },
-        null,
-        {
-          primary: {
+          polarity: {
+            type: 'primary',
             syntaxSide: 'targets',
             nonSyntaxSide: 'sources',
           },
-          secondary: {},
-        }
+        },
+        null
       );
 
       expect(
@@ -222,27 +210,21 @@ describe('syntaxMapper', () => {
     });
 
     it('does not duplicate 1 many:1 link to multiple', () => {
-      const result = syntaxMapper(
-        treedownSyntax as unknown as SyntaxRoot,
-        {
-          target: 'an interesting greek source',
-          source: 'a very good english translation',
-          links: [
-            {
-              targets: ['410160010010010', '410160010020010'],
-              sources: ['en_4'],
-            },
-          ],
-        },
-        null,
-        {
-          primary: {
-            syntaxSide: 'targets',
-            nonSyntaxSide: 'sources',
+      const result = syntaxMapper(treedownSyntax as unknown as SyntaxRoot, {
+        target: 'an interesting greek source',
+        source: 'a very good english translation',
+        links: [
+          {
+            targets: ['410160010010010', '410160010020010'],
+            sources: ['en_4'],
           },
-          secondary: {},
-        }
-      );
+        ],
+        polarity: {
+          type: 'primary',
+          syntaxSide: 'targets',
+          nonSyntaxSide: 'sources',
+        },
+      });
 
       expect(
         result.children[0].children[0].children[0].content.alignedWordIds
@@ -268,19 +250,18 @@ describe('syntaxMapper', () => {
               sources: ['en_4'],
             },
           ],
+          polarity: {
+            type: 'primary',
+            syntaxSide: 'targets',
+            nonSyntaxSide: 'sources',
+          },
         },
         {
           source: 'a very good english translation',
           target: 'an excellent spanish translation',
           links: [{ targets: ['spa_2'], sources: ['en_4'] }],
-        },
-        {
-          primary: {
-            syntaxSide: 'targets',
-            nonSyntaxSide: 'sources',
-          },
-
-          secondary: {
+          polarity: {
+            type: 'secondary',
             mappedSide: 'sources',
             nonMappedSide: 'targets',
           },
@@ -310,27 +291,24 @@ describe('syntaxMapper', () => {
               targets: ['nvi_2'],
             },
           ],
+          polarity: {
+            type: 'primary',
+            syntaxSide: 'sources',
+            nonSyntaxSide: 'targets',
+          },
         },
         {
           source: 'leb',
           target: 'nvi',
           links: [{ sources: ['en_4'], targets: ['nvi_2'] }],
-        },
-        {
-          primary: {
-            syntaxSide: 'sources',
-            nonSyntaxSide: 'targets',
-          },
-
-          secondary: {
+          polarity: {
+            type: 'secondary',
             mappedSide: 'targets',
             nonMappedSide: 'sources',
           },
         }
       );
 
-      console.log(result.children[0].children[0].children[0]);
-      // console.log(JSON.stringify(result, null, 2));
       expect(
         result.children[0].children[0].children[0].content.alignedWordIds
       ).toEqual(['nvi_2']);

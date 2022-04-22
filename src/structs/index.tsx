@@ -68,10 +68,32 @@ export interface InProgressLink extends Link {
   target: string;
 }
 
-// Collection of textual pairs
+export type AlignmentSide = 'sources' | 'targets';
+
+export interface AlignmentPolarityBase {
+  type: 'primary' | 'secondary';
+}
+
+interface PrimaryAlignmentPolarity extends AlignmentPolarityBase {
+  type: 'primary';
+  syntaxSide: AlignmentSide;
+  nonSyntaxSide: AlignmentSide;
+}
+
+interface SecondaryAlignmentPolarity extends AlignmentPolarityBase {
+  type: 'secondary';
+  mappedSide: AlignmentSide;
+  nonMappedSide: AlignmentSide;
+}
+
+export type AlignmentPolarity =
+  | PrimaryAlignmentPolarity
+  | SecondaryAlignmentPolarity;
+
 export interface Alignment {
   source: string;
   target: string;
+  polarity: AlignmentPolarity;
   links: Link[];
 }
 
