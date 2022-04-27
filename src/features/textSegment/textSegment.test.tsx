@@ -10,7 +10,18 @@ const testState: RootState = {
   alignment: {
     ...preloadedState.alignment,
     present: {
-      alignments: [{ source: 'sbl', target: 'leb', links: [] }],
+      alignments: [
+        {
+          source: 'sbl',
+          target: 'leb',
+          links: [],
+          polarity: {
+            type: 'primary',
+            syntaxSide: 'sources',
+            nonSyntaxSide: 'targets',
+          },
+        },
+      ],
       corpora: [],
       inProgressLink: {
         source: 'sbl',

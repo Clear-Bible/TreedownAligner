@@ -1,4 +1,10 @@
-import { Word, Alignment, CorpusRole } from 'structs';
+import {
+  Word,
+  Alignment,
+  AlignmentSide,
+  PrimaryAlignmentPolarity,
+  CorpusRole,
+} from 'structs';
 
 import alignmentSliceReducer, {
   createLink,
@@ -8,8 +14,26 @@ import alignmentSliceReducer, {
   AlignmentMode,
 } from 'state/alignment.slice';
 
-const englishAlignment: Alignment = { source: 'sbl', target: 'leb', links: [] };
-const spanishAlignment: Alignment = { source: 'sbl', target: 'nvi', links: [] };
+const englishAlignment: Alignment = {
+  source: 'sbl',
+  target: 'leb',
+  links: [],
+  polarity: {
+    type: 'primary',
+    syntaxSide: 'sources',
+    nonSyntaxSide: 'targets',
+  },
+};
+const spanishAlignment: Alignment = {
+  source: 'sbl',
+  target: 'nvi',
+  links: [],
+  polarity: {
+    type: 'primary',
+    syntaxSide: 'sources',
+    nonSyntaxSide: 'targets',
+  },
+};
 
 const sourceWord1: Word = {
   id: 'sbl_0',
@@ -232,6 +256,11 @@ describe('alignmentSlice reducer', () => {
             links: [
               { _id: 'sbl-leb-1', sources: ['sbl_0'], targets: ['leb_1'] },
             ],
+            polarity: {
+              type: 'primary',
+              syntaxSide: 'sources',
+              nonSyntaxSide: 'targets',
+            } as PrimaryAlignmentPolarity,
           },
         ],
         inProgressLink: null,
@@ -255,6 +284,11 @@ describe('alignmentSlice reducer', () => {
             links: [
               { _id: 'sbl-leb-1', sources: ['sbl_0'], targets: ['leb_1'] },
             ],
+            polarity: {
+              type: 'primary',
+              syntaxSide: 'sources',
+              nonSyntaxSide: 'targets',
+            } as PrimaryAlignmentPolarity,
           },
         ],
         inProgressLink: {
@@ -284,6 +318,11 @@ describe('alignmentSlice reducer', () => {
             links: [
               { _id: 'nvi-sbl-1', sources: ['nvi_0'], targets: ['sbl_1'] },
             ],
+            polarity: {
+              type: 'primary',
+              syntaxSide: 'sources',
+              nonSyntaxSide: 'targets',
+            } as PrimaryAlignmentPolarity,
           },
         ],
         inProgressLink: null,
@@ -309,6 +348,11 @@ describe('alignmentSlice reducer', () => {
             links: [
               { _id: 'nvi-sbl-1', sources: ['nvi_0'], targets: ['sbl_1'] },
             ],
+            polarity: {
+              type: 'primary',
+              syntaxSide: 'sources',
+              nonSyntaxSide: 'targets',
+            } as PrimaryAlignmentPolarity,
           },
         ],
         inProgressLink: {
@@ -398,6 +442,11 @@ describe('alignmentSlice reducer', () => {
             links: [
               { _id: 'sbl-leb-1', sources: ['sbl_0'], targets: ['leb_1'] },
             ],
+            polarity: {
+              type: 'primary',
+              syntaxSide: 'sources',
+              nonSyntaxSide: 'targets',
+            } as PrimaryAlignmentPolarity,
           },
         ],
         inProgressLink: {
@@ -435,6 +484,11 @@ describe('alignmentSlice reducer', () => {
                 targets: ['leb_1', 'leb_2'],
               },
             ],
+            polarity: {
+              type: 'primary',
+              syntaxSide: 'sources',
+              nonSyntaxSide: 'targets',
+            } as PrimaryAlignmentPolarity,
           },
         ],
         inProgressLink: {
@@ -474,6 +528,11 @@ describe('alignmentSlice reducer', () => {
                 targets: ['leb_1', 'leb_2'],
               },
             ],
+            polarity: {
+              type: 'primary',
+              syntaxSide: 'sources',
+              nonSyntaxSide: 'targets',
+            } as PrimaryAlignmentPolarity,
           },
         ],
       };
@@ -497,6 +556,11 @@ describe('alignmentSlice reducer', () => {
                 targets: ['leb_1', 'leb_2'],
               },
             ],
+            polarity: {
+              type: 'primary',
+              syntaxSide: 'sources',
+              nonSyntaxSide: 'targets',
+            } as PrimaryAlignmentPolarity,
           },
         ],
         inProgressLink: {
@@ -541,8 +605,14 @@ describe('alignmentSlice reducer', () => {
                 targets: ['leb_3', 'leb_8'],
               },
             ],
+            polarity: {
+              type: 'primary',
+              syntaxSide: 'sources',
+              nonSyntaxSide: 'targets',
+            } as PrimaryAlignmentPolarity,
           },
         ],
+
         inProgressLink: {
           _id: 'sbl-leb-1',
           source: 'sbl',
@@ -590,6 +660,11 @@ describe('alignmentSlice reducer', () => {
                 targets: ['leb_1', 'leb_2'],
               },
             ],
+            polarity: {
+              type: 'primary',
+              syntaxSide: 'sources',
+              nonSyntaxSide: 'targets',
+            } as PrimaryAlignmentPolarity,
           },
         ],
         inProgressLink: {

@@ -9,11 +9,21 @@ const testAlignments: Alignment[] = [
       { sources: ['regular_8'], targets: ['goofy_7'] },
       { sources: ['regular_1'], targets: ['goofy_2'] },
     ],
+    polarity: {
+      type: 'primary',
+      syntaxSide: 'sources',
+      nonSyntaxSide: 'targets',
+    },
   },
   {
     source: 'specificThing',
     target: 'genericThing',
     links: [{ sources: ['specific_1', 'specific_2'], targets: ['generic_4'] }],
+    polarity: {
+      type: 'primary',
+      syntaxSide: 'sources',
+      nonSyntaxSide: 'targets',
+    },
   },
 ];
 

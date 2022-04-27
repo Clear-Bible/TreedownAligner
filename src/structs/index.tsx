@@ -74,13 +74,13 @@ export interface AlignmentPolarityBase {
   type: 'primary' | 'secondary';
 }
 
-interface PrimaryAlignmentPolarity extends AlignmentPolarityBase {
+export interface PrimaryAlignmentPolarity extends AlignmentPolarityBase {
   type: 'primary';
   syntaxSide: AlignmentSide;
   nonSyntaxSide: AlignmentSide;
 }
 
-interface SecondaryAlignmentPolarity extends AlignmentPolarityBase {
+export interface SecondaryAlignmentPolarity extends AlignmentPolarityBase {
   type: 'secondary';
   mappedSide: AlignmentSide;
   nonMappedSide: AlignmentSide;
