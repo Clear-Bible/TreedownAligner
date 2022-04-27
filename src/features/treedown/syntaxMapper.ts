@@ -15,44 +15,58 @@ const mapAlignedWords = (
   });
 
   let secondaryMatchedLinks: Link[] = [];
-
-  if (
-    alignment.polarity.type === 'primary' &&
-    secondaryAlignment &&
-    secondaryAlignment.polarity.type === 'secondary'
-  ) {
+  if (alignment.polarity.type === 'primary') {
+    const syntaxSideName = alignment.polarity.syntaxSide;
     const nonSyntaxSideName = alignment.polarity.nonSyntaxSide;
-    const mappedSideName = secondaryAlignment.polarity.mappedSide;
+    if (
+      secondaryAlignment &&
+      secondaryAlignment.polarity.type === 'secondary'
+    ) {
+      const mappedSideName = secondaryAlignment.polarity.mappedSide;
+      const nonMappedSideName = secondaryAlignment.polarity.nonMappedSide;
 
-    secondaryMatchedLinks = matchedLinks
-      .map((matchedLink: Link) => {
-        const secondaryLink = secondaryAlignment.links.find(
-          (secondaryLink: Link) => {
-            return secondaryLink[mappedSideName].find(
-              (secondaryLinkMappedId: string) => {
-                return matchedLink[nonSyntaxSideName].includes(
-                  secondaryLinkMappedId
-                );
-              }
-            );
-          }
+      secondaryMatchedLinks = matchedLinks
+        .map((matchedLink: Link) => {
+          const secondaryLink = secondaryAlignment.links.find(
+            (secondaryLink: Link) => {
+              return secondaryLink[mappedSideName].find(
+                (secondaryLinkMappedId: string) => {
+                  console.log('found match');
+                  return matchedLink[nonSyntaxSideName].includes(
+                    secondaryLinkMappedId
+                  );
+                }
+              );
+            }
+          );
+
+          return secondaryLink;
+        })
+        .filter((x): x is Link => Boolean(x));
+
+      if (secondaryMatchedLinks.length > 0) {
+        console.log(
+          secondaryMatchedLinks.reduce((acc, curr) => {
+            return acc.concat(curr[nonMappedSideName]);
+          }, [] as string[])
         );
+        return secondaryMatchedLinks.reduce((acc, curr) => {
+          return acc.concat(curr[nonMappedSideName]);
+        }, [] as string[]);
+      }
+    }
 
-        return secondaryLink;
-      })
-      .filter((x): x is Link => Boolean(x));
-  }
-
-  if (secondaryMatchedLinks.length > 0) {
-    return secondaryMatchedLinks.reduce((acc, curr) => {
-      return acc.concat(curr.targets);
-    }, [] as string[]);
-  }
-
-  if (matchedLinks.length > 0) {
-    return matchedLinks.reduce((acc, curr) => {
-      return acc.concat(curr.sources);
-    }, [] as string[]);
+    if (matchedLinks.length > 0) {
+      console.log(
+        matchedLinks.reduce((acc, curr) => {
+          return acc.concat(curr[nonSyntaxSideName]);
+        }, [] as string[])
+      );
+      return matchedLinks.reduce((acc, curr) => {
+        return acc.concat(curr[nonSyntaxSideName]);
+      }, [] as string[]);
+    }
+    return [];
   }
   return [];
 };
@@ -166,8 +180,24 @@ const syntaxMapper = (
   alignment: Alignment,
   secondaryAlignment: Alignment | null = null
 ) => {
+  console.log(JSON.stringify(syntax));
+  console.log(
+    'MAPPER',
+    `${alignment.source} => ${alignment.target}`,
+    `${secondaryAlignment?.source} => ${secondaryAlignment?.target}`
+  );
+  console.log('secondary?', secondaryAlignment);
+  console.log(' -- polarity: ', JSON.stringify(alignment.polarity));
   const refactoredPrimaryAlignment = refactorLinks(alignment);
+  console.log(
+    'refactoredPrimary',
+    JSON.stringify(refactoredPrimaryAlignment?.links)
+  );
   const refactoredSecondaryAlignment = refactorLinks(secondaryAlignment);
+  console.log(
+    'refactoredSecondary',
+    JSON.stringify(refactoredSecondaryAlignment?.links)
+  );
 
   if (refactoredPrimaryAlignment) {
     _syntaxMapper(
@@ -176,6 +206,7 @@ const syntaxMapper = (
       refactoredSecondaryAlignment
     );
   }
+  console.log(JSON.parse(JSON.stringify(syntax)));
   return syntax;
 };
 

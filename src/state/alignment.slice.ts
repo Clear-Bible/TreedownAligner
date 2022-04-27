@@ -45,6 +45,7 @@ const createNextLinkId = (alignment: Alignment) => {
 };
 
 const remapSyntax = (state: Draft<AlignmentState>, alignmentIndex: number) => {
+  console.log('remap');
   const sourceCorpusId = state.alignments[alignmentIndex].source;
   const targetCorpusId = state.alignments[alignmentIndex].target;
   const sourceCorpusIndex = state.corpora.findIndex((corpus: Corpus) => {
@@ -117,6 +118,7 @@ const alignmentSlice = createSlice({
               return corpus.id === alignment.target;
             })?.type;
 
+            // TODO should this be looking at fields based on AlignmentPolarity?
             return (
               (sourceCorpusType === CorpusType.Primary &&
                 alignment.target === corpus.id) ||
@@ -125,6 +127,7 @@ const alignmentSlice = createSlice({
             );
           });
           if (alignment) {
+            console.log('MAP primary only', corpus.id);
             syntax = syntaxMapper(syntax, alignment);
           }
         } else if (
@@ -203,6 +206,16 @@ const alignmentSlice = createSlice({
 
             // console.log('primary', primaryAlignment);
             // console.log('secondary', secondaryAlignment);
+            console.log('MAP', 'with secondary', `corpus: ${corpus.id}`);
+            console.log(
+              '-- primary: ',
+              `${primaryAlignment.source} => ${primaryAlignment.target}`
+            );
+            console.log(
+              '-- secondary: ',
+              `${secondaryAlignment.source} => ${secondaryAlignment.target}`
+            );
+
             syntax = syntaxMapper(syntax, primaryAlignment, secondaryAlignment);
           }
         }

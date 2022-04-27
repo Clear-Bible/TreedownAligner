@@ -46,6 +46,7 @@ export interface Corpus {
   fullName: string;
   language: string;
   role: CorpusRole;
+  // TODO this may be causing confusion now with the introduction of AlignmentPolarity.
   type: CorpusType;
 
   words: Word[];

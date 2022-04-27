@@ -38,7 +38,6 @@ const determineCorpusView = (corpus: Corpus) => {
     const treedownType = syntaxCorpora.includes(corpus.id)
       ? TreedownType.Source
       : TreedownType.Mapped;
-    console.log(corpus);
     return <Treedown corpus={corpus} treedownType={treedownType} />;
   }
 };
@@ -56,7 +55,8 @@ export const CorpusComponent = (props: CorpusProps): ReactElement => {
   const isCorpusAligned = Boolean(
     useAppSelector((state) => {
       return state.alignment.present.alignments.find((alignment: Alignment) => {
-        return alignment[corpus.role] === corpus.id;
+        return alignment.source === corpus.id || alignment.target === corpus.id;
+        // return alignment[corpus.role] === corpus.id;
       });
     })
   );
