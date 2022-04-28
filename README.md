@@ -42,7 +42,7 @@ In your render function, include the component with some props:
 <TreedownEditor
   theme="day"
   corpora={[<...>]}
-  alignments={<...>}
+  alignments={[<...>]}
   alignmentUpdated={(newAlignmentData) => {
     // persist alignment data here
   }}
@@ -56,6 +56,18 @@ In your render function, include the component with some props:
 `string: 'day' | 'night'`
 
 specifies which css theme is used.
+
+### `localizationCode`
+
+`string`
+
+NOT YET IMPLEMENTED
+
+The consuming application can provide a `localizationCode` that component will conform internationalized UI elements to. The [ISO 639-3](https://iso639-3.sil.org/code_tables/639/data) is expected. Supported languages are:
+
+- English (eng)
+- something else here...
+- something else here...
 
 ### `corpora`
 
