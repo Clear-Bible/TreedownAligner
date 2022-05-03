@@ -11,6 +11,7 @@ import {
 } from 'structs';
 
 import removeSegmentFromLink from 'helpers/removeSegmentFromLink';
+import singularizeAlignmentPolarityField from 'helpers/singularizeAlignmentPolarityField';
 import generateLinkId from 'helpers/generateLinkId';
 import syntaxMapper from 'features/treedown/syntaxMapper';
 
@@ -55,14 +56,10 @@ const findPrimaryAlignmentBySecondary = (
     }
     return alignments.find((alignment) => {
       if (alignment.polarity.type === 'primary') {
-        let nonSyntaxSide: 'source' | 'target';
-
-        if (alignment.polarity.nonSyntaxSide === 'sources') {
-          nonSyntaxSide = 'source';
-        } else {
-          nonSyntaxSide = 'target';
-        }
-
+        const nonSyntaxSide = singularizeAlignmentPolarityField(
+          alignment.polarity,
+          'nonSyntaxSide'
+        );
         return alignment[nonSyntaxSide] === mappedSecondaryCorpusId;
       }
       return false;
@@ -185,13 +182,10 @@ const alignmentSlice = createSlice({
         if (syntax && syntax._syntaxType === SyntaxType.Mapped) {
           const alignment = state.alignments.find((alignment: Alignment) => {
             if (alignment.polarity.type === 'primary') {
-              let nonSyntaxSide: 'source' | 'target';
-              if (alignment.polarity.nonSyntaxSide === 'sources') {
-                nonSyntaxSide = 'source';
-              } else {
-                nonSyntaxSide = 'target';
-              }
-
+              const nonSyntaxSide = singularizeAlignmentPolarityField(
+                alignment.polarity,
+                'nonSyntaxSide'
+              );
               return alignment[nonSyntaxSide] === corpus.id;
             }
             return false;
@@ -232,21 +226,16 @@ const alignmentSlice = createSlice({
             secondaryAlignment &&
             secondaryAlignment.polarity.type === 'secondary'
           ) {
-            let mappedSide: 'source' | 'target';
-            if (secondaryAlignment.polarity.mappedSide === 'sources') {
-              mappedSide = 'source';
-            } else {
-              mappedSide = 'target';
-            }
-
+            const mappedSide = singularizeAlignmentPolarityField(
+              secondaryAlignment.polarity,
+              'mappedSide'
+            );
             const primaryAlignment = state.alignments.find((alignment) => {
               if (alignment.polarity.type === 'primary') {
-                let nonSyntaxSide: 'source' | 'target';
-                if (alignment.polarity.nonSyntaxSide === 'sources') {
-                  nonSyntaxSide = 'source';
-                } else {
-                  nonSyntaxSide = 'target';
-                }
+                const nonSyntaxSide = singularizeAlignmentPolarityField(
+                  alignment.polarity,
+                  'nonSyntaxSide'
+                );
                 return (
                   alignment[nonSyntaxSide] === secondaryAlignment[mappedSide]
                 );
