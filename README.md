@@ -101,7 +101,7 @@ interface Corpus {
 - [wip] `type: 'primary | 'translation'`
 - `words: Word[]` object representing a word in the corpus. See [`Word`](#word) below.
 - `fullText?: string` _optional_ - full unsegmented text of the corpus
-- `syntax?: SyntaxRoot` a syntactic parsing of the corpus. See [`SyntaxRoot`](#syntax-root) below.
+- `syntax?: SyntaxRoot` _optional_ - syntactic parsing of the corpus. See [`SyntaxRoot`](#syntax-root) below.
 
 #### `Word`
 
