@@ -124,16 +124,21 @@ export const TextSegment = (props: TextSegmentProps): ReactElement => {
 
   const isSelected = Boolean(
     useAppSelector((state) => {
-      if (word.role === CorpusRole.Source) {
-        return state.alignment.present.inProgressLink?.sources.includes(
-          word.id
-        );
-      }
-      if (word.role === CorpusRole.Target) {
-        return state.alignment.present.inProgressLink?.targets.includes(
-          word.id
-        );
-      }
+      return (
+        state.alignment.present.inProgressLink?.sources.includes(word.id) ||
+        state.alignment.present.inProgressLink?.targets.includes(word.id)
+      );
+
+      // if (word.role === CorpusRole.Source) {
+      //   return state.alignment.present.inProgressLink?.sources.includes(
+      //     word.id
+      //   );
+      // }
+      // if (word.role === CorpusRole.Target) {
+      //   return state.alignment.present.inProgressLink?.targets.includes(
+      //     word.id
+      //   );
+      // }
     })
   );
 

@@ -43,9 +43,43 @@ const createNextLinkId = (alignment: Alignment) => {
   )}`;
 };
 
+const findPrimaryAlignmentBySecondary = (
+  alignments: Alignment[],
+  secondaryAlignment: Alignment
+) => {
+  if (secondaryAlignment.polarity.type === 'secondary') {
+    let mappedSecondaryCorpusId: string;
+    if (secondaryAlignment.polarity.mappedSide === 'sources') {
+      mappedSecondaryCorpusId = secondaryAlignment['source'];
+    }
+    if (secondaryAlignment.polarity.mappedSide === 'targets') {
+      mappedSecondaryCorpusId = secondaryAlignment['target'];
+    }
+    return alignments.find((alignment) => {
+      if (alignment.polarity.type === 'primary') {
+        let nonSyntaxSide: 'source' | 'target';
+
+        if (alignment.polarity.nonSyntaxSide === 'sources') {
+          nonSyntaxSide = 'source';
+        } else {
+          nonSyntaxSide = 'target';
+        }
+
+        return alignment[nonSyntaxSide] === mappedSecondaryCorpusId;
+      }
+      return false;
+    });
+  } else {
+    throw new Error(
+      'Attempted to find a primary alignment for the wrong polarity.'
+    );
+  }
+};
+
 const remapSyntax = (state: Draft<AlignmentState>, alignmentIndex: number) => {
   const sourceCorpusId = state.alignments[alignmentIndex].source;
   const targetCorpusId = state.alignments[alignmentIndex].target;
+  console.log('remap', sourceCorpusId, targetCorpusId);
   const sourceCorpusIndex = state.corpora.findIndex((corpus: Corpus) => {
     return corpus.id === sourceCorpusId;
   });
@@ -53,29 +87,74 @@ const remapSyntax = (state: Draft<AlignmentState>, alignmentIndex: number) => {
     return corpus.id === targetCorpusId;
   });
 
-  if (
-    state.corpora[sourceCorpusIndex]?.syntax?._syntaxType === SyntaxType.Mapped
-  ) {
-    const oldSyntax = state.corpora[sourceCorpusIndex].syntax;
+  const sourceCorpusSyntaxType =
+    state.corpora[sourceCorpusIndex]?.syntax?._syntaxType;
+  const targetCorpusSyntaxType =
+    state.corpora[targetCorpusIndex]?.syntax?._syntaxType;
 
-    if (oldSyntax) {
-      state.corpora[sourceCorpusIndex].syntax = syntaxMapper(
-        oldSyntax,
-        state.alignments[alignmentIndex]
-      );
+  if (state.alignments[alignmentIndex].polarity.type === 'primary') {
+    if (sourceCorpusSyntaxType === SyntaxType.Mapped) {
+      const oldSyntax = state.corpora[sourceCorpusIndex].syntax;
+
+      if (oldSyntax) {
+        state.corpora[sourceCorpusIndex].syntax = syntaxMapper(
+          oldSyntax,
+          state.alignments[alignmentIndex]
+        );
+      }
+    }
+
+    if (targetCorpusSyntaxType === SyntaxType.Mapped) {
+      const oldSyntax = state.corpora[targetCorpusIndex].syntax;
+
+      if (oldSyntax) {
+        state.corpora[targetCorpusIndex].syntax = syntaxMapper(
+          oldSyntax,
+          state.alignments[alignmentIndex]
+        );
+      }
     }
   }
 
-  if (
-    state.corpora[targetCorpusIndex]?.syntax?._syntaxType === SyntaxType.Mapped
-  ) {
-    const oldSyntax = state.corpora[targetCorpusIndex].syntax;
+  if (state.alignments[alignmentIndex].polarity.type === 'secondary') {
+    console.log('secondary remap');
 
-    if (oldSyntax) {
-      state.corpora[targetCorpusIndex].syntax = syntaxMapper(
-        oldSyntax,
-        state.alignments[alignmentIndex]
-      );
+    if (sourceCorpusSyntaxType === SyntaxType.MappedSecondary) {
+      const secondaryAlignment = state.alignments[alignmentIndex];
+      const oldSyntax = state.corpora[sourceCorpusIndex].syntax;
+      if (oldSyntax && secondaryAlignment) {
+        const primaryAlignment = findPrimaryAlignmentBySecondary(
+          state.alignments,
+          secondaryAlignment
+        );
+
+        if (primaryAlignment) {
+          state.corpora[sourceCorpusIndex].syntax = syntaxMapper(
+            oldSyntax,
+            primaryAlignment,
+            secondaryAlignment
+          );
+        }
+      }
+    }
+
+    if (targetCorpusSyntaxType === SyntaxType.MappedSecondary) {
+      const secondaryAlignment = state.alignments[alignmentIndex];
+      const oldSyntax = state.corpora[targetCorpusIndex].syntax;
+      if (oldSyntax && secondaryAlignment) {
+        const primaryAlignment = findPrimaryAlignmentBySecondary(
+          state.alignments,
+          secondaryAlignment
+        );
+
+        if (primaryAlignment) {
+          state.corpora[targetCorpusIndex].syntax = syntaxMapper(
+            oldSyntax,
+            primaryAlignment,
+            secondaryAlignment
+          );
+        }
+      }
     }
   }
 };
@@ -273,94 +352,115 @@ const alignmentSlice = createSlice({
           }
         } else {
           // add segment to link
-          if (action.payload.role === CorpusRole.Source) {
+          if (action.payload.corpusId === state.inProgressLink.source) {
             state.inProgressLink.sources.push(action.payload.id);
           }
 
-          if (action.payload.role === CorpusRole.Target) {
+          if (action.payload.corpusId === state.inProgressLink.target) {
             state.inProgressLink.targets.push(action.payload.id);
           }
         }
       } else {
         // No in progress link.
         // Either create, or load existing link to edit.
-        const alignment = state.alignments.find(
-          (alignment) => alignment.target === action.payload.corpusId
+        const newInProgressLink = {
+          source: '?',
+          target: '?',
+          sources: [] as string[],
+          targets: [] as string[],
+        };
+
+        const potentialAlignments = state.alignments.filter(
+          (alignment) =>
+            alignment.target === action.payload.corpusId ||
+            alignment.source === action.payload.corpusId
         );
 
-        if (!alignment) {
-          // Both sides are not known.
-          // Enter partial edit mode.
-          let source = '?';
-          let target = '?';
-          const sources = [];
-          const targets = [];
+        if (potentialAlignments.length === 0) {
+          // No alignments found for text segment.
+          throw new Error(
+            `No alignment found for selected text segment: ${action.payload.id}, ${action.payload.corpusId}`
+          );
+        }
 
-          if (action.payload.role === CorpusRole.Source) {
-            source = action.payload.corpusId;
-            sources.push(action.payload.id);
+        if (potentialAlignments.length === 1) {
+          // Single alignmnent for text segment found.
+          const alignment = potentialAlignments[0];
+
+          const existingLink = alignment.links.find((link: Link) => {
+            return (
+              link.sources.includes(action.payload.id) ||
+              link.targets.includes(action.payload.id)
+            );
+          });
+
+          if (existingLink) {
+            // Load the existing link
+            state.inProgressLink = {
+              _id: existingLink._id,
+              source: alignment.source,
+              target: alignment.target,
+              sources: existingLink.sources,
+              targets: existingLink.targets,
+            };
+            state.mode = AlignmentMode.Select;
+            return;
           }
 
-          if (action.payload.role === CorpusRole.Target) {
-            target = action.payload.corpusId;
-            targets.push(action.payload.id);
+          // Initialize partial edit mode.
+          if (action.payload.corpusId === alignment.source) {
+            newInProgressLink.source = action.payload.corpusId;
+            newInProgressLink.sources.push(action.payload.id);
           }
 
-          state.inProgressLink = {
-            _id: '?',
-            source,
-            target,
-            sources,
-            targets,
-          };
-
+          if (action.payload.corpusId === alignment.target) {
+            newInProgressLink.target = action.payload.corpusId;
+            newInProgressLink.targets.push(action.payload.id);
+          }
+          state.inProgressLink = newInProgressLink;
           state.mode = AlignmentMode.PartialEdit;
           return;
         }
 
-        const existingLink = alignment.links.find((link: Link) => {
-          return (
-            link.sources.includes(action.payload.id) ||
-            link.targets.includes(action.payload.id)
+        if (potentialAlignments.length > 1) {
+          // Multiple potential alignments for text segment.
+          // Punt?
+          //
+          // Both sides are not known.
+          // Enter partial edit mode.
+          throw new Error(
+            'DISAMBIGUATE POTENTIAL ALIGNMENTS? Not implemented yet.'
           );
-        });
-
-        if (existingLink) {
-          // Load the existing link
-          state.inProgressLink = {
-            _id: existingLink._id,
-            source: alignment.source,
-            target: alignment.target,
-            sources: existingLink.sources,
-            targets: existingLink.targets,
-          };
-          state.mode = AlignmentMode.Select;
-        } else {
-          // Create new link
-          // assume it's a target segment for now
-
-          const newSources = [];
-          const newTargets = [];
-
-          if (action.payload.role === CorpusRole.Source) {
-            newSources.push(action.payload.id);
-            //source =
-          }
-
-          if (action.payload.role === CorpusRole.Target) {
-            newTargets.push(action.payload.id);
-          }
-
-          state.inProgressLink = {
-            _id: createNextLinkId(alignment),
-            source: alignment.source,
-            target: alignment.target,
-            sources: newSources,
-            targets: newTargets,
-          };
-          state.mode = AlignmentMode.Edit;
+          // state.mode = AlignmentMode.PartialEdit;
+          // return;
         }
       }
+      // else {
+      //     // Create new link
+      //     // assume it's a target segment for now
+      //
+      //     const newSources = [];
+      //     const newTargets = [];
+      //
+      //     if (action.payload.role === CorpusRole.Source) {
+      //       newSources.push(action.payload.id);
+      //       //source =
+      //     }
+      //
+      //     if (action.payload.role === CorpusRole.Target) {
+      //       newTargets.push(action.payload.id);
+      //     }
+      //
+      //     state.inProgressLink = {
+      //       _id: createNextLinkId(alignment),
+      //       source: alignment.source,
+      //       target: alignment.target,
+      //       sources: newSources,
+      //       targets: newTargets,
+      //     };
+      //     state.mode = AlignmentMode.Edit;
+      //   }
+      // }
     },
 
     resetTextSegments: (state) => {

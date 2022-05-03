@@ -9,7 +9,7 @@ const mapAlignedWords = (
     if (alignment.polarity.type === 'primary') {
       return link[alignment.polarity.syntaxSide].includes(sourceId);
     } else {
-      console.error('AlignmentPolarity', alignment);
+      console.error('AlignmentPolarity', alignment, sourceId);
       throw new Error(`Unexpected AlignmentPolarity`);
     }
   });
@@ -30,7 +30,6 @@ const mapAlignedWords = (
             (secondaryLink: Link) => {
               return secondaryLink[mappedSideName].find(
                 (secondaryLinkMappedId: string) => {
-                  console.log('found match');
                   return matchedLink[nonSyntaxSideName].includes(
                     secondaryLinkMappedId
                   );
@@ -44,11 +43,6 @@ const mapAlignedWords = (
         .filter((x): x is Link => Boolean(x));
 
       if (secondaryMatchedLinks.length > 0) {
-        console.log(
-          secondaryMatchedLinks.reduce((acc, curr) => {
-            return acc.concat(curr[nonMappedSideName]);
-          }, [] as string[])
-        );
         return secondaryMatchedLinks.reduce((acc, curr) => {
           return acc.concat(curr[nonMappedSideName]);
         }, [] as string[]);
@@ -56,11 +50,6 @@ const mapAlignedWords = (
     }
 
     if (matchedLinks.length > 0) {
-      console.log(
-        matchedLinks.reduce((acc, curr) => {
-          return acc.concat(curr[nonSyntaxSideName]);
-        }, [] as string[])
-      );
       return matchedLinks.reduce((acc, curr) => {
         return acc.concat(curr[nonSyntaxSideName]);
       }, [] as string[]);
