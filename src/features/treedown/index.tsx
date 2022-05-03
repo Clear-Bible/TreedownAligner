@@ -5,7 +5,7 @@ import { useAppSelector } from 'app/hooks';
 
 import cssVar from 'styles/cssVar';
 
-import { Corpus, CorpusRole, SyntaxNode, TreedownType, Word } from 'structs';
+import { Corpus, SyntaxNode, TreedownType, Word } from 'structs';
 import TextSegment from 'features/textSegment';
 
 import { findWordById } from 'helpers/findWord';
@@ -45,10 +45,6 @@ const renderMappedTextSegment = (syntaxNode: SyntaxNode, corpus: Corpus) => {
     syntaxNode.content.alignedWordIds &&
     syntaxNode.content.alignedWordIds.length > 0
   ) {
-    //console.log(corpus.id);
-    //if (corpus.id === 'nvi') {
-    //console.log('mapped?', syntaxNode.content);
-    //}
     return syntaxNode.content.alignedWordIds.map((alignedWordId) => {
       return (
         <TextSegment
@@ -199,7 +195,6 @@ const recurseSyntax = (
                     word={{
                       id: syntaxNode.content.n,
                       corpusId: corpus.id,
-                      role: CorpusRole.Source,
                       text: syntaxNode.content.text,
                       position: parsePosition(syntaxNode.content.osisId),
                     }}
@@ -239,7 +234,6 @@ const recurseSyntax = (
           word={{
             id: syntaxNode.content.n,
             corpusId: corpus.id,
-            role: CorpusRole.Source,
             text: syntaxNode.content.text,
             position: parsePosition(syntaxNode.content.osisId),
           }}

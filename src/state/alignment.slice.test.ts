@@ -3,7 +3,6 @@ import {
   Alignment,
   AlignmentSide,
   PrimaryAlignmentPolarity,
-  CorpusRole,
 } from 'structs';
 
 import alignmentSliceReducer, {
@@ -38,14 +37,12 @@ const spanishAlignment: Alignment = {
 const sourceWord1: Word = {
   id: 'sbl_0',
   corpusId: 'sbl',
-  role: CorpusRole.Source,
   text: '',
   position: 0,
 };
 const sourceWord2: Word = {
   id: 'sbl_1',
   corpusId: 'sbl',
-  role: CorpusRole.Source,
   text: '',
   position: 1,
 };
@@ -53,14 +50,12 @@ const sourceWord2: Word = {
 const targetWord1: Word = {
   id: 'leb_1',
   corpusId: 'leb',
-  role: CorpusRole.Target,
   text: '',
   position: 1,
 };
 const targetWord2: Word = {
   id: 'leb_2',
   corpusId: 'leb',
-  role: CorpusRole.Target,
   text: '',
   position: 2,
 };
@@ -68,7 +63,6 @@ const targetWord2: Word = {
 const otherTargetWord1: Word = {
   id: 'nvi_1',
   corpusId: 'nvi',
-  role: CorpusRole.Target,
   text: '',
   position: 1,
 };
@@ -369,7 +363,7 @@ describe('alignmentSlice reducer', () => {
         toggleTextSegment({
           id: 'sbl_2',
           corpusId: 'sbl',
-          role: CorpusRole.Target,
+          // role: CorpusRole.Target,
           text: 'asdf',
           position: 3,
         })

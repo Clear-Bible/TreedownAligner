@@ -6,7 +6,7 @@ import { useAppDispatch, useAppSelector } from 'app/hooks';
 import { toggleTextSegment, AlignmentMode } from 'state/alignment.slice';
 import { hover, relatedAlignments } from 'state/textSegmentHover.slice';
 
-import { Alignment, Word, CorpusRole, Link } from 'structs';
+import { Alignment, Word, Link } from 'structs';
 import findRelatedAlignments from 'helpers/findRelatedAlignments';
 
 import '../../styles/theme.css';
@@ -58,7 +58,7 @@ const computeStyle = (
   isLinked: boolean,
   isCurrentLinkMember: boolean,
   isInvolved: boolean,
-  role: CorpusRole,
+  // role: CorpusRole,
   mode: AlignmentMode,
   theme: 'night' | 'day'
 ): Record<string, string> => {
@@ -88,9 +88,9 @@ const computeStyle = (
     computedStyle = { ...computedStyle, ...unlinkedStyle(theme) };
   }
 
-  if (isLinked && role === 'source' && !isCurrentLinkMember) {
-    computedStyle = { ...computedStyle, ...lockedStyle() };
-  }
+  // if (isLinked && role === 'source' && !isCurrentLinkMember) {
+  //   computedStyle = { ...computedStyle, ...lockedStyle() };
+  // }
 
   if (!isInvolved && mode === AlignmentMode.Edit) {
     computedStyle = { ...computedStyle, ...lockedStyle() };
@@ -267,7 +267,7 @@ export const TextSegment = (props: TextSegmentProps): ReactElement => {
     isLinked,
     isCurrentLinkMember,
     isInvolved,
-    word.role,
+    // word.role,
     mode,
     theme
   );
@@ -298,7 +298,7 @@ export const TextSegment = (props: TextSegmentProps): ReactElement => {
             dispatch(toggleTextSegment(word));
           } else if (mode === AlignmentMode.PartialEdit) {
             dispatch(toggleTextSegment(word));
-          } else if (word.role === 'source' && isLinked) {
+          // } else if (word.role === 'source' && isLinked) {
             // ...do nothing...
             // we can't enter edit mode this way.
             // need a way to disambiguate between alignment data.

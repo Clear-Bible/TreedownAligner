@@ -1,4 +1,4 @@
-import { Alignment, Word, CorpusRole } from 'structs';
+import { Alignment, Word } from 'structs';
 import findRelatedAlignments from 'helpers/findRelatedAlignments';
 
 const testAlignments: Alignment[] = [
@@ -30,14 +30,12 @@ const testAlignments: Alignment[] = [
 const testWord: Word = {
   id: 'regular_8',
   corpusId: 'regular',
-  role: CorpusRole.Source,
   text: 'asdf',
   position: 8,
 };
 //const testWord1: Word = {
 //id: 'goofy_7',
 //corpusId: 'regular',
-//role: 'target',
 //text: 'fdsa',
 //position: 7,
 //};

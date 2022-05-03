@@ -5,7 +5,6 @@ import {
   Alignment,
   Link,
   InProgressLink,
-  CorpusRole,
   Corpus,
   CorpusViewType,
   SyntaxType,
@@ -285,24 +284,27 @@ const alignmentSlice = createSlice({
     toggleTextSegment: (state, action: PayloadAction<Word>) => {
       if (state.inProgressLink?._id === '?') {
         // There is a partial in-progress link.
-        const emptySide =
-          state.inProgressLink.sources.length === 0
-            ? CorpusRole.Source
-            : CorpusRole.Target;
+        // const emptySide =
+        //   state.inProgressLink.sources.length === 0
+        //     ? CorpusRole.Source
+        //     : CorpusRole.Target;
 
-        const sideInView = action.payload.role;
+        // const sideInView = action.payload.role;
 
-        if (sideInView === CorpusRole.Source) {
+        if (state.inProgressLink.source === action.payload.corpusId) {
           state.inProgressLink.source = action.payload.corpusId;
           state.inProgressLink.sources.push(action.payload.id);
         }
 
-        if (sideInView === CorpusRole.Target) {
+        if (state.inProgressLink.target === action.payload.corpusId) {
           state.inProgressLink.target = action.payload.corpusId;
           state.inProgressLink.targets.push(action.payload.id);
         }
 
-        if (sideInView === emptySide) {
+        if (
+          state.inProgressLink.sources.length !== 0 &&
+          state.inProgressLink.targets.length !== 0
+        ) {
           state.mode = AlignmentMode.Edit;
           const relatedAlignment = state.alignments.find((alignment) => {
             return (
@@ -319,7 +321,10 @@ const alignmentSlice = createSlice({
             );
           }
           state.inProgressLink._id = createNextLinkId(relatedAlignment);
-        } else if (sideInView !== emptySide) {
+        } else if (
+          state.inProgressLink.sources.length === 0 ||
+          state.inProgressLink.targets.length === 0
+        ) {
           state.mode = AlignmentMode.PartialEdit;
         }
         return;

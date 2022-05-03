@@ -1,10 +1,3 @@
-// Determines how a corpus might
-// be interacted with.
-export enum CorpusRole {
-  Source = 'source',
-  Target = 'target',
-}
-
 export enum CorpusType {
   Primary = 'primary',
   Translation = 'translation',
@@ -33,7 +26,6 @@ export enum TreedownType {
 export interface Word {
   id: string;
   corpusId: string;
-  role: CorpusRole;
 
   text: string;
   position: number;
@@ -45,7 +37,6 @@ export interface Corpus {
   name: string;
   fullName: string;
   language: string;
-  role: CorpusRole;
   // TODO this may be causing confusion now with the introduction of AlignmentPolarity.
   type: CorpusType;
 
