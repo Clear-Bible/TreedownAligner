@@ -14,7 +14,6 @@ import {
 import removeSegmentFromLink from 'helpers/removeSegmentFromLink';
 import generateLinkId from 'helpers/generateLinkId';
 import syntaxMapper from 'features/treedown/syntaxMapper';
-import cachedSyntax from 'features/treedown/cachedSyntax';
 import { CorpusType } from 'structs';
 
 export enum AlignmentMode {
@@ -45,7 +44,6 @@ const createNextLinkId = (alignment: Alignment) => {
 };
 
 const remapSyntax = (state: Draft<AlignmentState>, alignmentIndex: number) => {
-  console.log('remap');
   const sourceCorpusId = state.alignments[alignmentIndex].source;
   const targetCorpusId = state.alignments[alignmentIndex].target;
   const sourceCorpusIndex = state.corpora.findIndex((corpus: Corpus) => {
@@ -102,14 +100,12 @@ const alignmentSlice = createSlice({
 
     loadCorpora: (state, action: PayloadAction<Corpus[]>) => {
       state.corpora = action.payload.map((corpus: Corpus) => {
-        // console.log('loadCorpus', corpus.id);
         const viewType = corpus.viewType
           ? corpus.viewType
           : CorpusViewType.Paragraph;
 
         let syntax = corpus.syntax;
         if (syntax && syntax._syntaxType === SyntaxType.Mapped) {
-          // console.log('mapped', corpus.id);
           const alignment = state.alignments.find((alignment: Alignment) => {
             const sourceCorpusType = state.corpora.find((corpus) => {
               return corpus.id === alignment.source;
@@ -127,19 +123,14 @@ const alignmentSlice = createSlice({
             );
           });
           if (alignment) {
-            console.log('MAP primary only', corpus.id);
             syntax = syntaxMapper(syntax, alignment);
           }
         } else if (
           syntax &&
           syntax._syntaxType === SyntaxType.MappedSecondary
         ) {
-          // console.log('mappedSecondary', corpus.id);
           const secondaryAlignment = state.alignments.find((alignment) => {
-            //console.log('findSecondary', alignment.source, alignment.target);
-            //console.log('secondary options', action.payload.length);
             const sourceCorpus = action.payload.find((corpus) => {
-              //console.log('findSource', corpus.id);
               return corpus.id === alignment.source;
             });
             const targetCorpus = action.payload.find((corpus) => {
@@ -151,7 +142,6 @@ const alignmentSlice = createSlice({
             }
 
             if (alignment.target === corpus.id) {
-              //console.log('check', sourceCorpus);
               return sourceCorpus?.syntax?._syntaxType === SyntaxType.Mapped;
             }
 
@@ -165,21 +155,10 @@ const alignmentSlice = createSlice({
           }
 
           if (secondaryAlignment) {
-            // console.log(
-            //   'secondary',
-            //   secondaryAlignment.source,
-            //   secondaryAlignment.target
-            // );
             const mappedAlignmentCorpus =
               secondaryAlignment.source === corpus.id
                 ? secondaryAlignment.target
                 : secondaryAlignment.source;
-
-            // console.log(
-            //   'findPrimary',
-            //   mappedAlignmentCorpus,
-            //   state.alignments.length
-            // );
 
             const primaryAlignment = state.alignments.find((alignment) => {
               const sourceCorpusType = action.payload.find((corpus) => {
@@ -189,7 +168,6 @@ const alignmentSlice = createSlice({
                 return corpus.id === alignment.target;
               })?.type;
 
-              // console.log(sourceCorpusType, targetCorpusType);
               return (
                 (alignment.source === mappedAlignmentCorpus ||
                   alignment.target === mappedAlignmentCorpus) &&
@@ -203,18 +181,6 @@ const alignmentSlice = createSlice({
                 `Error determining the primary alignment data for Corpus: ${corpus.id}`
               );
             }
-
-            // console.log('primary', primaryAlignment);
-            // console.log('secondary', secondaryAlignment);
-            console.log('MAP', 'with secondary', `corpus: ${corpus.id}`);
-            console.log(
-              '-- primary: ',
-              `${primaryAlignment.source} => ${primaryAlignment.target}`
-            );
-            console.log(
-              '-- secondary: ',
-              `${secondaryAlignment.source} => ${secondaryAlignment.target}`
-            );
 
             syntax = syntaxMapper(syntax, primaryAlignment, secondaryAlignment);
           }
@@ -333,7 +299,6 @@ const alignmentSlice = createSlice({
           if (action.payload.role === CorpusRole.Source) {
             source = action.payload.corpusId;
             sources.push(action.payload.id);
-            console.log(source, sources);
           }
 
           if (action.payload.role === CorpusRole.Target) {

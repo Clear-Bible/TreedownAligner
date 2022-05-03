@@ -16,7 +16,6 @@ const mapAlignedWords = (
 
   let secondaryMatchedLinks: Link[] = [];
   if (alignment.polarity.type === 'primary') {
-    const syntaxSideName = alignment.polarity.syntaxSide;
     const nonSyntaxSideName = alignment.polarity.nonSyntaxSide;
     if (
       secondaryAlignment &&
@@ -134,6 +133,7 @@ const refactorLinks = (alignment: Alignment | null): Alignment | null => {
                     [syntaxSide]: [syntaxSideId],
                   };
                 }
+                return null;
               }
             );
           }
@@ -166,10 +166,12 @@ const refactorLinks = (alignment: Alignment | null): Alignment | null => {
                   [mappedSideName]: [mappedId],
                 };
               }
+              return null;
             });
           }
           return link;
         }
+        return null;
       })
     ),
   };
@@ -180,24 +182,8 @@ const syntaxMapper = (
   alignment: Alignment,
   secondaryAlignment: Alignment | null = null
 ) => {
-  console.log(JSON.stringify(syntax));
-  console.log(
-    'MAPPER',
-    `${alignment.source} => ${alignment.target}`,
-    `${secondaryAlignment?.source} => ${secondaryAlignment?.target}`
-  );
-  console.log('secondary?', secondaryAlignment);
-  console.log(' -- polarity: ', JSON.stringify(alignment.polarity));
   const refactoredPrimaryAlignment = refactorLinks(alignment);
-  console.log(
-    'refactoredPrimary',
-    JSON.stringify(refactoredPrimaryAlignment?.links)
-  );
   const refactoredSecondaryAlignment = refactorLinks(secondaryAlignment);
-  console.log(
-    'refactoredSecondary',
-    JSON.stringify(refactoredSecondaryAlignment?.links)
-  );
 
   if (refactoredPrimaryAlignment) {
     _syntaxMapper(
@@ -206,7 +192,6 @@ const syntaxMapper = (
       refactoredSecondaryAlignment
     );
   }
-  console.log(JSON.parse(JSON.stringify(syntax)));
   return syntax;
 };
 

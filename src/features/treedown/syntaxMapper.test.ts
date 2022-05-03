@@ -272,11 +272,6 @@ describe('syntaxMapper', () => {
       expect(
         result.children[0].children[0].children[0].content.alignedWordIds
       ).toEqual(['spa_2']);
-
-      //expect(
-      //result.children[0].children[0].children[1].children[0].content
-      //.alignedWordIds
-      //).toEqual([undefined]);
     });
 
     it('secondarily maps a single word (reversed)', () => {
@@ -312,7 +307,7 @@ describe('syntaxMapper', () => {
 
       expect(
         result.children[0].children[0].children[0].content.alignedWordIds
-      ).toEqual(['nvi_2']);
+      ).toEqual(['en_4']);
     });
   });
 
