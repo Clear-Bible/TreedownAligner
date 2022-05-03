@@ -1,4 +1,4 @@
-import { Corpus, CorpusType } from 'structs';
+import { Corpus } from 'structs';
 
 const sblText =
   'οὐ μόνον δέ, ἀλλὰ καὶ καυχώμεθα ἐν ταῖς θλίψεσιν, εἰδότες ὅτι ἡ θλῖψις ὑπομονὴν κατεργάζεται,';
@@ -15,7 +15,6 @@ const availableCorpora: Corpus[] = [
     name: 'SBL GNT',
     fullName: 'SBL Greek New Testament',
     language: 'grc',
-    type: CorpusType.Primary,
     words: [],
     syntax: undefined,
   },
@@ -25,7 +24,6 @@ const availableCorpora: Corpus[] = [
     name: 'LEB',
     fullName: 'Lexham English Bible',
     language: 'eng',
-    type: CorpusType.Translation,
     words: [],
   },
   {
@@ -33,7 +31,6 @@ const availableCorpora: Corpus[] = [
     name: 'NVI',
     fullName: 'Nueva Versión Internacional',
     language: 'spa',
-    type: CorpusType.Translation,
     words: [],
   },
   {
@@ -41,7 +38,6 @@ const availableCorpora: Corpus[] = [
     name: 'BT 1',
     fullName: 'Back Translation 1',
     language: 'eng',
-    type: CorpusType.Translation,
     words: [],
   },
 ];
@@ -104,7 +100,6 @@ export const queryText = (
     name: corpus?.name ?? '',
     fullName: corpus?.fullName ?? '',
     language: corpus?.language ?? '',
-    type: corpus?.type ?? CorpusType.Primary,
     words: words,
   };
 };

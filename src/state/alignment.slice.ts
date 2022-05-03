@@ -13,7 +13,6 @@ import {
 import removeSegmentFromLink from 'helpers/removeSegmentFromLink';
 import generateLinkId from 'helpers/generateLinkId';
 import syntaxMapper from 'features/treedown/syntaxMapper';
-import { CorpusType } from 'structs';
 
 export enum AlignmentMode {
   CleanSlate = 'cleanSlate', // Default mode
@@ -185,20 +184,17 @@ const alignmentSlice = createSlice({
         let syntax = corpus.syntax;
         if (syntax && syntax._syntaxType === SyntaxType.Mapped) {
           const alignment = state.alignments.find((alignment: Alignment) => {
-            const sourceCorpusType = state.corpora.find((corpus) => {
-              return corpus.id === alignment.source;
-            })?.type;
-            const targetCorpusType = state.corpora.find((corpus) => {
-              return corpus.id === alignment.target;
-            })?.type;
+            if (alignment.polarity.type === 'primary') {
+              let nonSyntaxSide: 'source' | 'target';
+              if (alignment.polarity.nonSyntaxSide === 'sources') {
+                nonSyntaxSide = 'source';
+              } else {
+                nonSyntaxSide = 'target';
+              }
 
-            // TODO should this be looking at fields based on AlignmentPolarity?
-            return (
-              (sourceCorpusType === CorpusType.Primary &&
-                alignment.target === corpus.id) ||
-              (targetCorpusType === CorpusType.Primary &&
-                alignment.source === corpus.id)
-            );
+              return alignment[nonSyntaxSide] === corpus.id;
+            }
+            return false;
           });
           if (alignment) {
             syntax = syntaxMapper(syntax, alignment);
@@ -232,26 +228,30 @@ const alignmentSlice = createSlice({
             );
           }
 
-          if (secondaryAlignment) {
-            const mappedAlignmentCorpus =
-              secondaryAlignment.source === corpus.id
-                ? secondaryAlignment.target
-                : secondaryAlignment.source;
+          if (
+            secondaryAlignment &&
+            secondaryAlignment.polarity.type === 'secondary'
+          ) {
+            let mappedSide: 'source' | 'target';
+            if (secondaryAlignment.polarity.mappedSide === 'sources') {
+              mappedSide = 'source';
+            } else {
+              mappedSide = 'target';
+            }
 
             const primaryAlignment = state.alignments.find((alignment) => {
-              const sourceCorpusType = action.payload.find((corpus) => {
-                return corpus.id === alignment.source;
-              })?.type;
-              const targetCorpusType = action.payload.find((corpus) => {
-                return corpus.id === alignment.target;
-              })?.type;
-
-              return (
-                (alignment.source === mappedAlignmentCorpus ||
-                  alignment.target === mappedAlignmentCorpus) &&
-                (sourceCorpusType === CorpusType.Primary ||
-                  targetCorpusType === CorpusType.Primary)
-              );
+              if (alignment.polarity.type === 'primary') {
+                let nonSyntaxSide: 'source' | 'target';
+                if (alignment.polarity.nonSyntaxSide === 'sources') {
+                  nonSyntaxSide = 'source';
+                } else {
+                  nonSyntaxSide = 'target';
+                }
+                return (
+                  alignment[nonSyntaxSide] === secondaryAlignment[mappedSide]
+                );
+              }
+              return false;
             });
 
             if (!primaryAlignment) {
@@ -284,12 +284,6 @@ const alignmentSlice = createSlice({
     toggleTextSegment: (state, action: PayloadAction<Word>) => {
       if (state.inProgressLink?._id === '?') {
         // There is a partial in-progress link.
-        // const emptySide =
-        //   state.inProgressLink.sources.length === 0
-        //     ? CorpusRole.Source
-        //     : CorpusRole.Target;
-
-        // const sideInView = action.payload.role;
 
         if (state.inProgressLink.source === action.payload.corpusId) {
           state.inProgressLink.source = action.payload.corpusId;

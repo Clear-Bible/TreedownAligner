@@ -1,8 +1,3 @@
-export enum CorpusType {
-  Primary = 'primary',
-  Translation = 'translation',
-}
-
 export enum SyntaxType {
   // Has syntax data.
   Source = 'source',
@@ -37,8 +32,6 @@ export interface Corpus {
   name: string;
   fullName: string;
   language: string;
-  // TODO this may be causing confusion now with the introduction of AlignmentPolarity.
-  type: CorpusType;
 
   words: Word[];
   fullText?: string;
