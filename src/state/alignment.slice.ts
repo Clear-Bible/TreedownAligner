@@ -74,7 +74,6 @@ const findPrimaryAlignmentBySecondary = (
 const remapSyntax = (state: Draft<AlignmentState>, alignmentIndex: number) => {
   const sourceCorpusId = state.alignments[alignmentIndex].source;
   const targetCorpusId = state.alignments[alignmentIndex].target;
-  console.log('remap', sourceCorpusId, targetCorpusId);
   const sourceCorpusIndex = state.corpora.findIndex((corpus: Corpus) => {
     return corpus.id === sourceCorpusId;
   });
@@ -112,7 +111,6 @@ const remapSyntax = (state: Draft<AlignmentState>, alignmentIndex: number) => {
   }
 
   if (state.alignments[alignmentIndex].polarity.type === 'secondary') {
-    console.log('secondary remap');
 
     if (sourceCorpusSyntaxType === SyntaxType.MappedSecondary) {
       const secondaryAlignment = state.alignments[alignmentIndex];
@@ -352,6 +350,7 @@ const alignmentSlice = createSlice({
         // No in progress link.
         // Either create, or load existing link to edit.
         const newInProgressLink = {
+          _id: '?',
           source: '?',
           target: '?',
           sources: [] as string[],
@@ -395,19 +394,24 @@ const alignmentSlice = createSlice({
             return;
           }
 
-          // Initialize partial edit mode.
-          if (action.payload.corpusId === alignment.source) {
-            newInProgressLink.source = action.payload.corpusId;
-            newInProgressLink.sources.push(action.payload.id);
-          }
+          if (!existingLink) {
+            // Initialize partial edit mode.
 
-          if (action.payload.corpusId === alignment.target) {
-            newInProgressLink.target = action.payload.corpusId;
-            newInProgressLink.targets.push(action.payload.id);
+            newInProgressLink._id = createNextLinkId(alignment);
+            newInProgressLink.source = alignment.source;
+            newInProgressLink.target = alignment.target;
+
+            if (action.payload.corpusId === alignment.source) {
+              newInProgressLink.sources.push(action.payload.id);
+            }
+
+            if (action.payload.corpusId === alignment.target) {
+              newInProgressLink.targets.push(action.payload.id);
+            }
+            state.inProgressLink = newInProgressLink;
+            state.mode = AlignmentMode.Edit;
+            return;
           }
-          state.inProgressLink = newInProgressLink;
-          state.mode = AlignmentMode.PartialEdit;
-          return;
         }
 
         if (potentialAlignments.length > 1) {
@@ -416,39 +420,23 @@ const alignmentSlice = createSlice({
           //
           // Both sides are not known.
           // Enter partial edit mode.
+          alert(
+            'The feature "DISAMBIGUATE POTENTIAL ALIGNMENTS" has not been implemented yet. Please contact support.'
+          );
           throw new Error(
             'DISAMBIGUATE POTENTIAL ALIGNMENTS? Not implemented yet.'
           );
+          // state.inProgressLink = {
+          //   _id: '?',
+          //   source: '',
+          //   target: '',
+          //   sources: [],
+          //   targets: [],
+          // };
           // state.mode = AlignmentMode.PartialEdit;
           // return;
         }
       }
-      // else {
-      //     // Create new link
-      //     // assume it's a target segment for now
-      //
-      //     const newSources = [];
-      //     const newTargets = [];
-      //
-      //     if (action.payload.role === CorpusRole.Source) {
-      //       newSources.push(action.payload.id);
-      //       //source =
-      //     }
-      //
-      //     if (action.payload.role === CorpusRole.Target) {
-      //       newTargets.push(action.payload.id);
-      //     }
-      //
-      //     state.inProgressLink = {
-      //       _id: createNextLinkId(alignment),
-      //       source: alignment.source,
-      //       target: alignment.target,
-      //       sources: newSources,
-      //       targets: newTargets,
-      //     };
-      //     state.mode = AlignmentMode.Edit;
-      //   }
-      // }
     },
 
     resetTextSegments: (state) => {

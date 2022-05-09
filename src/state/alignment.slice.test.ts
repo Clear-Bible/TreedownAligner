@@ -302,15 +302,27 @@ describe('alignmentSlice reducer', () => {
       expect(resultState.mode).toEqual(AlignmentMode.Edit);
     });
 
-    it('enters partial edit mode (from clean)', () => {
+    it('enters edit mode (from clean) for non-ambigious alignments', () => {
       const previousState = {
         ...initialState,
         alignments: [
           {
-            source: 'nvi',
-            target: 'sbl',
+            source: 'sbl',
+            target: 'nvi',
             links: [
-              { _id: 'nvi-sbl-1', sources: ['nvi_0'], targets: ['sbl_1'] },
+              { _id: 'sbl-nvi-1', sources: ['sbl_0'], targets: ['nvi_1'] },
+            ],
+            polarity: {
+              type: 'primary',
+              syntaxSide: 'sources',
+              nonSyntaxSide: 'targets',
+            } as PrimaryAlignmentPolarity,
+          },
+          {
+            source: 'nvi',
+            target: 'leb',
+            links: [
+              { _id: 'nvi-leb-1', sources: ['nvi_1'], targets: ['leb_3'] },
             ],
             polarity: {
               type: 'primary',
@@ -324,12 +336,72 @@ describe('alignmentSlice reducer', () => {
 
       const resultState = alignmentSliceReducer(
         previousState,
-        toggleTextSegment(targetWord2)
+        toggleTextSegment({
+          id: 'leb_4',
+          corpusId: 'leb',
+          text: 'some word',
+          position: 4,
+        })
       );
 
       expect(resultState.inProgressLink).toBeTruthy();
-      expect(resultState.inProgressLink?._id).toEqual('?');
-      expect(resultState.mode).toEqual(AlignmentMode.PartialEdit);
+      expect(resultState.inProgressLink?._id).toEqual('nvi-leb-2');
+      expect(resultState.mode).toEqual(AlignmentMode.Edit);
+    });
+
+    it.only('enters partial edit mode (from clean, ambiguous)', () => {
+      const previousState = {
+        ...initialState,
+        alignments: [
+          {
+            source: 'sbl',
+            target: 'nvi',
+            links: [
+              { _id: 'sbl-nvi-1', sources: ['sbl_0'], targets: ['nvi_1'] },
+            ],
+            polarity: {
+              type: 'primary',
+              syntaxSide: 'sources',
+              nonSyntaxSide: 'targets',
+            } as PrimaryAlignmentPolarity,
+          },
+          {
+            source: 'nvi',
+            target: 'leb',
+            links: [
+              { _id: 'nvi-leb-1', sources: ['nvi_1'], targets: ['leb_3'] },
+            ],
+            polarity: {
+              type: 'primary',
+              syntaxSide: 'sources',
+              nonSyntaxSide: 'targets',
+            } as PrimaryAlignmentPolarity,
+          },
+        ],
+        inProgressLink: null,
+      };
+
+      try {
+        const resultState = alignmentSliceReducer(
+          previousState,
+          toggleTextSegment({
+            id: 'nvi_6',
+            corpusId: 'nvi',
+            text: 'some word',
+            position: 6,
+          })
+        );
+      } catch (error) {
+        if (error instanceof Error) {
+          expect(error.message).toEqual(
+            'DISAMBIGUATE POTENTIAL ALIGNMENTS? Not implemented yet.'
+          );
+        }
+      }
+
+      // expect(resultState.inProgressLink).toBeTruthy();
+      // expect(resultState.inProgressLink?._id).toEqual('?');
+      // expect(resultState.mode).toEqual(AlignmentMode.PartialEdit);
     });
 
     it('enters edit mode (from partial edit)', () => {
@@ -349,13 +421,6 @@ describe('alignmentSlice reducer', () => {
             } as PrimaryAlignmentPolarity,
           },
         ],
-        inProgressLink: {
-          _id: '?',
-          source: 'nvi',
-          target: '',
-          sources: ['nvi_1'],
-          targets: [],
-        },
       };
 
       const resultState = alignmentSliceReducer(
