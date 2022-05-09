@@ -111,7 +111,6 @@ const remapSyntax = (state: Draft<AlignmentState>, alignmentIndex: number) => {
   }
 
   if (state.alignments[alignmentIndex].polarity.type === 'secondary') {
-
     if (sourceCorpusSyntaxType === SyntaxType.MappedSecondary) {
       const secondaryAlignment = state.alignments[alignmentIndex];
       const oldSyntax = state.corpora[sourceCorpusIndex].syntax;
