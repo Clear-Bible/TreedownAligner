@@ -83,8 +83,6 @@ interface Corpus {
   name: string;
   fullName: string;
   language: string;
-  role: CorpusRole;
-  type: CorpusType;
 
   words: Word[];
   fullText?: string;
@@ -97,8 +95,6 @@ interface Corpus {
 - `name: string` short name, like `NIV`
 - `fullName` long name, like `New International Version`
 - `language` language code via [ISO 639-3](https://iso639-3.sil.org/code_tables/639/data)
-- [wip] `role: 'source' | 'target`
-- [wip] `type: 'primary | 'translation'`
 - `words: Word[]` object representing a word in the corpus. See [`Word`](#word) below.
 - `fullText?: string` _optional_ - full unsegmented text of the corpus
 - `syntax?: SyntaxRoot` _optional_ - syntactic parsing of the corpus. See [`SyntaxRoot`](#syntax-root) below.
@@ -113,7 +109,6 @@ A `Word` looks like:
 export interface Word {
   id: string;
   corpusId: string;
-  role: CorpusRole;
 
   text: string;
   position: number;
@@ -122,7 +117,6 @@ export interface Word {
 
 - `id: string` unique indetifier. used to correlate with [`Alignment`](#alignments) data
 - `corpusId: string` unique identifier of the corpus the words belongs to
-- [wip] `role: 'source' | 'target'`
 - `text: string` content of the word
 - `position: number` sequential position of the word in the corpus
 
@@ -152,13 +146,34 @@ interface Alignment {
 - `polarity: AlignmentPolarity` describes the directionality of the alignment see [`AlignmentPolarity`](#alignment-polarity) below.
 - `links: Link[]` relationship entities between the two corpora. see [`Links`](#links)
 
-#### Alignment Polarity
+#### `AlignmentPolarity`
 
-WORK IN PROGRESS
+An `AlignmentPolarity` describes the "sides" of an alignment and their attributes.
+Each alignment dataset much be specified with either a `PrimaryAlignmentPolarity` or a `SecondaryAlignmentPolarity`.
 
 ```ts
-asdf;
+interface PrimaryAlignmentPolarity {
+  type: 'primary';
+  syntaxSide: 'sources' | 'targets';
+  nonSyntaxSide: 'sources' | 'targets';
+}
 ```
+
+- `type: 'primary'`
+- `syntaxSide: 'sources' | 'targets'`
+- `nonSyntaxSide: 'sources' | 'targets'`
+
+```ts
+interface SecondaryAlignmentPolarity {
+  type: 'secondary';
+  mappedSide: 'sources' | 'targets';
+  nonMappedSide: 'sources' | 'targets';
+}
+```
+
+- `type: 'secondary'`
+- `mappedSide: 'sources' | 'targets'`
+- `nonMappedSide: 'sources' | 'targets'`
 
 #### Links
 
