@@ -1,10 +1,16 @@
 import { ReactElement, Fragment } from 'react';
+import '@fontsource/roboto/300.css';
+import '@fontsource/roboto/400.css';
+import '@fontsource/roboto/500.css';
+import '@fontsource/roboto/700.css';
 
 import { Provider } from 'react-redux';
 import { store } from 'app/store';
 
 import Editor from './editor';
 import { Alignment, Corpus } from 'structs';
+
+import './styles.css';
 
 interface EditorWrapperProps {
   corpora: Corpus[];
