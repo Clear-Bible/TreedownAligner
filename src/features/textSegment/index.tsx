@@ -20,7 +20,7 @@ const defaultStyle = (theme: 'night' | 'day') => {
   return {
     cursor: 'pointer',
     lineHeight: '1.4rem',
-    color: cssVar('font-color', theme),
+    // color: cssVar('font-color', theme),
   };
 };
 
@@ -29,7 +29,10 @@ const focusedStyle = () => {
 };
 
 const unlinkedStyle = (theme: 'night' | 'day') => {
-  return { fontStyle: 'italic', color: cssVar('unlinked-font-color', theme) };
+  return {
+    fontStyle: 'italic',
+    // color: cssVar('unlinked-font-color', theme)
+  };
 };
 
 const lockedStyle = () => {
@@ -38,8 +41,8 @@ const lockedStyle = () => {
 
 const selectedStyle = (theme: 'night' | 'day') => {
   return {
-    backgroundColor: cssVar('selected-segment-background-color', theme),
-    color: cssVar('selected-segment-font-color', theme),
+    // backgroundColor: cssVar('selected-segment-background-color', theme),
+    // color: cssVar('selected-segment-font-color', theme),
     borderRadius: '0.25rem',
   };
 };

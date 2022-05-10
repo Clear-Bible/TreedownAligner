@@ -60,10 +60,10 @@ export const CorpusComponent = (props: CorpusProps): ReactElement => {
           textAlign: 'right',
           padding: '0.5rem',
           fontWeight: 'regular',
-          color: cssVar('font-color', theme),
+          // color: cssVar('font-color', theme),
           position: 'sticky',
           top: '0',
-          backgroundColor: cssVar('--background', theme),
+          // backgroundColor: cssVar('--background', theme),
         }}
       >
         {corpus.name}

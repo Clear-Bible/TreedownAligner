@@ -2,8 +2,8 @@ import { ReactElement, useState, useEffect } from 'react';
 
 import { Corpus, SyntaxType, SyntaxRoot } from 'structs';
 
-import cssVar from 'styles/cssVar';
-import '../styles/theme.css';
+// import cssVar from 'styles/cssVar';
+// import '../styles/theme.css';
 
 import EditorWrapper from 'features/editor';
 
@@ -118,13 +118,13 @@ const Workbench = (props: WorkbenchProps): ReactElement => {
     loadSyntaxData().catch(console.error);
   }, [bookDoc, book, chapter, verse]);
 
-  if (theme === 'night') {
-    document.body.style.backgroundColor = 'var(--night-background)';
-  }
-
-  if (theme === 'day') {
-    document.body.style.backgroundColor = 'var(--day-background)';
-  }
+  // if (theme === 'night') {
+  //   document.body.style.backgroundColor = 'var(--night-background)';
+  // }
+  //
+  // if (theme === 'day') {
+  //   document.body.style.backgroundColor = 'var(--day-background)';
+  // }
 
   const corpora: Corpus[] = [];
 
@@ -157,9 +157,11 @@ const Workbench = (props: WorkbenchProps): ReactElement => {
 
   return (
     <div
-      style={{
-        backgroundColor: cssVar('background', themeVar),
-      }}
+      style={
+        {
+          // backgroundColor: cssVar('background', themeVar),
+        }
+      }
     >
       <div
         style={{
@@ -168,13 +170,13 @@ const Workbench = (props: WorkbenchProps): ReactElement => {
           alignItems: 'center',
           padding: '2rem',
           border: '1px solid',
-          borderColor: cssVar('border-color', themeVar),
+          // borderColor: cssVar('border-color', themeVar),
           textAlign: 'center',
           margin: 'auto',
           marginTop: '1rem',
           marginBottom: '1rem',
           maxWidth: '800px',
-          backgroundColor: cssVar('background', themeVar),
+          // backgroundColor: cssVar('background', themeVar),
         }}
       >
         <div
@@ -185,7 +187,11 @@ const Workbench = (props: WorkbenchProps): ReactElement => {
           }}
         >
           <label
-            style={{ color: cssVar('font-color', theme as 'night' | 'day') }}
+            style={
+              {
+                // color: cssVar('font-color', theme as 'night' | 'day')
+              }
+            }
           >
             Book{' '}
             <select
@@ -208,7 +214,11 @@ const Workbench = (props: WorkbenchProps): ReactElement => {
             </select>
           </label>
           <label
-            style={{ color: cssVar('font-color', theme as 'night' | 'day') }}
+            style={
+              {
+                // color: cssVar('font-color', theme as 'night' | 'day'),
+              }
+            }
           >
             Chapter{' '}
             <select
@@ -227,7 +237,11 @@ const Workbench = (props: WorkbenchProps): ReactElement => {
             </select>
           </label>
           <label
-            style={{ color: cssVar('font-color', theme as 'night' | 'day') }}
+            style={
+              {
+                // color: cssVar('font-color', theme as 'night' | 'day')
+              }
+            }
           >
             Verse{' '}
             <select
@@ -267,7 +281,11 @@ const Workbench = (props: WorkbenchProps): ReactElement => {
           }}
         >
           <label
-            style={{ color: cssVar('font-color', theme as 'night' | 'day') }}
+            style={
+              {
+                // color: cssVar('font-color', theme as 'night' | 'day')
+              }
+            }
           >
             <input
               type="checkbox"
@@ -280,7 +298,11 @@ const Workbench = (props: WorkbenchProps): ReactElement => {
             Source
           </label>
           <label
-            style={{ color: cssVar('font-color', theme as 'night' | 'day') }}
+            style={
+              {
+                // color: cssVar('font-color', theme as 'night' | 'day'),
+              }
+            }
           >
             <input
               type="checkbox"
@@ -294,7 +316,11 @@ const Workbench = (props: WorkbenchProps): ReactElement => {
           </label>
 
           <label
-            style={{ color: cssVar('font-color', theme as 'night' | 'day') }}
+            style={
+              {
+                // color: cssVar('font-color', theme as 'night' | 'day')
+              }
+            }
           >
             <input
               type="checkbox"
@@ -307,7 +333,11 @@ const Workbench = (props: WorkbenchProps): ReactElement => {
             LWC
           </label>
           <label
-            style={{ color: cssVar('font-color', theme as 'night' | 'day') }}
+            style={
+              {
+                // color: cssVar('font-color', theme as 'night' | 'day')
+              }
+            }
           >
             <input
               type="checkbox"
@@ -328,7 +358,7 @@ const Workbench = (props: WorkbenchProps): ReactElement => {
           justifyContent: 'center',
           padding: '2rem',
           border: '1px solid',
-          borderColor: cssVar('border-color', themeVar),
+          // borderColor: cssVar('border-color', themeVar),
           margin: 'auto',
           marginTop: '1rem',
           marginBottom: '1rem',

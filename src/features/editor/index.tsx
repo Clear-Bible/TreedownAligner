@@ -1,13 +1,10 @@
-import { ReactElement, Fragment } from 'react';
-import '@fontsource/roboto/300.css';
-import '@fontsource/roboto/400.css';
-import '@fontsource/roboto/500.css';
-import '@fontsource/roboto/700.css';
+import {  Fragment } from 'react';
 
 import { Provider } from 'react-redux';
 import { store } from 'app/store';
 
 import Editor from './editor';
+import Themed from 'features/themed';
 import { Alignment, Corpus } from 'structs';
 
 import './styles.css';
@@ -19,18 +16,22 @@ interface EditorWrapperProps {
   alignmentUpdated: Function;
 }
 
-const EditorWrapper = (props: EditorWrapperProps): ReactElement => {
+const EditorWrapper = (props: EditorWrapperProps): any => {
+  const { theme } = props;
+
   return (
-    <Fragment>
-      <Provider store={store}>
-        <Editor
-          corpora={props.corpora}
-          alignments={props.alignments}
-          theme={props.theme}
-          alignmentUpdated={props.alignmentUpdated}
-        />
-      </Provider>
-    </Fragment>
+    <Themed theme={theme}>
+      <Fragment>
+        <Provider store={store}>
+          <Editor
+            corpora={props.corpora}
+            alignments={props.alignments}
+            theme={props.theme}
+            alignmentUpdated={props.alignmentUpdated}
+          />
+        </Provider>
+      </Fragment>
+    </Themed>
   );
 };
 
