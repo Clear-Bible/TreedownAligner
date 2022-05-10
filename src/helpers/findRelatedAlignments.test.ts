@@ -1,4 +1,4 @@
-import { Alignment, Word, CorpusRole } from 'structs';
+import { Alignment, Word } from 'structs';
 import findRelatedAlignments from 'helpers/findRelatedAlignments';
 
 const testAlignments: Alignment[] = [
@@ -9,25 +9,33 @@ const testAlignments: Alignment[] = [
       { sources: ['regular_8'], targets: ['goofy_7'] },
       { sources: ['regular_1'], targets: ['goofy_2'] },
     ],
+    polarity: {
+      type: 'primary',
+      syntaxSide: 'sources',
+      nonSyntaxSide: 'targets',
+    },
   },
   {
     source: 'specificThing',
     target: 'genericThing',
     links: [{ sources: ['specific_1', 'specific_2'], targets: ['generic_4'] }],
+    polarity: {
+      type: 'primary',
+      syntaxSide: 'sources',
+      nonSyntaxSide: 'targets',
+    },
   },
 ];
 
 const testWord: Word = {
   id: 'regular_8',
   corpusId: 'regular',
-  role: CorpusRole.Source,
   text: 'asdf',
   position: 8,
 };
 //const testWord1: Word = {
 //id: 'goofy_7',
 //corpusId: 'regular',
-//role: 'target',
 //text: 'fdsa',
 //position: 7,
 //};

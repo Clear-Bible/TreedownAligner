@@ -1,4 +1,9 @@
-import { Word, Alignment, CorpusRole } from 'structs';
+import {
+  Word,
+  Alignment,
+  AlignmentSide,
+  PrimaryAlignmentPolarity,
+} from 'structs';
 
 import alignmentSliceReducer, {
   createLink,
@@ -8,20 +13,36 @@ import alignmentSliceReducer, {
   AlignmentMode,
 } from 'state/alignment.slice';
 
-const englishAlignment: Alignment = { source: 'sbl', target: 'leb', links: [] };
-const spanishAlignment: Alignment = { source: 'sbl', target: 'nvi', links: [] };
+const englishAlignment: Alignment = {
+  source: 'sbl',
+  target: 'leb',
+  links: [],
+  polarity: {
+    type: 'primary',
+    syntaxSide: 'sources',
+    nonSyntaxSide: 'targets',
+  },
+};
+const spanishAlignment: Alignment = {
+  source: 'sbl',
+  target: 'nvi',
+  links: [],
+  polarity: {
+    type: 'primary',
+    syntaxSide: 'sources',
+    nonSyntaxSide: 'targets',
+  },
+};
 
 const sourceWord1: Word = {
   id: 'sbl_0',
   corpusId: 'sbl',
-  role: CorpusRole.Source,
   text: '',
   position: 0,
 };
 const sourceWord2: Word = {
   id: 'sbl_1',
   corpusId: 'sbl',
-  role: CorpusRole.Source,
   text: '',
   position: 1,
 };
@@ -29,14 +50,12 @@ const sourceWord2: Word = {
 const targetWord1: Word = {
   id: 'leb_1',
   corpusId: 'leb',
-  role: CorpusRole.Target,
   text: '',
   position: 1,
 };
 const targetWord2: Word = {
   id: 'leb_2',
   corpusId: 'leb',
-  role: CorpusRole.Target,
   text: '',
   position: 2,
 };
@@ -44,7 +63,6 @@ const targetWord2: Word = {
 const otherTargetWord1: Word = {
   id: 'nvi_1',
   corpusId: 'nvi',
-  role: CorpusRole.Target,
   text: '',
   position: 1,
 };
@@ -232,6 +250,11 @@ describe('alignmentSlice reducer', () => {
             links: [
               { _id: 'sbl-leb-1', sources: ['sbl_0'], targets: ['leb_1'] },
             ],
+            polarity: {
+              type: 'primary',
+              syntaxSide: 'sources',
+              nonSyntaxSide: 'targets',
+            } as PrimaryAlignmentPolarity,
           },
         ],
         inProgressLink: null,
@@ -255,6 +278,11 @@ describe('alignmentSlice reducer', () => {
             links: [
               { _id: 'sbl-leb-1', sources: ['sbl_0'], targets: ['leb_1'] },
             ],
+            polarity: {
+              type: 'primary',
+              syntaxSide: 'sources',
+              nonSyntaxSide: 'targets',
+            } as PrimaryAlignmentPolarity,
           },
         ],
         inProgressLink: {
@@ -274,16 +302,33 @@ describe('alignmentSlice reducer', () => {
       expect(resultState.mode).toEqual(AlignmentMode.Edit);
     });
 
-    it('enters partial edit mode (from clean)', () => {
+    it('enters edit mode (from clean) for non-ambigious alignments', () => {
       const previousState = {
         ...initialState,
         alignments: [
           {
-            source: 'nvi',
-            target: 'sbl',
+            source: 'sbl',
+            target: 'nvi',
             links: [
-              { _id: 'nvi-sbl-1', sources: ['nvi_0'], targets: ['sbl_1'] },
+              { _id: 'sbl-nvi-1', sources: ['sbl_0'], targets: ['nvi_1'] },
             ],
+            polarity: {
+              type: 'primary',
+              syntaxSide: 'sources',
+              nonSyntaxSide: 'targets',
+            } as PrimaryAlignmentPolarity,
+          },
+          {
+            source: 'nvi',
+            target: 'leb',
+            links: [
+              { _id: 'nvi-leb-1', sources: ['nvi_1'], targets: ['leb_3'] },
+            ],
+            polarity: {
+              type: 'primary',
+              syntaxSide: 'sources',
+              nonSyntaxSide: 'targets',
+            } as PrimaryAlignmentPolarity,
           },
         ],
         inProgressLink: null,
@@ -291,12 +336,72 @@ describe('alignmentSlice reducer', () => {
 
       const resultState = alignmentSliceReducer(
         previousState,
-        toggleTextSegment(targetWord2)
+        toggleTextSegment({
+          id: 'leb_4',
+          corpusId: 'leb',
+          text: 'some word',
+          position: 4,
+        })
       );
 
       expect(resultState.inProgressLink).toBeTruthy();
-      expect(resultState.inProgressLink?._id).toEqual('?');
-      expect(resultState.mode).toEqual(AlignmentMode.PartialEdit);
+      expect(resultState.inProgressLink?._id).toEqual('nvi-leb-2');
+      expect(resultState.mode).toEqual(AlignmentMode.Edit);
+    });
+
+    it.only('enters partial edit mode (from clean, ambiguous)', () => {
+      const previousState = {
+        ...initialState,
+        alignments: [
+          {
+            source: 'sbl',
+            target: 'nvi',
+            links: [
+              { _id: 'sbl-nvi-1', sources: ['sbl_0'], targets: ['nvi_1'] },
+            ],
+            polarity: {
+              type: 'primary',
+              syntaxSide: 'sources',
+              nonSyntaxSide: 'targets',
+            } as PrimaryAlignmentPolarity,
+          },
+          {
+            source: 'nvi',
+            target: 'leb',
+            links: [
+              { _id: 'nvi-leb-1', sources: ['nvi_1'], targets: ['leb_3'] },
+            ],
+            polarity: {
+              type: 'primary',
+              syntaxSide: 'sources',
+              nonSyntaxSide: 'targets',
+            } as PrimaryAlignmentPolarity,
+          },
+        ],
+        inProgressLink: null,
+      };
+
+      try {
+        const resultState = alignmentSliceReducer(
+          previousState,
+          toggleTextSegment({
+            id: 'nvi_6',
+            corpusId: 'nvi',
+            text: 'some word',
+            position: 6,
+          })
+        );
+      } catch (error) {
+        if (error instanceof Error) {
+          expect(error.message).toEqual(
+            'DISAMBIGUATE POTENTIAL ALIGNMENTS? Not implemented yet.'
+          );
+        }
+      }
+
+      // expect(resultState.inProgressLink).toBeTruthy();
+      // expect(resultState.inProgressLink?._id).toEqual('?');
+      // expect(resultState.mode).toEqual(AlignmentMode.PartialEdit);
     });
 
     it('enters edit mode (from partial edit)', () => {
@@ -309,15 +414,13 @@ describe('alignmentSlice reducer', () => {
             links: [
               { _id: 'nvi-sbl-1', sources: ['nvi_0'], targets: ['sbl_1'] },
             ],
+            polarity: {
+              type: 'primary',
+              syntaxSide: 'sources',
+              nonSyntaxSide: 'targets',
+            } as PrimaryAlignmentPolarity,
           },
         ],
-        inProgressLink: {
-          _id: '?',
-          source: 'nvi',
-          target: '',
-          sources: ['nvi_1'],
-          targets: [],
-        },
       };
 
       const resultState = alignmentSliceReducer(
@@ -325,7 +428,7 @@ describe('alignmentSlice reducer', () => {
         toggleTextSegment({
           id: 'sbl_2',
           corpusId: 'sbl',
-          role: CorpusRole.Target,
+          // role: CorpusRole.Target,
           text: 'asdf',
           position: 3,
         })
@@ -398,6 +501,11 @@ describe('alignmentSlice reducer', () => {
             links: [
               { _id: 'sbl-leb-1', sources: ['sbl_0'], targets: ['leb_1'] },
             ],
+            polarity: {
+              type: 'primary',
+              syntaxSide: 'sources',
+              nonSyntaxSide: 'targets',
+            } as PrimaryAlignmentPolarity,
           },
         ],
         inProgressLink: {
@@ -435,6 +543,11 @@ describe('alignmentSlice reducer', () => {
                 targets: ['leb_1', 'leb_2'],
               },
             ],
+            polarity: {
+              type: 'primary',
+              syntaxSide: 'sources',
+              nonSyntaxSide: 'targets',
+            } as PrimaryAlignmentPolarity,
           },
         ],
         inProgressLink: {
@@ -474,6 +587,11 @@ describe('alignmentSlice reducer', () => {
                 targets: ['leb_1', 'leb_2'],
               },
             ],
+            polarity: {
+              type: 'primary',
+              syntaxSide: 'sources',
+              nonSyntaxSide: 'targets',
+            } as PrimaryAlignmentPolarity,
           },
         ],
       };
@@ -497,6 +615,11 @@ describe('alignmentSlice reducer', () => {
                 targets: ['leb_1', 'leb_2'],
               },
             ],
+            polarity: {
+              type: 'primary',
+              syntaxSide: 'sources',
+              nonSyntaxSide: 'targets',
+            } as PrimaryAlignmentPolarity,
           },
         ],
         inProgressLink: {
@@ -541,8 +664,14 @@ describe('alignmentSlice reducer', () => {
                 targets: ['leb_3', 'leb_8'],
               },
             ],
+            polarity: {
+              type: 'primary',
+              syntaxSide: 'sources',
+              nonSyntaxSide: 'targets',
+            } as PrimaryAlignmentPolarity,
           },
         ],
+
         inProgressLink: {
           _id: 'sbl-leb-1',
           source: 'sbl',
@@ -590,6 +719,11 @@ describe('alignmentSlice reducer', () => {
                 targets: ['leb_1', 'leb_2'],
               },
             ],
+            polarity: {
+              type: 'primary',
+              syntaxSide: 'sources',
+              nonSyntaxSide: 'targets',
+            } as PrimaryAlignmentPolarity,
           },
         ],
         inProgressLink: {

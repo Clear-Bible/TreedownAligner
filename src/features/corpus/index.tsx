@@ -7,7 +7,7 @@ import DragHandle from 'features/dragHandle';
 import Treedown from 'features/treedown';
 
 import { toggleCorpusView } from 'state/alignment.slice';
-import { Word, Corpus, CorpusViewType, Alignment, TreedownType } from 'structs';
+import { Word, Corpus, CorpusViewType, TreedownType } from 'structs';
 
 import cssVar from 'styles/cssVar';
 
@@ -52,14 +52,6 @@ export const CorpusComponent = (props: CorpusProps): ReactElement => {
     return state.app.theme;
   });
 
-  const isCorpusAligned = Boolean(
-    useAppSelector((state) => {
-      return state.alignment.present.alignments.find((alignment: Alignment) => {
-        return alignment[corpus.role] === corpus.id;
-      });
-    })
-  );
-
   return (
     <div className="corpus-scroll-container">
       <DragHandle />
@@ -80,7 +72,7 @@ export const CorpusComponent = (props: CorpusProps): ReactElement => {
       {determineCorpusView(corpus)}
 
       <button
-        disabled={!isCorpusAligned}
+        disabled={!corpus.syntax}
         style={{
           position: 'sticky',
           bottom: '0',

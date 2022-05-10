@@ -6,7 +6,7 @@ import { useAppDispatch, useAppSelector } from 'app/hooks';
 import { toggleTextSegment, AlignmentMode } from 'state/alignment.slice';
 import { hover, relatedAlignments } from 'state/textSegmentHover.slice';
 
-import { Alignment, Word, CorpusRole, Link } from 'structs';
+import { Alignment, Word, Link } from 'structs';
 import findRelatedAlignments from 'helpers/findRelatedAlignments';
 
 import '../../styles/theme.css';
@@ -58,7 +58,7 @@ const computeStyle = (
   isLinked: boolean,
   isCurrentLinkMember: boolean,
   isInvolved: boolean,
-  role: CorpusRole,
+  isMemberOfMultipleAlignments: boolean,
   mode: AlignmentMode,
   theme: 'night' | 'day'
 ): Record<string, string> => {
@@ -88,7 +88,14 @@ const computeStyle = (
     computedStyle = { ...computedStyle, ...unlinkedStyle(theme) };
   }
 
-  if (isLinked && role === 'source' && !isCurrentLinkMember) {
+  if (
+    (!isInvolved && mode !== AlignmentMode.CleanSlate) ||
+    (!isInvolved && isMemberOfMultipleAlignments)
+  ) {
+    computedStyle = { ...computedStyle, ...lockedStyle() };
+  }
+
+  if (isInvolved && isMemberOfMultipleAlignments && isLinked) {
     computedStyle = { ...computedStyle, ...lockedStyle() };
   }
 
@@ -122,18 +129,35 @@ export const TextSegment = (props: TextSegmentProps): ReactElement => {
     (state) => state.textSegmentHover.hovered?.id === word.id
   );
 
+  const isMemberOfMultipleAlignments = useAppSelector((state) => {
+    const relatedAlignments = state.alignment.present.alignments.filter(
+      (alignment) => {
+        return (
+          alignment.source === word.corpusId ||
+          alignment.target === word.corpusId
+        );
+      }
+    );
+    return relatedAlignments.length > 1;
+  });
+
   const isSelected = Boolean(
     useAppSelector((state) => {
-      if (word.role === CorpusRole.Source) {
-        return state.alignment.present.inProgressLink?.sources.includes(
-          word.id
-        );
-      }
-      if (word.role === CorpusRole.Target) {
-        return state.alignment.present.inProgressLink?.targets.includes(
-          word.id
-        );
-      }
+      return (
+        state.alignment.present.inProgressLink?.sources.includes(word.id) ||
+        state.alignment.present.inProgressLink?.targets.includes(word.id)
+      );
+
+      // if (word.role === CorpusRole.Source) {
+      //   return state.alignment.present.inProgressLink?.sources.includes(
+      //     word.id
+      //   );
+      // }
+      // if (word.role === CorpusRole.Target) {
+      //   return state.alignment.present.inProgressLink?.targets.includes(
+      //     word.id
+      //   );
+      // }
     })
   );
 
@@ -262,7 +286,7 @@ export const TextSegment = (props: TextSegmentProps): ReactElement => {
     isLinked,
     isCurrentLinkMember,
     isInvolved,
-    word.role,
+    isMemberOfMultipleAlignments,
     mode,
     theme
   );
@@ -291,12 +315,14 @@ export const TextSegment = (props: TextSegmentProps): ReactElement => {
             isInvolved
           ) {
             dispatch(toggleTextSegment(word));
-          } else if (mode === AlignmentMode.PartialEdit) {
+          } else if (mode === AlignmentMode.PartialEdit && !isLinked) {
             dispatch(toggleTextSegment(word));
-          } else if (word.role === 'source' && isLinked) {
+            // } else if (word.role === 'source' && isLinked) {
             // ...do nothing...
             // we can't enter edit mode this way.
             // need a way to disambiguate between alignment data.
+          } else if (isMemberOfMultipleAlignments) {
+            // do nothing
           } else if (mode === AlignmentMode.CleanSlate) {
             dispatch(toggleTextSegment(word));
           }

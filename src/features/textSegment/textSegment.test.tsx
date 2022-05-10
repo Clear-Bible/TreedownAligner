@@ -1,7 +1,7 @@
 import { renderWithProvider, RootState } from 'test/harness';
 import preloadedState from 'test/preloadedState';
 
-import { CorpusRole } from 'structs';
+// import { CorpusRole } from 'structs';
 import { AlignmentMode } from 'state/alignment.slice';
 import TextSegment from 'features/textSegment';
 
@@ -10,7 +10,18 @@ const testState: RootState = {
   alignment: {
     ...preloadedState.alignment,
     present: {
-      alignments: [{ source: 'sbl', target: 'leb', links: [] }],
+      alignments: [
+        {
+          source: 'sbl',
+          target: 'leb',
+          links: [],
+          polarity: {
+            type: 'primary',
+            syntaxSide: 'sources',
+            nonSyntaxSide: 'targets',
+          },
+        },
+      ],
       corpora: [],
       inProgressLink: {
         source: 'sbl',
@@ -29,7 +40,7 @@ describe('TextSegment', () => {
         word={{
           id: 'test_1',
           corpusId: 'test',
-          role: CorpusRole.Source,
+          // role: CorpusRole.Source,
           text: 'mikey',
           position: 0,
         }}
@@ -44,7 +55,7 @@ describe('TextSegment', () => {
         word={{
           id: 'sbl_0',
           corpusId: 'sbl',
-          role: CorpusRole.Source,
+          // role: CorpusRole.Source,
           text: 'mikey',
           position: 0,
         }}

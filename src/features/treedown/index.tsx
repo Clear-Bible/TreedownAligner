@@ -5,7 +5,7 @@ import { useAppSelector } from 'app/hooks';
 
 import cssVar from 'styles/cssVar';
 
-import { Corpus, CorpusRole, SyntaxNode, TreedownType, Word } from 'structs';
+import { Corpus, SyntaxNode, TreedownType, Word } from 'structs';
 import TextSegment from 'features/textSegment';
 
 import { findWordById } from 'helpers/findWord';
@@ -66,7 +66,11 @@ const recurseSyntax = (
     const graduatedDepth = depth * 0.5;
 
     if (syntaxNode.content.elementType === 'pc') {
-      return <span className="pc">{syntaxNode.content.text}</span>;
+      return (
+        treedownType === TreedownType.Source && (
+          <span className="pc">{syntaxNode.content.text}</span>
+        )
+      );
     }
 
     if (syntaxNode.content && syntaxNode.content.elementType === 'sentence') {
@@ -127,6 +131,9 @@ const recurseSyntax = (
         calculatedWidth = 'fit-content';
       }
 
+      //if (corpus.id === 'nvi' && syntaxNode.content.elementType === 'w') {
+      //console.log(syntaxNode);
+      //}
       return (
         <div
           className="constituent"
@@ -188,7 +195,6 @@ const recurseSyntax = (
                     word={{
                       id: syntaxNode.content.n,
                       corpusId: corpus.id,
-                      role: CorpusRole.Source,
                       text: syntaxNode.content.text,
                       position: parsePosition(syntaxNode.content.osisId),
                     }}
@@ -228,7 +234,6 @@ const recurseSyntax = (
           word={{
             id: syntaxNode.content.n,
             corpusId: corpus.id,
-            role: CorpusRole.Source,
             text: syntaxNode.content.text,
             position: parsePosition(syntaxNode.content.osisId),
           }}

@@ -1,18 +1,10 @@
-// Determines how a corpus might
-// be interacted with.
-export enum CorpusRole {
-  Source = 'source',
-  Target = 'target',
-}
-
-export enum CorpusType {
-  Primary = 'primary',
-  Translation = 'translation',
-}
-
 export enum SyntaxType {
+  // Has syntax data.
   Source = 'source',
+  // Mapped to a corpus with syntax data.
   Mapped = 'mapped',
+  // Mapped to a corpus that is mapped to a corpus with syntax data.
+  MappedSecondary = 'mappedSecondary',
 }
 
 export enum CorpusViewType {
@@ -29,7 +21,6 @@ export enum TreedownType {
 export interface Word {
   id: string;
   corpusId: string;
-  role: CorpusRole;
 
   text: string;
   position: number;
@@ -41,8 +32,6 @@ export interface Corpus {
   name: string;
   fullName: string;
   language: string;
-  role: CorpusRole;
-  type: CorpusType;
 
   words: Word[];
   fullText?: string;
@@ -64,10 +53,32 @@ export interface InProgressLink extends Link {
   target: string;
 }
 
-// Collection of textual pairs
+export type AlignmentSide = 'sources' | 'targets';
+
+export interface AlignmentPolarityBase {
+  type: 'primary' | 'secondary';
+}
+
+export interface PrimaryAlignmentPolarity extends AlignmentPolarityBase {
+  type: 'primary';
+  syntaxSide: AlignmentSide;
+  nonSyntaxSide: AlignmentSide;
+}
+
+export interface SecondaryAlignmentPolarity extends AlignmentPolarityBase {
+  type: 'secondary';
+  mappedSide: AlignmentSide;
+  nonMappedSide: AlignmentSide;
+}
+
+export type AlignmentPolarity =
+  | PrimaryAlignmentPolarity
+  | SecondaryAlignmentPolarity;
+
 export interface Alignment {
   source: string;
   target: string;
+  polarity: AlignmentPolarity;
   links: Link[];
 }
 

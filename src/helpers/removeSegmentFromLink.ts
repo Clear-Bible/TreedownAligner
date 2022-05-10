@@ -1,4 +1,4 @@
-import { Word, InProgressLink, CorpusRole } from 'structs';
+import { Word, InProgressLink } from 'structs';
 
 const removeFromArray = (originArray: string[], id: string): string[] => {
   const _array = originArray.concat([]);
@@ -11,9 +11,9 @@ const removeSegmentFromLink = (
   wordToRemove: Word,
   link: InProgressLink
 ): InProgressLink => {
-  if (wordToRemove.role === CorpusRole.Source) {
+  if (link.sources.includes(wordToRemove.id)) {
     link.sources = removeFromArray(link.sources, wordToRemove.id);
-  } else if (wordToRemove.role === CorpusRole.Target) {
+  } else if (link.targets.includes(wordToRemove.id)) {
     link.targets = removeFromArray(link.targets, wordToRemove.id);
   }
 
