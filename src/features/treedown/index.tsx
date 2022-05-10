@@ -131,9 +131,6 @@ const recurseSyntax = (
         calculatedWidth = 'fit-content';
       }
 
-      //if (corpus.id === 'nvi' && syntaxNode.content.elementType === 'w') {
-      //console.log(syntaxNode);
-      //}
       return (
         <div
           className="constituent"

@@ -1,7 +1,6 @@
 import { renderWithProvider, RootState } from 'test/harness';
 import preloadedState from 'test/preloadedState';
 
-// import { CorpusRole } from 'structs';
 import { AlignmentMode } from 'state/alignment.slice';
 import TextSegment from 'features/textSegment';
 
@@ -40,7 +39,6 @@ describe('TextSegment', () => {
         word={{
           id: 'test_1',
           corpusId: 'test',
-          // role: CorpusRole.Source,
           text: 'mikey',
           position: 0,
         }}
@@ -55,7 +53,6 @@ describe('TextSegment', () => {
         word={{
           id: 'sbl_0',
           corpusId: 'sbl',
-          // role: CorpusRole.Source,
           text: 'mikey',
           position: 0,
         }}
