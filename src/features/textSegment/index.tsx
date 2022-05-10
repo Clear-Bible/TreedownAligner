@@ -1,4 +1,5 @@
 import React, { ReactElement } from 'react';
+import { Typography } from '@mui/material';
 
 import useDebug from 'hooks/useDebug';
 import { useAppDispatch, useAppSelector } from 'app/hooks';
@@ -289,7 +290,7 @@ export const TextSegment = (props: TextSegmentProps): ReactElement => {
   return (
     <React.Fragment>
       <span> </span>
-      <span
+      <Typography display="inline"
         className="text-segment"
         style={computedStyle}
         onMouseEnter={() => {
@@ -321,7 +322,7 @@ export const TextSegment = (props: TextSegmentProps): ReactElement => {
         }}
       >
         {props.word.text}
-      </span>
+      </Typography>
     </React.Fragment>
   );
 };

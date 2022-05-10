@@ -1,5 +1,6 @@
 import React, { ReactElement } from 'react';
 import GridLayout from 'react-grid-layout';
+import { Card, Container } from '@mui/material';
 
 import { useAppSelector } from 'app/hooks';
 import useDebug from 'hooks/useDebug';
@@ -50,19 +51,21 @@ export const Polyglot = (): ReactElement => {
         {corpora.map((corpus: Corpus, index: number): ReactElement => {
           const key = `text_${index}`;
           return (
-            <div
+            <Card
+              elevation={2}
               className="corpus-container corpus-scroll-container"
               key={key}
               style={{
-                border: '1px solid',
                 borderColor: cssVar('border-color', theme),
                 overflowY: 'scroll',
                 overflowX: 'scroll',
                 msOverflowStyle: 'none',
               }}
             >
-              <CorpusComponent key={corpus.id} corpus={corpus} />
-            </div>
+              <Container>
+                <CorpusComponent key={corpus.id} corpus={corpus} />
+              </Container>
+            </Card>
           );
         })}
       </GridLayout>

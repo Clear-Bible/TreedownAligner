@@ -1,6 +1,7 @@
 import React, { ReactElement } from 'react';
 import GridLayout from 'react-grid-layout';
 import { ActionCreators } from 'redux-undo';
+import { Button } from '@mui/material';
 
 import { useAppDispatch, useAppSelector } from 'app/hooks';
 import useDebug from 'hooks/useDebug';
@@ -70,55 +71,59 @@ export const ControlPanel = (props: ControlPanelProps): ReactElement => {
         <div
           key="a"
           style={{
-            border: '1px solid',
-            borderColor: cssVar('border-color', theme),
             display: 'flex',
             justifyContent: 'center',
             alignItems: 'center',
             gap: '10px',
           }}
         >
-          <button
+          <Button
+            variant="contained"
             disabled={mode !== AlignmentMode.Edit || !linkHasBothSides}
             onClick={() => {
               dispatch(createLink());
             }}
           >
             Link
-          </button>
-          <button
+          </Button>
+          <Button
+            variant="contained"
             disabled={!(mode === AlignmentMode.Select)}
             onClick={() => {
               dispatch(deleteLink());
             }}
           >
             Unlink
-          </button>
-          <button
+          </Button>
+          <Button
+            variant="contained"
             disabled={!anySegmentsSelected}
             onClick={() => {
               dispatch(resetTextSegments());
             }}
           >
             Reset
-          </button>
-          <button
+          </Button>
+          <Button
+            variant="contained"
             onClick={() => {
               dispatch(ActionCreators.undo());
             }}
           >
             Undo
-          </button>
+          </Button>
 
-          <button
+          <Button
+            variant="contained"
             onClick={() => {
               dispatch(ActionCreators.redo());
             }}
           >
             Redo
-          </button>
+          </Button>
 
-          <button
+          <Button
+            variant="contained"
             onClick={() => {
               if (props.alignmentUpdated) {
                 props.alignmentUpdated(alignmentState);
@@ -126,7 +131,7 @@ export const ControlPanel = (props: ControlPanelProps): ReactElement => {
             }}
           >
             Save
-          </button>
+          </Button>
         </div>
       </GridLayout>
     </React.Fragment>

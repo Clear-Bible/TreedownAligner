@@ -1,4 +1,5 @@
 import { ReactElement } from 'react';
+import { Typography } from '@mui/material';
 
 import useDebug from 'hooks/useDebug';
 import { useAppSelector } from 'app/hooks';
@@ -183,7 +184,7 @@ const recurseSyntax = (
             syntaxNode.content.n &&
             syntaxNode.content.osisId &&
             syntaxNode.content.text && (
-              <span style={{ textIndent: `${graduatedDepth}rem` }}>
+              <Typography display="inline" style={{ textIndent: `${graduatedDepth}rem` }}>
                 {treedownType === TreedownType.Mapped &&
                   renderMappedTextSegment(syntaxNode, corpus)}
 
@@ -197,7 +198,7 @@ const recurseSyntax = (
                     }}
                   />
                 )}
-              </span>
+              </Typography>
             )}
         </div>
       );

@@ -1,5 +1,6 @@
 import React, { ReactElement } from 'react';
 import GridLayout from 'react-grid-layout';
+import { Card } from '@mui/material';
 
 import { useAppSelector } from 'app/hooks';
 import useDebug from 'hooks/useDebug';
@@ -58,27 +59,25 @@ export const ContextPanel = (): ReactElement => {
         maxRows={1}
         compactType="horizontal"
       >
-        <div
+        <Card
+          elevation={6}
           key="a"
-          style={{
-            border: '1px solid',
-
-            borderColor: cssVar('border-color', theme),
-          }}
+          // style={{
+          //   borderColor: cssVar('border-color', theme),
+          // }}
         >
           <LinkBuilderComponent />
-        </div>
+        </Card>
 
-        <div
+        <Card
+          elevation={6}
           key="b"
           style={{
-            border: '1px solid',
-            borderColor: cssVar('border-color', theme),
             overflow: 'scroll',
           }}
         >
           <Treedown corpus={greekCorpus} treedownType={TreedownType.Source} />;
-        </div>
+        </Card>
       </GridLayout>
     </div>
   );

@@ -1,4 +1,5 @@
 import { ReactElement } from 'react';
+import { CardHeader, Typography } from '@mui/material';
 
 import useDebug from 'hooks/useDebug';
 import { useAppDispatch, useAppSelector } from 'app/hooks';
@@ -18,7 +19,7 @@ interface CorpusProps {
 const determineCorpusView = (corpus: Corpus) => {
   if (corpus.viewType === CorpusViewType.Paragraph) {
     return (
-      <p
+      <Typography
         style={{
           paddingTop: '0.5rem',
           paddingBottom: '0.5rem',
@@ -29,7 +30,7 @@ const determineCorpusView = (corpus: Corpus) => {
         {corpus.words.map((word: Word): ReactElement => {
           return <TextSegment key={word.id} word={word} />;
         })}
-      </p>
+      </Typography>
     );
   }
 
@@ -66,7 +67,7 @@ export const CorpusComponent = (props: CorpusProps): ReactElement => {
           // backgroundColor: cssVar('--background', theme),
         }}
       >
-        {corpus.name}
+        <Typography variant="h6">{corpus.name}</Typography>
       </div>
 
       {determineCorpusView(corpus)}
