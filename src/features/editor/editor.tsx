@@ -44,7 +44,7 @@ export const Editor = (props: EditorProps): ReactElement => {
   }, [dispatch, corpora, alignments]);
 
   return (
-    <Container>
+    <Container maxWidth={false}>
       <Polyglot />
       <ControlPanel alignmentUpdated={alignmentUpdated} />
       <ContextPanel />

@@ -1,5 +1,5 @@
 import React, { ReactElement, useState } from 'react';
-import GridLayout from 'react-grid-layout';
+// import GridLayout from 'react-grid-layout';
 import { ActionCreators } from 'redux-undo';
 import {
   Button,
@@ -7,6 +7,7 @@ import {
   Tooltip,
   ToggleButton,
   ToggleButtonGroup,
+  Stack,
 } from '@mui/material';
 import {
   AddLink,
@@ -67,142 +68,130 @@ export const ControlPanel = (props: ControlPanelProps): ReactElement => {
     return state.alignment.present.alignments;
   });
 
-  const layout = [
-    {
-      i: 'a',
-      x: 0,
-      y: 0,
-      w: 24,
-      h: 4,
-      minW: 24,
-      maxW: 24,
-      isResizeable: false,
-      static: true,
-    },
-  ];
+  // const layout = [
+  //   {
+  //     i: 'a',
+  //     x: 0,
+  //     y: 0,
+  //     w: 24,
+  //     h: 4,
+  //     minW: 24,
+  //     maxW: 24,
+  //     isResizeable: false,
+  //     static: true,
+  //   },
+  // ];
 
   return (
-    <React.Fragment>
-      <GridLayout
-        layout={layout}
-        cols={24}
-        rowHeight={4}
-        width={1200}
-        maxRows={1}
+    <Stack
+      direction="row"
+      spacing={2}
+      justifyContent="center"
+      alignItems="baseline"
+      style={{ marginTop: '16px', marginBottom: '16px' }}
+    >
+      <ToggleButtonGroup
+        size="small"
+        value={formats}
+        // onChange={(
+        //   event: React.MouseEvent<HTMLElement>,
+        //   newFormats: string[]
+        // ) => {}}
       >
-        <div
-          key="a"
-          style={{
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-            gap: '10px',
+        <ToggleButton
+          value="tree"
+          disabled={!someSyntax}
+          onClick={() => {
+            if (someSyntax) {
+              if (formats.includes('tree')) {
+                setFormats([]);
+              } else {
+                setFormats(['tree']);
+              }
+              for (const corpus of corpora) {
+                if (corpus.syntax) {
+                  dispatch(toggleCorpusView(corpus.id));
+                }
+              }
+            }
           }}
         >
-          <ToggleButtonGroup
-            size="small"
-            value={formats}
-            // onChange={(
-            //   event: React.MouseEvent<HTMLElement>,
-            //   newFormats: string[]
-            // ) => {}}
+          <Park />
+        </ToggleButton>
+      </ToggleButtonGroup>
+
+      <ButtonGroup>
+        <Tooltip title="Create Link" arrow describeChild>
+          <Button
+            variant="contained"
+            disabled={mode !== AlignmentMode.Edit || !linkHasBothSides}
+            onClick={() => {
+              dispatch(createLink());
+            }}
           >
-            <ToggleButton
-              value="tree"
-              disabled={!someSyntax}
-              onClick={() => {
-                if (someSyntax) {
-                  if (formats.includes('tree')) {
-                    setFormats([]);
-                  } else {
-                    setFormats(['tree']);
-                  }
-                  for (const corpus of corpora) {
-                    if (corpus.syntax) {
-                      dispatch(toggleCorpusView(corpus.id));
-                    }
-                  }
-                }
-              }}
-            >
-              <Park />
-            </ToggleButton>
-          </ToggleButtonGroup>
+            <AddLink />
+          </Button>
+        </Tooltip>
+        <Tooltip title="Delete Link" arrow describeChild>
+          <Button
+            variant="contained"
+            disabled={!(mode === AlignmentMode.Select)}
+            onClick={() => {
+              dispatch(deleteLink());
+            }}
+          >
+            <LinkOff />
+          </Button>
+        </Tooltip>
+        <Tooltip title="Reset" arrow describeChild>
+          <Button
+            variant="contained"
+            disabled={!anySegmentsSelected}
+            onClick={() => {
+              dispatch(resetTextSegments());
+            }}
+          >
+            <RestartAlt />
+          </Button>
+        </Tooltip>
+      </ButtonGroup>
+      <ButtonGroup>
+        <Tooltip title="Undo" arrow describeChild>
+          <Button
+            variant="contained"
+            onClick={() => {
+              dispatch(ActionCreators.undo());
+            }}
+          >
+            <Undo />
+          </Button>
+        </Tooltip>
 
-          <ButtonGroup>
-            <Tooltip title="Create Link" arrow describeChild>
-              <Button
-                variant="contained"
-                disabled={mode !== AlignmentMode.Edit || !linkHasBothSides}
-                onClick={() => {
-                  dispatch(createLink());
-                }}
-              >
-                <AddLink />
-              </Button>
-            </Tooltip>
-            <Tooltip title="Delete Link" arrow describeChild>
-              <Button
-                variant="contained"
-                disabled={!(mode === AlignmentMode.Select)}
-                onClick={() => {
-                  dispatch(deleteLink());
-                }}
-              >
-                <LinkOff />
-              </Button>
-            </Tooltip>
-            <Tooltip title="Reset" arrow describeChild>
-              <Button
-                variant="contained"
-                disabled={!anySegmentsSelected}
-                onClick={() => {
-                  dispatch(resetTextSegments());
-                }}
-              >
-                <RestartAlt />
-              </Button>
-            </Tooltip>
-          </ButtonGroup>
-          <ButtonGroup>
-            <Tooltip title="Undo" arrow describeChild>
-              <Button
-                variant="contained"
-                onClick={() => {
-                  dispatch(ActionCreators.undo());
-                }}
-              >
-                <Undo />
-              </Button>
-            </Tooltip>
+        <Tooltip title="Redo" arrow describeChild>
+          <Button
+            variant="contained"
+            onClick={() => {
+              dispatch(ActionCreators.redo());
+            }}
+          >
+            <Redo />
+          </Button>
+        </Tooltip>
+      </ButtonGroup>
 
-            <Tooltip title="Redo" arrow describeChild>
-              <Button
-                variant="contained"
-                onClick={() => {
-                  dispatch(ActionCreators.redo());
-                }}
-              >
-                <Redo />
-              </Button>
-            </Tooltip>
-          </ButtonGroup>
-
-          <Tooltip title="Save" arrow describeChild>
-            <Button
-              variant="contained"
-              onClick={() => {
-                if (props.alignmentUpdated) {
-                  props.alignmentUpdated(alignmentState);
-                }
-              }}
-            >
-              <Save />
-            </Button>
-          </Tooltip>
-        </div>
-      </GridLayout>
-    </React.Fragment>
+      <Tooltip title="Save" arrow describeChild>
+        <Button
+          variant="contained"
+          onClick={() => {
+            if (props.alignmentUpdated) {
+              props.alignmentUpdated(alignmentState);
+            }
+          }}
+        >
+          <Save />
+        </Button>
+      </Tooltip>
+    </Stack>
   );
 };
 
