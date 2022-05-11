@@ -10,105 +10,158 @@ import { hover, relatedAlignments } from 'state/textSegmentHover.slice';
 import { Alignment, Word, Link } from 'structs';
 import findRelatedAlignments from 'helpers/findRelatedAlignments';
 
-import '../../styles/theme.css';
-import cssVar from 'styles/cssVar';
+// import '../../styles/theme.css';
+// import cssVar from 'styles/cssVar';
+
+import './textSegment.style.css';
 
 interface TextSegmentProps {
   word: Word;
 }
 
-const defaultStyle = (theme: 'night' | 'day') => {
-  return {
-    cursor: 'pointer',
-    lineHeight: '1.4rem',
-    // color: cssVar('font-color', theme),
-  };
-};
-
-const focusedStyle = () => {
-  return { textDecoration: 'underline' };
-};
-
-const unlinkedStyle = (theme: 'night' | 'day') => {
-  return {
-    fontStyle: 'italic',
-    // color: cssVar('unlinked-font-color', theme)
-  };
-};
-
-const lockedStyle = () => {
-  return { cursor: 'not-allowed' };
-};
-
-const selectedStyle = (theme: 'night' | 'day') => {
-  return {
-    // backgroundColor: cssVar('selected-segment-background-color', theme),
-    // color: cssVar('selected-segment-font-color', theme),
-    borderRadius: '0.25rem',
-  };
-};
-
-const relatedStyle = () => {
-  return {
-    WebkitTextStroke: `1px black`,
-    backgroundColor: 'yellow',
-  };
-};
-
-const computeStyle = (
-  isHovered: boolean,
+const computeVariant = (
   isSelected: boolean,
-  isRelated: boolean,
-  isLinked: boolean,
-  isCurrentLinkMember: boolean,
-  isInvolved: boolean,
-  isMemberOfMultipleAlignments: boolean,
-  mode: AlignmentMode,
-  theme: 'night' | 'day'
-): Record<string, string> => {
-  let computedStyle = { ...defaultStyle(theme) };
-
-  if (isRelated && !isSelected && !(mode === AlignmentMode.Edit)) {
-    computedStyle = { ...computedStyle, ...relatedStyle() };
-  }
-
-  if (isHovered && !isSelected) {
-    computedStyle = { ...computedStyle, ...focusedStyle() };
-  }
-
+  isLinked: boolean
+): 'unlinked' | 'selected' | undefined => {
   if (isSelected) {
-    computedStyle = { ...computedStyle, ...selectedStyle(theme) };
+    return 'selected';
   }
-
-  if (isLinked && mode === AlignmentMode.Edit && !isCurrentLinkMember) {
-    computedStyle = { ...computedStyle, ...lockedStyle() };
+  if (!isLinked) {
+    return 'unlinked';
   }
-
-  if (mode === AlignmentMode.Edit && isCurrentLinkMember && !isSelected) {
-    computedStyle = { ...computedStyle, ...unlinkedStyle(theme) };
-  }
-
-  if (!isLinked && !isSelected) {
-    computedStyle = { ...computedStyle, ...unlinkedStyle(theme) };
-  }
-
-  if (
-    (!isInvolved && mode !== AlignmentMode.CleanSlate) ||
-    (!isInvolved && isMemberOfMultipleAlignments)
-  ) {
-    computedStyle = { ...computedStyle, ...lockedStyle() };
-  }
-
-  if (isInvolved && isMemberOfMultipleAlignments && isLinked) {
-    computedStyle = { ...computedStyle, ...lockedStyle() };
-  }
-
-  if (!isInvolved && mode === AlignmentMode.Edit) {
-    computedStyle = { ...computedStyle, ...lockedStyle() };
-  }
-
-  return computedStyle;
+  return undefined;
 };
+
+const computeDecoration = (
+  isHovered: boolean,
+  isRelated: boolean,
+  mode: AlignmentMode,
+  isLinked: boolean,
+  isInvolved: boolean,
+  isMemberOfMultipleAlignments: boolean
+): string => {
+  let decoration = '';
+  if (mode === AlignmentMode.Edit || mode === AlignmentMode.Select) {
+    if (isLinked) {
+      // Prevents previously linked segments being added to other links.
+      decoration += ' locked';
+    }
+
+    if (!isInvolved) {
+      // Prevents segments from not-involved corpora being added to the inProgressLink
+      decoration += ' locked';
+    }
+
+    return decoration;
+  }
+
+  if (isHovered) {
+    decoration += ' focused';
+  }
+
+  if (isRelated) {
+    decoration += ' related';
+  }
+
+  if (isMemberOfMultipleAlignments) {
+    decoration += ' locked';
+  }
+
+  return decoration;
+};
+
+// const defaultStyle = (theme: 'night' | 'day') => {
+//   return {
+//     cursor: 'pointer',
+//     lineHeight: '1.4rem',
+//     // color: cssVar('font-color', theme),
+//   };
+// };
+//
+// const focusedStyle = () => {
+//   return { textDecoration: 'underline' };
+// };
+//
+// const unlinkedStyle = (theme: 'night' | 'day') => {
+//   return {
+//     fontStyle: 'italic',
+//     // color: 'red',
+//   };
+// };
+//
+// const lockedStyle = () => {
+//   return { cursor: 'not-allowed' };
+// };
+//
+// const selectedStyle = (theme: 'night' | 'day') => {
+//   return {
+//     // backgroundColor: cssVar('selected-segment-background-color', theme),
+//     // color: cssVar('selected-segment-font-color', theme),
+//     borderRadius: '0.25rem',
+//   };
+// };
+//
+// const relatedStyle = () => {
+//   return {
+//     WebkitTextStroke: `1px black`,
+//     backgroundColor: 'yellow',
+//   };
+// };
+
+// const computeStyle = (
+//   isHovered: boolean,
+//   isSelected: boolean,
+//   isRelated: boolean,
+//   isLinked: boolean,
+//   isCurrentLinkMember: boolean,
+//   isInvolved: boolean,
+//   isMemberOfMultipleAlignments: boolean,
+//   mode: AlignmentMode,
+//   theme: 'night' | 'day'
+// ): Record<string, string> => {
+//   let computedStyle = { ...defaultStyle(theme) };
+//
+//   if (isRelated && !isSelected && !(mode === AlignmentMode.Edit)) {
+//     computedStyle = { ...computedStyle, ...relatedStyle() };
+//   }
+//
+//   if (isHovered && !isSelected) {
+//     computedStyle = { ...computedStyle, ...focusedStyle() };
+//   }
+//
+//   if (isSelected) {
+//     computedStyle = { ...computedStyle, ...selectedStyle(theme) };
+//   }
+//
+//   if (isLinked && mode === AlignmentMode.Edit && !isCurrentLinkMember) {
+//     computedStyle = { ...computedStyle, ...lockedStyle() };
+//   }
+//
+//   if (mode === AlignmentMode.Edit && isCurrentLinkMember && !isSelected) {
+//     computedStyle = { ...computedStyle, ...unlinkedStyle(theme) };
+//   }
+//
+//   if (!isLinked && !isSelected) {
+//     computedStyle = { ...computedStyle, ...unlinkedStyle(theme) };
+//   }
+//
+//   if (
+//     (!isInvolved && mode !== AlignmentMode.CleanSlate) ||
+//     (!isInvolved && isMemberOfMultipleAlignments)
+//   ) {
+//     computedStyle = { ...computedStyle, ...lockedStyle() };
+//   }
+//
+//   if (isInvolved && isMemberOfMultipleAlignments && isLinked) {
+//     computedStyle = { ...computedStyle, ...lockedStyle() };
+//   }
+//
+//   if (!isInvolved && mode === AlignmentMode.Edit) {
+//     computedStyle = { ...computedStyle, ...lockedStyle() };
+//   }
+//
+//   return computedStyle;
+// };
 
 export const TextSegment = (props: TextSegmentProps): ReactElement => {
   const { word } = props;
@@ -272,17 +325,17 @@ export const TextSegment = (props: TextSegmentProps): ReactElement => {
     })
   );
 
-  const computedStyle = computeStyle(
-    isHovered,
-    isSelected,
-    isRelated,
-    isLinked,
-    isCurrentLinkMember,
-    isInvolved,
-    isMemberOfMultipleAlignments,
-    mode,
-    theme
-  );
+  // const computedStyle = computeStyle(
+  //   isHovered,
+  //   isSelected,
+  //   isRelated,
+  //   isLinked,
+  //   isCurrentLinkMember,
+  //   isInvolved,
+  //   isMemberOfMultipleAlignments,
+  //   mode,
+  //   theme
+  // );
 
   if (!word) {
     return <span>{'ERROR'}</span>;
@@ -290,9 +343,20 @@ export const TextSegment = (props: TextSegmentProps): ReactElement => {
   return (
     <React.Fragment>
       <span> </span>
-      <Typography display="inline"
-        className="text-segment"
-        style={computedStyle}
+      <Typography
+        display="inline"
+        variant={computeVariant(isSelected, isLinked)}
+        className={`text-segment ${computeDecoration(
+          isHovered,
+          isRelated,
+          mode,
+          isLinked,
+          isInvolved,
+          isMemberOfMultipleAlignments
+        )}`}
+        // variant="selected"
+        // className={`text-segment related focused locked`}
+        style={{ padding: '1px' }}
         onMouseEnter={() => {
           dispatch(hover(word));
           dispatch(relatedAlignments(findRelatedAlignments(alignments, word)));
