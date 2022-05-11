@@ -47,11 +47,11 @@ export const CorpusComponent = (props: CorpusProps): ReactElement => {
   const { corpus } = props;
   useDebug('TextComponent');
 
-  const dispatch = useAppDispatch();
-
-  const theme = useAppSelector((state) => {
-    return state.app.theme;
-  });
+  // const dispatch = useAppDispatch();
+  //
+  // const theme = useAppSelector((state) => {
+  //   return state.app.theme;
+  // });
 
   return (
     <div className="corpus-scroll-container">
@@ -71,21 +71,6 @@ export const CorpusComponent = (props: CorpusProps): ReactElement => {
       </div>
 
       {determineCorpusView(corpus)}
-
-      <button
-        disabled={!corpus.syntax}
-        style={{
-          position: 'sticky',
-          bottom: '0',
-          left: '0',
-          cursor: 'pointer',
-          height: '1rem',
-          width: '1rem',
-        }}
-        onClick={() => {
-          dispatch(toggleCorpusView(corpus.id));
-        }}
-      ></button>
     </div>
   );
 };

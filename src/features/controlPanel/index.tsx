@@ -1,7 +1,13 @@
-import React, { ReactElement } from 'react';
+import React, { ReactElement, useState } from 'react';
 import GridLayout from 'react-grid-layout';
 import { ActionCreators } from 'redux-undo';
-import { Button, ButtonGroup, Tooltip } from '@mui/material';
+import {
+  Button,
+  ButtonGroup,
+  Tooltip,
+  ToggleButton,
+  ToggleButtonGroup,
+} from '@mui/material';
 import {
   AddLink,
   LinkOff,
@@ -9,6 +15,7 @@ import {
   Redo,
   Undo,
   Save,
+  Park,
 } from '@mui/icons-material';
 
 import { useAppDispatch, useAppSelector } from 'app/hooks';
@@ -17,10 +24,9 @@ import {
   resetTextSegments,
   createLink,
   deleteLink,
+  toggleCorpusView,
   AlignmentMode,
 } from 'state/alignment.slice';
-
-// import cssVar from 'styles/cssVar';
 
 interface ControlPanelProps {
   alignmentUpdated: Function;
@@ -30,13 +36,11 @@ export const ControlPanel = (props: ControlPanelProps): ReactElement => {
   useDebug('ControlPanel');
   const dispatch = useAppDispatch();
 
+  const [formats, setFormats] = useState([] as string[]);
+
   const anySegmentsSelected = useAppSelector((state) =>
     Boolean(state.alignment.present.inProgressLink)
   );
-
-  // const theme = useAppSelector((state) => {
-  //   return state.app.theme;
-  // });
 
   const mode = useAppSelector((state) => {
     return state.alignment.present.mode;
@@ -47,6 +51,16 @@ export const ControlPanel = (props: ControlPanelProps): ReactElement => {
       Number(state.alignment.present.inProgressLink?.sources.length) > 0 &&
       Number(state.alignment.present.inProgressLink?.targets.length) > 0
     );
+  });
+
+  const corpora = useAppSelector((state) => {
+    return state.alignment.present.corpora;
+  });
+
+  const someSyntax = useAppSelector((state) => {
+    return state.alignment.present.corpora.some((corpus) => {
+      return Boolean(corpus.syntax);
+    });
   });
 
   const alignmentState = useAppSelector((state) => {
@@ -85,6 +99,36 @@ export const ControlPanel = (props: ControlPanelProps): ReactElement => {
             gap: '10px',
           }}
         >
+          <ToggleButtonGroup
+            size="small"
+            value={formats}
+            // onChange={(
+            //   event: React.MouseEvent<HTMLElement>,
+            //   newFormats: string[]
+            // ) => {}}
+          >
+            <ToggleButton
+              value="tree"
+              disabled={!someSyntax}
+              onClick={() => {
+                if (someSyntax) {
+                  if (formats.includes('tree')) {
+                    setFormats([]);
+                  } else {
+                    setFormats(['tree']);
+                  }
+                  for (const corpus of corpora) {
+                    if (corpus.syntax) {
+                      dispatch(toggleCorpusView(corpus.id));
+                    }
+                  }
+                }
+              }}
+            >
+              <Park />
+            </ToggleButton>
+          </ToggleButtonGroup>
+
           <ButtonGroup>
             <Tooltip title="Create Link" arrow describeChild>
               <Button
