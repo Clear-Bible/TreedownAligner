@@ -1,5 +1,6 @@
 import { ReactElement } from 'react';
-import { CardHeader, Typography } from '@mui/material';
+import { Tooltip, Typography } from '@mui/material';
+import { InfoOutlined } from '@mui/icons-material';
 
 import useDebug from 'hooks/useDebug';
 import { useAppDispatch, useAppSelector } from 'app/hooks';
@@ -55,7 +56,6 @@ export const CorpusComponent = (props: CorpusProps): ReactElement => {
 
   return (
     <div className="corpus-scroll-container">
-      <DragHandle />
       <div
         style={{
           textAlign: 'right',
@@ -67,7 +67,23 @@ export const CorpusComponent = (props: CorpusProps): ReactElement => {
           // backgroundColor: cssVar('--background', theme),
         }}
       >
-        <Typography variant="h6">{corpus.name}</Typography>
+        <Typography variant="h6" display="inline-block">
+          {corpus.name}
+        </Typography>
+
+        <Tooltip
+          title={
+            <>
+              <Typography variant="h6">{corpus.fullName}</Typography>
+              <Typography>{corpus.name}</Typography>
+              <Typography>Language: {corpus.language}</Typography>
+            </>
+          }
+        >
+          <div style={{ padding: '2px', display: 'inline-block' }}>
+            <InfoOutlined style={{ marginBottom: '-5px', padding: '2px' }} />
+          </div>
+        </Tooltip>
       </div>
 
       {determineCorpusView(corpus)}
