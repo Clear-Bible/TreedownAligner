@@ -117,7 +117,7 @@ export const ControlPanel = (props: ControlPanelProps): ReactElement => {
       >
         <ToggleButton
           value="tree"
-          disabled={!someSyntax}
+          disabled={!someSyntax || currentCorpusViewports.length === 0}
           onClick={() => {
             if (someSyntax) {
               if (formats.includes('tree')) {
@@ -175,6 +175,7 @@ export const ControlPanel = (props: ControlPanelProps): ReactElement => {
       <ButtonGroup>
         <Tooltip title="Undo" arrow describeChild>
           <Button
+            disabled={currentCorpusViewports.length === 0}
             variant="contained"
             onClick={() => {
               dispatch(ActionCreators.undo());
@@ -186,6 +187,7 @@ export const ControlPanel = (props: ControlPanelProps): ReactElement => {
 
         <Tooltip title="Redo" arrow describeChild>
           <Button
+            disabled={currentCorpusViewports.length === 0}
             variant="contained"
             onClick={() => {
               dispatch(ActionCreators.redo());
@@ -198,6 +200,7 @@ export const ControlPanel = (props: ControlPanelProps): ReactElement => {
 
       <Tooltip title="Save" arrow describeChild>
         <Button
+          disabled={currentCorpusViewports.length === 0}
           variant="contained"
           onClick={() => {
             if (props.alignmentUpdated) {
@@ -228,6 +231,7 @@ export const ControlPanel = (props: ControlPanelProps): ReactElement => {
             disableHoverListener={currentCorpusViewports.length === 0}
           >
             <Button
+              variant="contained"
               onClick={() => {
                 dispatch(
                   addCorpusViewport({
@@ -244,6 +248,7 @@ export const ControlPanel = (props: ControlPanelProps): ReactElement => {
         </Tooltip>
         <Tooltip title="Remove a corpus viewport" arrow describeChild>
           <Button
+            variant="contained"
             disabled={currentCorpusViewports.length === 0}
             onClick={() => {
               dispatch(removeCorpusViewport());
