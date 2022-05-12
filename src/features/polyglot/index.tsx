@@ -1,11 +1,19 @@
 import React, { ReactElement } from 'react';
 // import GridLayout from 'react-grid-layout';
-import { Card, Container, Stack } from '@mui/material';
+import {
+  Card,
+  Container,
+  Stack,
+  Button,
+  ButtonGroup,
+  Typography,
+} from '@mui/material';
+import { Add, Remove } from '@mui/icons-material';
 
 import { useAppSelector } from 'app/hooks';
 import useDebug from 'hooks/useDebug';
 import CorpusComponent from 'features/corpus';
-import { Corpus } from 'structs';
+import { Corpus, CorpusViewport } from 'structs';
 
 // import cssVar from 'styles/cssVar';
 
@@ -14,6 +22,10 @@ import './styles.css';
 export const Polyglot = (): ReactElement => {
   useDebug('PolyglotComponent');
   const corpora = useAppSelector((state) => state.alignment.present.corpora);
+
+  const corpusViewports = useAppSelector((state) => {
+    return state.app.corpusViewports;
+  });
 
   // const layoutRange = Array.from({ length: corpora.length }, (x, i) => i);
 
@@ -36,6 +48,10 @@ export const Polyglot = (): ReactElement => {
   // const theme = useAppSelector((state) => {
   //   return state.app.theme;
   // });
+  //
+  // if (corpusViewports.length === 0) {
+  //   return <Typography>To begin, add a corpus viewport.</Typography>;
+  // }
 
   return (
     <Stack
@@ -45,28 +61,42 @@ export const Polyglot = (): ReactElement => {
       justifyContent="stretch"
       alignItems="stretch"
     >
-      {corpora.map((corpus: Corpus, index: number): ReactElement => {
-        const key = `text_${index}`;
-        return (
-          <Card
-            elevation={2}
-            className="corpus-container corpus-scroll-container"
-            key={key}
-            style={{
-              flexGrow: '1',
-              flexBasis: '0',
-              minWidth: '16rem',
-              overflowY: 'scroll',
-              overflowX: 'scroll',
-              msOverflowStyle: 'none',
-            }}
-          >
-            <Container>
-              <CorpusComponent key={corpus.id} corpus={corpus} />
-            </Container>
-          </Card>
-        );
-      })}
+      {corpusViewports.length === 0 && (
+        <Typography variant="h6" style={{ margin: 'auto' }}>
+          To begin, add a corpus viewport.
+        </Typography>
+      )}
+
+      {corpora.length &&
+        corpusViewports.map(
+          (corpusViewport: CorpusViewport, index: number): ReactElement => {
+            const corpusId = corpusViewport.corpusId;
+            const key = `text_${index}`;
+            return (
+              <Card
+                elevation={2}
+                className="corpus-container corpus-scroll-container"
+                key={key}
+                style={{
+                  flexGrow: '1',
+                  flexBasis: '0',
+                  minWidth: '16rem',
+                  overflowY: 'scroll',
+                  overflowX: 'scroll',
+                  msOverflowStyle: 'none',
+                }}
+              >
+                <Container>
+                  <CorpusComponent
+                    key={corpusId}
+                    corpusId={corpusId}
+                    viewportIndex={index}
+                  />
+                </Container>
+              </Card>
+            );
+          }
+        )}
     </Stack>
   );
 };

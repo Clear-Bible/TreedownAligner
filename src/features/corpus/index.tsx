@@ -1,20 +1,30 @@
-import { ReactElement } from 'react';
-import { Tooltip, Typography } from '@mui/material';
-import { InfoOutlined } from '@mui/icons-material';
+import { ReactElement, useState } from 'react';
+import {
+  Tooltip,
+  Typography,
+  IconButton,
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem,
+} from '@mui/material';
+import { InfoOutlined, Settings } from '@mui/icons-material';
 
 import useDebug from 'hooks/useDebug';
 import { useAppDispatch, useAppSelector } from 'app/hooks';
 import TextSegment from 'features/textSegment';
 import DragHandle from 'features/dragHandle';
 import Treedown from 'features/treedown';
+import CorpusSettings from 'features/corpusSettings';
 
 import { toggleCorpusView } from 'state/alignment.slice';
 import { Word, Corpus, CorpusViewType, TreedownType } from 'structs';
 
-import cssVar from 'styles/cssVar';
+// import cssVar from 'styles/cssVar';
 
 interface CorpusProps {
-  corpus: Corpus;
+  corpusId: string | null;
+  viewportIndex: number;
 }
 
 const determineCorpusView = (corpus: Corpus) => {
@@ -45,49 +55,78 @@ const determineCorpusView = (corpus: Corpus) => {
 };
 
 export const CorpusComponent = (props: CorpusProps): ReactElement => {
-  const { corpus } = props;
+  const { corpusId, viewportIndex } = props;
   useDebug('TextComponent');
 
-  // const dispatch = useAppDispatch();
-  //
-  // const theme = useAppSelector((state) => {
-  //   return state.app.theme;
-  // });
+  const [showSettings, setShowSettings] = useState(false);
+
+  const corpora = useAppSelector((state) => {
+    return state.alignment.present.corpora;
+  });
+
+  const corpus = useAppSelector((state) => {
+    return state.alignment.present.corpora.find((corpus) => {
+      return corpus.id === corpusId;
+    });
+  });
+
+  if (!corpusId || !corpus) {
+    return <Typography>Empty State</Typography>;
+  }
 
   return (
-    <div className="corpus-scroll-container">
-      <div
-        style={{
-          textAlign: 'right',
-          padding: '0.5rem',
-          fontWeight: 'regular',
-          // color: cssVar('font-color', theme),
-          position: 'sticky',
-          top: '0',
-          // backgroundColor: cssVar('--background', theme),
-        }}
-      >
-        <Typography variant="h6" display="inline-block">
-          {corpus.name}
-        </Typography>
-
-        <Tooltip
-          title={
-            <>
-              <Typography variant="h6">{corpus.fullName}</Typography>
-              <Typography>{corpus.name}</Typography>
-              <Typography>Language: {corpus.language}</Typography>
-            </>
-          }
+    <>
+      <div className="corpus-scroll-container">
+        <div
+          style={{
+            textAlign: 'right',
+            padding: '0.5rem',
+            fontWeight: 'regular',
+            position: 'sticky',
+            top: '0',
+          }}
         >
-          <div style={{ padding: '2px', display: 'inline-block' }}>
-            <InfoOutlined style={{ marginBottom: '-5px', padding: '2px' }} />
-          </div>
-        </Tooltip>
-      </div>
+          <Typography variant="h6" display="inline-block">
+            {corpus.name}
+          </Typography>
 
-      {determineCorpusView(corpus)}
-    </div>
+          <Tooltip
+            title={
+              <>
+                <Typography variant="h6">{corpus.fullName}</Typography>
+                <Typography>{corpus.name}</Typography>
+                <Typography>Language: {corpus.language}</Typography>
+              </>
+            }
+          >
+            <div style={{ padding: '2px', display: 'inline-block' }}>
+              <InfoOutlined style={{ marginBottom: '-5px', padding: '2px' }} />
+            </div>
+          </Tooltip>
+          <IconButton
+            style={{
+              marginBottom: '5px',
+              marginLeft: '-8px',
+              marginRight: '-24px',
+            }}
+            onClick={() => {
+              setShowSettings(!showSettings);
+            }}
+          >
+            <Settings />
+          </IconButton>
+        </div>
+
+        {showSettings && (
+          <CorpusSettings
+            currentCorpusId={corpusId}
+            viewportIndex={viewportIndex}
+          />
+        )}
+
+        {!showSettings && determineCorpusView(corpus)}
+      </div>
+    </>
   );
 };
 

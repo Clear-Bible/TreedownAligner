@@ -36,7 +36,7 @@ const darkTheme = createTheme({
   },
 });
 
-console.log(darkTheme);
+console.log('dark: ', darkTheme.palette.secondary.main);
 
 const lightTheme = createTheme({
   palette: {
@@ -54,6 +54,8 @@ const lightTheme = createTheme({
     },
   },
 });
+
+console.log('light: ', lightTheme.palette.secondary.main);
 
 interface ThemedProps {
   theme: 'day' | 'night';

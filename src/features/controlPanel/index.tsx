@@ -7,8 +7,10 @@ import {
   Tooltip,
   ToggleButton,
   ToggleButtonGroup,
+  Typography,
   Stack,
 } from '@mui/material';
+
 import {
   AddLink,
   LinkOff,
@@ -17,6 +19,8 @@ import {
   Undo,
   Save,
   Park,
+  Add,
+  Remove,
 } from '@mui/icons-material';
 
 import { useAppDispatch, useAppSelector } from 'app/hooks';
@@ -28,6 +32,8 @@ import {
   toggleCorpusView,
   AlignmentMode,
 } from 'state/alignment.slice';
+
+import { addCorpusViewport, removeCorpusViewport } from 'state/app.slice';
 
 interface ControlPanelProps {
   alignmentUpdated: Function;
@@ -56,6 +62,17 @@ export const ControlPanel = (props: ControlPanelProps): ReactElement => {
 
   const corpora = useAppSelector((state) => {
     return state.alignment.present.corpora;
+  });
+
+  const currentCorpusViewports = useAppSelector((state) => {
+    return state.app.corpusViewports;
+  });
+
+  const corporaWithoutViewport = corpora.filter((corpus) => {
+    const currentViewportIds = currentCorpusViewports.map(
+      (viewport) => viewport.corpusId
+    );
+    return !currentViewportIds.includes(corpus.id);
   });
 
   const someSyntax = useAppSelector((state) => {
@@ -191,6 +208,51 @@ export const ControlPanel = (props: ControlPanelProps): ReactElement => {
           <Save />
         </Button>
       </Tooltip>
+
+      <ButtonGroup>
+        <Tooltip
+          placement="top"
+          arrow
+          open={currentCorpusViewports.length === 0}
+          title={
+            <>
+              <Typography color="info.light">Click here</Typography>
+              <Typography>to add a corpus viewport.</Typography>
+            </>
+          }
+        >
+          <Tooltip
+            title="Add corpus viewport"
+            arrow
+            describeChild
+            disableHoverListener={currentCorpusViewports.length === 0}
+          >
+            <Button
+              onClick={() => {
+                dispatch(
+                  addCorpusViewport({
+                    availableCorpora: corporaWithoutViewport.map(
+                      (corpus) => corpus.id
+                    ),
+                  })
+                );
+              }}
+            >
+              <Add />
+            </Button>
+          </Tooltip>
+        </Tooltip>
+        <Tooltip title="Remove a corpus viewport" arrow describeChild>
+          <Button
+            disabled={currentCorpusViewports.length === 0}
+            onClick={() => {
+              dispatch(removeCorpusViewport());
+            }}
+          >
+            <Remove />
+          </Button>
+        </Tooltip>
+      </ButtonGroup>
     </Stack>
   );
 };
