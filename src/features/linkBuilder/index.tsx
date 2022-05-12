@@ -59,7 +59,11 @@ export const LinkBuilderComponent = (props: LinkBuilderProps): ReactElement => {
           }}
         >
           <Typography
-            style={{ lineHeight: '12rem', color: cssVar('font-color', theme) }}
+            style={{
+              lineHeight: '12rem',
+              color: cssVar('font-color', theme),
+              userSelect: 'none',
+            }}
           >
             Select a target word to begin building a link.
           </Typography>
