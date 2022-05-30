@@ -55,7 +55,7 @@
     "prettier": "^2.6.1",
     "react": "^18.0.0",
     "react-dom": "^18.0.0",
-    "rollup": "^2.70.1",
+    "rollup": "^2.75.3",
     "rollup-plugin-postcss": "^4.0.2"
   },
   "resolutions": {
