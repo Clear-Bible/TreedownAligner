@@ -1,5 +1,4 @@
 import React, { ReactElement, useState } from 'react';
-// import GridLayout from 'react-grid-layout';
 import { ActionCreators } from 'redux-undo';
 import {
   Button,
