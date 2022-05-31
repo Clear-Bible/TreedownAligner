@@ -41,7 +41,7 @@ export const ContextPanel = (): ReactElement => {
 
   const greekCorpus =
     useAppSelector((state) => {
-      const syntaxCorpora = ['sbl', 'nestle1904'];
+      const syntaxCorpora = ['sbl', 'nestle1904', 'oshb'];
       return state.alignment.present.corpora.find((corpus: Corpus) => {
         return syntaxCorpora.includes(corpus.id);
       });
@@ -76,7 +76,7 @@ export const ContextPanel = (): ReactElement => {
           flexBasis: '0',
         }}
       >
-        <Treedown corpus={greekCorpus} treedownType={TreedownType.Source} />;
+        <Treedown corpus={greekCorpus} treedownType={TreedownType.Source} />
       </Card>
     </Stack>
   );

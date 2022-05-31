@@ -42,6 +42,7 @@ const isAdjunct = (syntaxNode: SyntaxNode): boolean => {
 };
 
 const renderMappedTextSegment = (syntaxNode: SyntaxNode, corpus: Corpus) => {
+  console.log('renderMappedTextSegment');
   if (
     syntaxNode.content.alignedWordIds &&
     syntaxNode.content.alignedWordIds.length > 0
@@ -184,7 +185,10 @@ const recurseSyntax = (
             syntaxNode.content.n &&
             syntaxNode.content.osisId &&
             syntaxNode.content.text && (
-              <Typography display="inline" style={{ textIndent: `${graduatedDepth}rem` }}>
+              <Typography
+                display="inline"
+                style={{ textIndent: `${graduatedDepth}rem` }}
+              >
                 {treedownType === TreedownType.Mapped &&
                   renderMappedTextSegment(syntaxNode, corpus)}
 
@@ -227,6 +231,7 @@ const recurseSyntax = (
       if (treedownType === TreedownType.Mapped) {
         return renderMappedTextSegment(syntaxNode, corpus);
       }
+      console.log('non mapped', syntaxNode.content.n);
       return (
         <TextSegment
           word={{

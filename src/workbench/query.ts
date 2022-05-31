@@ -9,11 +9,23 @@ const nviText =
 const backTransText =
   'And not only in this, otherwise too in our sufferings, because we know that the suffering produces perseverance;';
 
+const oshbText =
+  'בְּ רֵאשִׁ֖ית בָּרָ֣א אֱלֹהִ֑ים אֵ֥ת הַ שָּׁמַ֖יִם וְ אֵ֥ת הָ אָֽרֶץ';
+
 const availableCorpora: Corpus[] = [
   {
     id: 'sbl',
     name: 'SBL GNT',
     fullName: 'SBL Greek New Testament',
+    language: 'grc',
+    words: [],
+    syntax: undefined,
+  },
+
+  {
+    id: 'oshb',
+    name: 'OSHB HOT',
+    fullName: 'Open Scriptures Hebrew Bible',
     language: 'grc',
     words: [],
     syntax: undefined,
@@ -50,6 +62,10 @@ export const queryText = (
 ): Corpus => {
   let text = '';
 
+  if (corpusId === 'oshb') {
+    text = oshbText;
+  }
+
   if (corpusId === 'sbl') {
     text = sblText;
   }
@@ -83,6 +99,13 @@ export const queryText = (
       const verseString = String(verse).padStart(3, '0');
       const positionString = String(index + 1).padStart(3, '0');
       id = `${bookString}${chapterString}${verseString}${positionString}0010`;
+    } else if (corpus.id === 'oshb') {
+      const bookString = String(book).padStart(2, '0');
+      const chapterString = String(chapter).padStart(3, '0');
+      const verseString = String(verse).padStart(3, '0');
+      const positionString = String(index + 1).padStart(3, '0');
+      const wordPartString = '1';
+      id = `${bookString}${chapterString}${verseString}${positionString}${wordPartString}`;
     } else {
       id = `${corpusId}_${index}`;
     }
