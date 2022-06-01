@@ -10,7 +10,6 @@ import { hover, relatedAlignments } from 'state/textSegmentHover.slice';
 import { Alignment, Word, Link } from 'structs';
 import findRelatedAlignments from 'helpers/findRelatedAlignments';
 
-
 import './textSegment.style.css';
 
 interface TextSegmentProps {
@@ -245,7 +244,8 @@ export const TextSegment = (props: TextSegmentProps): ReactElement => {
     <React.Fragment>
       <span> </span>
       <Typography
-        display="inline"
+        paragraph={false}
+        component="span"
         variant={computeVariant(isSelected, isLinked)}
         className={`text-segment ${computeDecoration(
           isHovered,
@@ -255,8 +255,6 @@ export const TextSegment = (props: TextSegmentProps): ReactElement => {
           isInvolved,
           isMemberOfMultipleAlignments
         )}`}
-        // variant="selected"
-        // className={`text-segment related focused locked`}
         style={{ padding: '1px' }}
         onMouseEnter={() => {
           dispatch(hover(word));

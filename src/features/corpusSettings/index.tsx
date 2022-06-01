@@ -47,7 +47,7 @@ const CorpusSettingsComponent = (props: CorpusSettingsProps) => {
           }}
         >
           {corpora.map((corpus) => {
-            return <MenuItem value={corpus.id}>{corpus.name}</MenuItem>;
+            return <MenuItem key={corpus.id} value={corpus.id}>{corpus.name}</MenuItem>;
           })}
         </Select>
         <Button

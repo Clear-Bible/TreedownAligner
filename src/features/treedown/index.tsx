@@ -49,6 +49,7 @@ const renderMappedTextSegment = (syntaxNode: SyntaxNode, corpus: Corpus) => {
     return syntaxNode.content.alignedWordIds.map((alignedWordId) => {
       return (
         <TextSegment
+          key={alignedWordId}
           word={findWordById([corpus], alignedWordId) ?? ({} as Word)}
         />
       );
@@ -63,7 +64,7 @@ const recurseSyntax = (
   hasTrailingPunctuation: boolean = false,
   treedownType: TreedownType
 ): any => {
-  return [syntax].map((syntaxNode) => {
+  return [syntax].map((syntaxNode, index) => {
     const graduatedDepth = depth * 0.5;
 
     if (syntaxNode.content.elementType === 'pc') {
@@ -91,6 +92,7 @@ const recurseSyntax = (
     if (isClause(syntaxNode)) {
       return (
         <div
+          key={`cl-${syntaxNode.content.n}-${index}-${graduatedDepth}`}
           className="cl"
           style={{
             marginLeft: `${graduatedDepth}rem`,
@@ -134,6 +136,7 @@ const recurseSyntax = (
 
       return (
         <div
+          key={`consituent-${syntaxNode.content.n}-${index}-${graduatedDepth}`}
           className="constituent"
           style={{
             marginTop: '5px',
@@ -165,7 +168,7 @@ const recurseSyntax = (
               className="constituent-role"
               size="small"
               label={syntaxNode.content.role}
-              style={{fontSize: '0.7rem'}}
+              style={{ fontSize: '0.7rem' }}
             />
           </Tooltip>
 
@@ -187,6 +190,7 @@ const recurseSyntax = (
             syntaxNode.content.osisId &&
             syntaxNode.content.text && (
               <Typography
+                paragraph={false}
                 display="inline"
                 style={{ textIndent: `${graduatedDepth}rem` }}
               >
@@ -262,13 +266,12 @@ export const TreedownComponent = (props: TreedownProps): ReactElement => {
   if (corpus.syntax && Object.keys(corpus.syntax).length > 0) {
     return (
       <div
-        key={`corpus_${corpus.id}_treedown`}
+        key={`corpus_wrapper_${corpus.id}_treedown`}
         style={{
           paddingTop: '0.5rem',
           paddingBottom: '0.5rem',
           paddingLeft: '0.7rem',
           paddingRight: '0.7rem',
-          color: cssVar('font-color', theme),
         }}
       >
         {recurseSyntax(corpus, corpus.syntax, 0, false, treedownType)}

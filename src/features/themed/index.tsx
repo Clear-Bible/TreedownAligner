@@ -1,8 +1,7 @@
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import { CssBaseline } from '@mui/material';
 
-// import { primary } from '@mui/material/colors';
-
+// Not sure yet if we really need to manually load these.
 // import '@fontsource/roboto/300.css';
 // import '@fontsource/roboto/400.css';
 // import '@fontsource/roboto/500.css';
@@ -36,8 +35,6 @@ const darkTheme = createTheme({
   },
 });
 
-console.log('dark: ', darkTheme.palette.secondary.main);
-
 const lightTheme = createTheme({
   palette: {
     mode: 'light',
@@ -55,8 +52,6 @@ const lightTheme = createTheme({
   },
 });
 
-console.log('light: ', lightTheme.palette.secondary.main);
-
 interface ThemedProps {
   theme: 'day' | 'night';
   children: any;
@@ -65,7 +60,6 @@ interface ThemedProps {
 const Themed = (props: ThemedProps) => {
   const { theme, children } = props;
   const chosenTheme = theme === 'night' ? darkTheme : lightTheme;
-  console.log(theme, chosenTheme);
   return (
     <ThemeProvider theme={chosenTheme}>
       <CssBaseline />

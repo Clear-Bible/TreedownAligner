@@ -1,4 +1,4 @@
-import React, { ReactElement, useState } from 'react';
+import { ReactElement, useState } from 'react';
 import { ActionCreators } from 'redux-undo';
 import {
   Button,
@@ -83,21 +83,6 @@ export const ControlPanel = (props: ControlPanelProps): ReactElement => {
   const alignmentState = useAppSelector((state) => {
     return state.alignment.present.alignments;
   });
-
-  // const layout = [
-  //   {
-  //     i: 'a',
-  //     x: 0,
-  //     y: 0,
-  //     w: 24,
-  //     h: 4,
-  //     minW: 24,
-  //     maxW: 24,
-  //     isResizeable: false,
-  //     static: true,
-  //   },
-  // ];
-
   return (
     <Stack
       direction="row"
@@ -109,6 +94,7 @@ export const ControlPanel = (props: ControlPanelProps): ReactElement => {
       <ToggleButtonGroup
         size="small"
         value={formats}
+        // For later.
         // onChange={(
         //   event: React.MouseEvent<HTMLElement>,
         //   newFormats: string[]
