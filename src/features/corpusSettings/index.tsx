@@ -1,4 +1,4 @@
-import { ReactElement, useState } from 'react';
+import { useState } from 'react';
 import {
   Typography,
   FormControl,
@@ -7,7 +7,6 @@ import {
   MenuItem,
   Button,
 } from '@mui/material';
-// import { InfoOutlined, Settings } from '@mui/icons-material';
 
 import useDebug from 'hooks/useDebug';
 import { useAppDispatch, useAppSelector } from 'app/hooks';
@@ -19,6 +18,8 @@ interface CorpusSettingsProps {
 }
 
 const CorpusSettingsComponent = (props: CorpusSettingsProps) => {
+  useDebug('CorpusSettings');
+
   const { currentCorpusId, viewportIndex } = props;
 
   const [selectedCorpusId, setSelectedCorpusId] = useState(currentCorpusId);
