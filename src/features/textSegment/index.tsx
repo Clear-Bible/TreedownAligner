@@ -225,18 +225,6 @@ export const TextSegment = (props: TextSegmentProps): ReactElement => {
     })
   );
 
-  // const computedStyle = computeStyle(
-  //   isHovered,
-  //   isSelected,
-  //   isRelated,
-  //   isLinked,
-  //   isCurrentLinkMember,
-  //   isInvolved,
-  //   isMemberOfMultipleAlignments,
-  //   mode,
-  //   theme
-  // );
-
   if (!word) {
     return <span>{'ERROR'}</span>;
   }
