@@ -1,11 +1,10 @@
 import { ReactElement } from 'react';
 import useDebug from 'hooks/useDebug';
 import { useAppSelector } from 'app/hooks';
+import { Divider, Typography } from '@mui/material';
 
 import { Corpus, Word } from 'structs';
 import findWordById from 'helpers/findWord';
-
-import DragHandle from 'features/dragHandle';
 
 import cssVar from 'styles/cssVar';
 
@@ -57,13 +56,16 @@ export const LinkBuilderComponent = (props: LinkBuilderProps): ReactElement => {
             paddingBottom: '0.5rem',
           }}
         >
-          <div
-            style={{ lineHeight: '12rem', color: cssVar('font-color', theme) }}
+          <Typography
+            style={{
+              lineHeight: '12rem',
+              color: cssVar('font-color', theme),
+              userSelect: 'none',
+            }}
           >
             Select a target word to begin building a link.
-          </div>
+          </Typography>
         </div>
-        <DragHandle />
       </>
     );
   }
@@ -102,9 +104,11 @@ export const LinkBuilderComponent = (props: LinkBuilderProps): ReactElement => {
               color: cssVar('font-color', theme),
             }}
           >
-            <div style={{ textAlign: 'right' }}>{corpus?.name}</div>
-            <div>
-              <hr />
+            <Typography variant="h6" style={{ textAlign: 'right' }}>
+              {corpus?.name}
+            </Typography>
+            <div style={{ marginBottom: '8px' }}>
+              <Divider />
             </div>
             <div>
               <span>&nbsp;</span>
@@ -136,13 +140,12 @@ export const LinkBuilderComponent = (props: LinkBuilderProps): ReactElement => {
                 }
               )}
             </div>
-            <div>
-              <hr />
+            <div style={{ marginTop: '8px' }}>
+              <Divider />
             </div>
           </div>
         );
       })}
-      <DragHandle />
     </div>
   );
 };

@@ -1,6 +1,26 @@
-import React, { ReactElement } from 'react';
-import GridLayout from 'react-grid-layout';
+import { ReactElement, useState } from 'react';
 import { ActionCreators } from 'redux-undo';
+import {
+  Button,
+  ButtonGroup,
+  Tooltip,
+  ToggleButton,
+  ToggleButtonGroup,
+  Typography,
+  Stack,
+} from '@mui/material';
+
+import {
+  AddLink,
+  LinkOff,
+  RestartAlt,
+  Redo,
+  Undo,
+  Save,
+  Park,
+  Add,
+  Remove,
+} from '@mui/icons-material';
 
 import { useAppDispatch, useAppSelector } from 'app/hooks';
 import useDebug from 'hooks/useDebug';
@@ -8,10 +28,11 @@ import {
   resetTextSegments,
   createLink,
   deleteLink,
+  toggleCorpusView,
   AlignmentMode,
 } from 'state/alignment.slice';
 
-import cssVar from 'styles/cssVar';
+import { addCorpusViewport, removeCorpusViewport } from 'state/app.slice';
 
 interface ControlPanelProps {
   alignmentUpdated: Function;
@@ -21,13 +42,11 @@ export const ControlPanel = (props: ControlPanelProps): ReactElement => {
   useDebug('ControlPanel');
   const dispatch = useAppDispatch();
 
+  const [formats, setFormats] = useState([] as string[]);
+
   const anySegmentsSelected = useAppSelector((state) =>
     Boolean(state.alignment.present.inProgressLink)
   );
-
-  const theme = useAppSelector((state) => {
-    return state.app.theme;
-  });
 
   const mode = useAppSelector((state) => {
     return state.alignment.present.mode;
@@ -40,96 +59,191 @@ export const ControlPanel = (props: ControlPanelProps): ReactElement => {
     );
   });
 
+  const corpora = useAppSelector((state) => {
+    return state.alignment.present.corpora;
+  });
+
+  const currentCorpusViewports = useAppSelector((state) => {
+    return state.app.corpusViewports;
+  });
+
+  const corporaWithoutViewport = corpora.filter((corpus) => {
+    const currentViewportIds = currentCorpusViewports.map(
+      (viewport) => viewport.corpusId
+    );
+    return !currentViewportIds.includes(corpus.id);
+  });
+
+  const someSyntax = useAppSelector((state) => {
+    return state.alignment.present.corpora.some((corpus) => {
+      return Boolean(corpus.syntax);
+    });
+  });
+
   const alignmentState = useAppSelector((state) => {
     return state.alignment.present.alignments;
   });
-
-  const layout = [
-    {
-      i: 'a',
-      x: 0,
-      y: 0,
-      w: 24,
-      h: 4,
-      minW: 24,
-      maxW: 24,
-      isResizeable: false,
-      static: true,
-    },
-  ];
-
   return (
-    <React.Fragment>
-      <GridLayout
-        layout={layout}
-        cols={24}
-        rowHeight={4}
-        width={1200}
-        maxRows={1}
+    <Stack
+      direction="row"
+      spacing={2}
+      justifyContent="center"
+      alignItems="baseline"
+      style={{ marginTop: '16px', marginBottom: '16px' }}
+    >
+      <ToggleButtonGroup
+        size="small"
+        value={formats}
+        // For later.
+        // onChange={(
+        //   event: React.MouseEvent<HTMLElement>,
+        //   newFormats: string[]
+        // ) => {}}
       >
-        <div
-          key="a"
-          style={{
-            border: '1px solid',
-            borderColor: cssVar('border-color', theme),
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-            gap: '10px',
+        <ToggleButton
+          value="tree"
+          disabled={!someSyntax || currentCorpusViewports.length === 0}
+          onClick={() => {
+            if (someSyntax) {
+              if (formats.includes('tree')) {
+                setFormats([]);
+              } else {
+                setFormats(['tree']);
+              }
+              for (const corpus of corpora) {
+                if (corpus.syntax) {
+                  dispatch(toggleCorpusView(corpus.id));
+                }
+              }
+            }
           }}
         >
-          <button
+          <Park />
+        </ToggleButton>
+      </ToggleButtonGroup>
+
+      <ButtonGroup>
+        <Tooltip title="Create Link" arrow describeChild>
+          <Button
+            variant="contained"
             disabled={mode !== AlignmentMode.Edit || !linkHasBothSides}
             onClick={() => {
               dispatch(createLink());
             }}
           >
-            Link
-          </button>
-          <button
+            <AddLink />
+          </Button>
+        </Tooltip>
+        <Tooltip title="Delete Link" arrow describeChild>
+          <Button
+            variant="contained"
             disabled={!(mode === AlignmentMode.Select)}
             onClick={() => {
               dispatch(deleteLink());
             }}
           >
-            Unlink
-          </button>
-          <button
+            <LinkOff />
+          </Button>
+        </Tooltip>
+        <Tooltip title="Reset" arrow describeChild>
+          <Button
+            variant="contained"
             disabled={!anySegmentsSelected}
             onClick={() => {
               dispatch(resetTextSegments());
             }}
           >
-            Reset
-          </button>
-          <button
+            <RestartAlt />
+          </Button>
+        </Tooltip>
+      </ButtonGroup>
+      <ButtonGroup>
+        <Tooltip title="Undo" arrow describeChild>
+          <Button
+            disabled={currentCorpusViewports.length === 0}
+            variant="contained"
             onClick={() => {
               dispatch(ActionCreators.undo());
             }}
           >
-            Undo
-          </button>
+            <Undo />
+          </Button>
+        </Tooltip>
 
-          <button
+        <Tooltip title="Redo" arrow describeChild>
+          <Button
+            disabled={currentCorpusViewports.length === 0}
+            variant="contained"
             onClick={() => {
               dispatch(ActionCreators.redo());
             }}
           >
-            Redo
-          </button>
+            <Redo />
+          </Button>
+        </Tooltip>
+      </ButtonGroup>
 
-          <button
+      <Tooltip title="Save" arrow describeChild>
+        <Button
+          disabled={currentCorpusViewports.length === 0}
+          variant="contained"
+          onClick={() => {
+            if (props.alignmentUpdated) {
+              props.alignmentUpdated(alignmentState);
+            }
+          }}
+        >
+          <Save />
+        </Button>
+      </Tooltip>
+
+      <ButtonGroup>
+        <Tooltip
+          placement="top"
+          arrow
+          open={currentCorpusViewports.length === 0}
+          title={
+            <>
+              <Typography color="info.light">Click here</Typography>
+              <Typography>to add a corpus viewport.</Typography>
+            </>
+          }
+        >
+          <Tooltip
+            title="Add corpus viewport"
+            arrow
+            describeChild
+            disableHoverListener={currentCorpusViewports.length === 0}
+          >
+            <Button
+              variant="contained"
+              onClick={() => {
+                dispatch(
+                  addCorpusViewport({
+                    availableCorpora: corporaWithoutViewport.map(
+                      (corpus) => corpus.id
+                    ),
+                  })
+                );
+              }}
+            >
+              <Add />
+            </Button>
+          </Tooltip>
+        </Tooltip>
+        <Tooltip title="Remove a corpus viewport" arrow describeChild>
+          <Button
+            variant="contained"
+            disabled={currentCorpusViewports.length === 0}
             onClick={() => {
-              if (props.alignmentUpdated) {
-                props.alignmentUpdated(alignmentState);
-              }
+              dispatch(removeCorpusViewport());
             }}
           >
-            Save
-          </button>
-        </div>
-      </GridLayout>
-    </React.Fragment>
+            <Remove />
+          </Button>
+        </Tooltip>
+      </ButtonGroup>
+    </Stack>
   );
 };
 

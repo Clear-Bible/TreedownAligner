@@ -1,0 +1,16 @@
+.text-segment {
+  cursor: pointer;
+}
+
+.text-segment.focused {
+  text-decoration: underline;
+}
+
+.text-segment.locked {
+  cursor: not-allowed;
+}
+
+.text-segment.related {
+  -webkit-text-stroke: 1px black;
+  background-color: yellow;
+}

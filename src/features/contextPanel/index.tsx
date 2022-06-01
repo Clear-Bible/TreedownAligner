@@ -1,43 +1,15 @@
-import React, { ReactElement } from 'react';
-import GridLayout from 'react-grid-layout';
+import { ReactElement } from 'react';
+import { Card, Stack } from '@mui/material';
 
 import { useAppSelector } from 'app/hooks';
 import useDebug from 'hooks/useDebug';
-//import Context from 'features/context';
 import Treedown from 'features/treedown';
 import LinkBuilderComponent from 'features/linkBuilder';
 
 import { Corpus, TreedownType } from 'structs';
-import cssVar from 'styles/cssVar';
 
 export const ContextPanel = (): ReactElement => {
   useDebug('ContextPanel');
-  const layout = [
-    {
-      i: 'a',
-      x: 0,
-      y: 0,
-      w: 12,
-      h: 12,
-      minW: 12,
-      maxW: 12,
-      isResizeable: false,
-    },
-    {
-      i: 'b',
-      x: 12,
-      y: 0,
-      w: 12,
-      h: 12,
-      minW: 12,
-      maxW: 12,
-      isResizeable: false,
-    },
-  ];
-
-  const theme = useAppSelector((state) => {
-    return state.app.theme;
-  });
 
   const greekCorpus =
     useAppSelector((state) => {
@@ -48,39 +20,37 @@ export const ContextPanel = (): ReactElement => {
     }) ?? ({} as Corpus);
 
   return (
-    <div style={{ position: 'relative' }}>
-      <GridLayout
-        draggableHandle=".drag-handle"
-        layout={layout}
-        cols={24}
-        rowHeight={12}
-        width={1200}
-        maxRows={1}
-        compactType="horizontal"
+    <Stack
+      direction="row"
+      spacing={2}
+      style={{ height: '16rem' }}
+      justifyContent="stretch"
+      alignItems="stretch"
+    >
+      <Card
+        elevation={6}
+        key="a"
+        style={{
+          flexGrow: '1',
+          flexBasis: '0',
+        }}
       >
-        <div
-          key="a"
-          style={{
-            border: '1px solid',
+        <LinkBuilderComponent />
+      </Card>
 
-            borderColor: cssVar('border-color', theme),
-          }}
-        >
-          <LinkBuilderComponent />
-        </div>
+      <Card
+        elevation={6}
+        key="b"
+        style={{
+          overflow: 'scroll',
 
-        <div
-          key="b"
-          style={{
-            border: '1px solid',
-            borderColor: cssVar('border-color', theme),
-            overflow: 'scroll',
-          }}
-        >
-          <Treedown corpus={greekCorpus} treedownType={TreedownType.Source} />;
-        </div>
-      </GridLayout>
-    </div>
+          flexGrow: '1',
+          flexBasis: '0',
+        }}
+      >
+        <Treedown corpus={greekCorpus} treedownType={TreedownType.Source} />;
+      </Card>
+    </Stack>
   );
 };
 

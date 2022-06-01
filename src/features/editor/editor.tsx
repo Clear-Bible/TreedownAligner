@@ -1,4 +1,5 @@
 import { ReactElement, useEffect } from 'react';
+import { Container } from '@mui/material';
 
 import useDebug from 'hooks/useDebug';
 import { useAppDispatch } from 'app/hooks';
@@ -12,7 +13,6 @@ import ContextPanel from 'features/contextPanel';
 import { Alignment, Corpus } from 'structs';
 import copySyntaxData from 'helpers/copySyntaxData';
 
-import cssVar from 'styles/cssVar';
 import '../../styles/theme.css';
 
 interface EditorProps {
@@ -43,17 +43,11 @@ export const Editor = (props: EditorProps): ReactElement => {
   }, [dispatch, corpora, alignments]);
 
   return (
-    <div
-      className="editor-container"
-      style={{
-        backgroundColor: cssVar('background', theme),
-        width: '1200px',
-      }}
-    >
+    <Container maxWidth={false}>
       <Polyglot />
       <ControlPanel alignmentUpdated={alignmentUpdated} />
       <ContextPanel />
-    </div>
+    </Container>
   );
 };
 

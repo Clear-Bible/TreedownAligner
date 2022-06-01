@@ -26,6 +26,10 @@ export interface Word {
   position: number;
 }
 
+export interface CorpusViewport {
+  corpusId: string | null;
+}
+
 // A body of text.
 export interface Corpus {
   id: string;

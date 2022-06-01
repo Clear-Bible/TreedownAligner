@@ -349,7 +349,7 @@ describe('alignmentSlice reducer', () => {
       expect(resultState.mode).toEqual(AlignmentMode.Edit);
     });
 
-    it.only('enters partial edit mode (from clean, ambiguous)', () => {
+    it('enters partial edit mode (from clean, ambiguous)', () => {
       const previousState = {
         ...initialState,
         alignments: [

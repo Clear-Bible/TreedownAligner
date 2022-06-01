@@ -1,4 +1,5 @@
 import { ReactElement } from 'react';
+import { Typography, Chip, Tooltip } from '@mui/material';
 
 import useDebug from 'hooks/useDebug';
 import { useAppSelector } from 'app/hooks';
@@ -48,6 +49,7 @@ const renderMappedTextSegment = (syntaxNode: SyntaxNode, corpus: Corpus) => {
     return syntaxNode.content.alignedWordIds.map((alignedWordId) => {
       return (
         <TextSegment
+          key={alignedWordId}
           word={findWordById([corpus], alignedWordId) ?? ({} as Word)}
         />
       );
@@ -62,7 +64,7 @@ const recurseSyntax = (
   hasTrailingPunctuation: boolean = false,
   treedownType: TreedownType
 ): any => {
-  return [syntax].map((syntaxNode) => {
+  return [syntax].map((syntaxNode, index) => {
     const graduatedDepth = depth * 0.5;
 
     if (syntaxNode.content.elementType === 'pc') {
@@ -90,6 +92,7 @@ const recurseSyntax = (
     if (isClause(syntaxNode)) {
       return (
         <div
+          key={`cl-${syntaxNode.content.n}-${index}-${graduatedDepth}`}
           className="cl"
           style={{
             marginLeft: `${graduatedDepth}rem`,
@@ -133,6 +136,7 @@ const recurseSyntax = (
 
       return (
         <div
+          key={`consituent-${syntaxNode.content.n}-${index}-${graduatedDepth}`}
           className="constituent"
           style={{
             marginTop: '5px',
@@ -154,18 +158,20 @@ const recurseSyntax = (
               +
             </span>
           )}
-          <span
-            style={{
-              fontSize: '0.7rem',
-              margin: '0.2rem',
-              backgroundColor: cssVar('syntax-label-background', theme),
-              borderRadius: '0.1rem',
-              padding: '0.2rem',
-              color: cssVar('font-color', theme),
-            }}
+
+          <Tooltip
+            title="An explanatory comment of this constituent."
+            arrow
+            describeChild
           >
-            {syntaxNode.content.role}
-          </span>
+            <Chip
+              className="constituent-role"
+              size="small"
+              label={syntaxNode.content.role}
+              style={{ fontSize: '0.7rem' }}
+            />
+          </Tooltip>
+
           {syntaxNode.children &&
             syntaxNode.children.map(
               (childSyntaxNode: SyntaxNode, index: number) => {
@@ -183,7 +189,11 @@ const recurseSyntax = (
             syntaxNode.content.n &&
             syntaxNode.content.osisId &&
             syntaxNode.content.text && (
-              <span style={{ textIndent: `${graduatedDepth}rem` }}>
+              <Typography
+                paragraph={false}
+                display="inline"
+                style={{ textIndent: `${graduatedDepth}rem` }}
+              >
                 {treedownType === TreedownType.Mapped &&
                   renderMappedTextSegment(syntaxNode, corpus)}
 
@@ -197,7 +207,7 @@ const recurseSyntax = (
                     }}
                   />
                 )}
-              </span>
+              </Typography>
             )}
         </div>
       );
@@ -256,13 +266,12 @@ export const TreedownComponent = (props: TreedownProps): ReactElement => {
   if (corpus.syntax && Object.keys(corpus.syntax).length > 0) {
     return (
       <div
-        key={`corpus_${corpus.id}_treedown`}
+        key={`corpus_wrapper_${corpus.id}_treedown`}
         style={{
           paddingTop: '0.5rem',
           paddingBottom: '0.5rem',
           paddingLeft: '0.7rem',
           paddingRight: '0.7rem',
-          color: cssVar('font-color', theme),
         }}
       >
         {recurseSyntax(corpus, corpus.syntax, 0, false, treedownType)}

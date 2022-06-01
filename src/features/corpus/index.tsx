@@ -1,24 +1,24 @@
-import { ReactElement } from 'react';
+import { ReactElement, useState } from 'react';
+import { Tooltip, Typography, IconButton } from '@mui/material';
+import { InfoOutlined, Settings } from '@mui/icons-material';
 
 import useDebug from 'hooks/useDebug';
-import { useAppDispatch, useAppSelector } from 'app/hooks';
+import { useAppSelector } from 'app/hooks';
 import TextSegment from 'features/textSegment';
-import DragHandle from 'features/dragHandle';
 import Treedown from 'features/treedown';
+import CorpusSettings from 'features/corpusSettings';
 
-import { toggleCorpusView } from 'state/alignment.slice';
 import { Word, Corpus, CorpusViewType, TreedownType } from 'structs';
 
-import cssVar from 'styles/cssVar';
-
 interface CorpusProps {
-  corpus: Corpus;
+  corpusId: string | null;
+  viewportIndex: number;
 }
 
 const determineCorpusView = (corpus: Corpus) => {
   if (corpus.viewType === CorpusViewType.Paragraph) {
     return (
-      <p
+      <Typography
         style={{
           paddingTop: '0.5rem',
           paddingBottom: '0.5rem',
@@ -29,7 +29,7 @@ const determineCorpusView = (corpus: Corpus) => {
         {corpus.words.map((word: Word): ReactElement => {
           return <TextSegment key={word.id} word={word} />;
         })}
-      </p>
+      </Typography>
     );
   }
 
@@ -43,49 +43,74 @@ const determineCorpusView = (corpus: Corpus) => {
 };
 
 export const CorpusComponent = (props: CorpusProps): ReactElement => {
-  const { corpus } = props;
+  const { corpusId, viewportIndex } = props;
   useDebug('TextComponent');
 
-  const dispatch = useAppDispatch();
+  const [showSettings, setShowSettings] = useState(false);
 
-  const theme = useAppSelector((state) => {
-    return state.app.theme;
+  const corpus = useAppSelector((state) => {
+    return state.alignment.present.corpora.find((corpus) => {
+      return corpus.id === corpusId;
+    });
   });
 
+  if (!corpusId || !corpus) {
+    return <Typography>Empty State</Typography>;
+  }
+
   return (
-    <div className="corpus-scroll-container">
-      <DragHandle />
-      <div
-        style={{
-          textAlign: 'right',
-          padding: '0.5rem',
-          fontWeight: 'regular',
-          color: cssVar('font-color', theme),
-          position: 'sticky',
-          top: '0',
-          backgroundColor: cssVar('--background', theme),
-        }}
-      >
-        {corpus.name}
+    <>
+      <div className="corpus-scroll-container">
+        <div
+          style={{
+            textAlign: 'right',
+            padding: '0.5rem',
+            fontWeight: 'regular',
+            position: 'sticky',
+            top: '0',
+          }}
+        >
+          <Typography variant="h6" display="inline-block">
+            {corpus.name}
+          </Typography>
+
+          <Tooltip
+            title={
+              <>
+                <Typography variant="h6">{corpus.fullName}</Typography>
+                <Typography>{corpus.name}</Typography>
+                <Typography>Language: {corpus.language}</Typography>
+              </>
+            }
+          >
+            <div style={{ padding: '2px', display: 'inline-block' }}>
+              <InfoOutlined style={{ marginBottom: '-5px', padding: '2px' }} />
+            </div>
+          </Tooltip>
+          <IconButton
+            style={{
+              marginBottom: '5px',
+              marginLeft: '-8px',
+              marginRight: '-24px',
+            }}
+            onClick={() => {
+              setShowSettings(!showSettings);
+            }}
+          >
+            <Settings />
+          </IconButton>
+        </div>
+
+        {showSettings && (
+          <CorpusSettings
+            currentCorpusId={corpusId}
+            viewportIndex={viewportIndex}
+          />
+        )}
+
+        {!showSettings && determineCorpusView(corpus)}
       </div>
-
-      {determineCorpusView(corpus)}
-
-      <button
-        disabled={!corpus.syntax}
-        style={{
-          position: 'sticky',
-          bottom: '0',
-          left: '0',
-          cursor: 'pointer',
-          height: '1rem',
-          width: '1rem',
-        }}
-        onClick={() => {
-          dispatch(toggleCorpusView(corpus.id));
-        }}
-      ></button>
-    </div>
+    </>
   );
 };
 
