@@ -1,5 +1,5 @@
 import { ReactElement } from 'react';
-import { Typography, Chip } from '@mui/material';
+import { Typography, Chip, Tooltip } from '@mui/material';
 
 import useDebug from 'hooks/useDebug';
 import { useAppSelector } from 'app/hooks';
@@ -156,11 +156,17 @@ const recurseSyntax = (
             </span>
           )}
 
-          <Chip
-            className="constituent-role"
-            size="small"
-            label={syntaxNode.content.role}
-          />
+          <Tooltip
+            title="An explanatory comment of this constituent."
+            arrow
+            describeChild
+          >
+            <Chip
+              className="constituent-role"
+              size="small"
+              label={syntaxNode.content.role}
+            />
+          </Tooltip>
 
           {syntaxNode.children &&
             syntaxNode.children.map(
