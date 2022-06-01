@@ -1,26 +1,14 @@
 import { ReactElement, useState } from 'react';
-import {
-  Tooltip,
-  Typography,
-  IconButton,
-  FormControl,
-  InputLabel,
-  Select,
-  MenuItem,
-} from '@mui/material';
+import { Tooltip, Typography, IconButton } from '@mui/material';
 import { InfoOutlined, Settings } from '@mui/icons-material';
 
 import useDebug from 'hooks/useDebug';
-import { useAppDispatch, useAppSelector } from 'app/hooks';
+import { useAppSelector } from 'app/hooks';
 import TextSegment from 'features/textSegment';
-import DragHandle from 'features/dragHandle';
 import Treedown from 'features/treedown';
 import CorpusSettings from 'features/corpusSettings';
 
-import { toggleCorpusView } from 'state/alignment.slice';
 import { Word, Corpus, CorpusViewType, TreedownType } from 'structs';
-
-// import cssVar from 'styles/cssVar';
 
 interface CorpusProps {
   corpusId: string | null;
@@ -59,10 +47,6 @@ export const CorpusComponent = (props: CorpusProps): ReactElement => {
   useDebug('TextComponent');
 
   const [showSettings, setShowSettings] = useState(false);
-
-  const corpora = useAppSelector((state) => {
-    return state.alignment.present.corpora;
-  });
 
   const corpus = useAppSelector((state) => {
     return state.alignment.present.corpora.find((corpus) => {
