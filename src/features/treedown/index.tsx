@@ -1,5 +1,5 @@
 import { ReactElement } from 'react';
-import { Typography } from '@mui/material';
+import { Typography, Chip } from '@mui/material';
 
 import useDebug from 'hooks/useDebug';
 import { useAppSelector } from 'app/hooks';
@@ -155,18 +155,13 @@ const recurseSyntax = (
               +
             </span>
           )}
-          <span
-            style={{
-              fontSize: '0.7rem',
-              margin: '0.2rem',
-              backgroundColor: cssVar('syntax-label-background', theme),
-              borderRadius: '0.1rem',
-              padding: '0.2rem',
-              color: cssVar('font-color', theme),
-            }}
-          >
-            {syntaxNode.content.role}
-          </span>
+
+          <Chip
+            className="constituent-role"
+            size="small"
+            label={syntaxNode.content.role}
+          />
+
           {syntaxNode.children &&
             syntaxNode.children.map(
               (childSyntaxNode: SyntaxNode, index: number) => {
@@ -184,7 +179,10 @@ const recurseSyntax = (
             syntaxNode.content.n &&
             syntaxNode.content.osisId &&
             syntaxNode.content.text && (
-              <Typography display="inline" style={{ textIndent: `${graduatedDepth}rem` }}>
+              <Typography
+                display="inline"
+                style={{ textIndent: `${graduatedDepth}rem` }}
+              >
                 {treedownType === TreedownType.Mapped &&
                   renderMappedTextSegment(syntaxNode, corpus)}
 
