@@ -14,7 +14,6 @@ const initialState: AppState = {
 };
 
 const CORPUS_VIEWPORT_MAX = 4;
-const CORPUS_VIEWPORT_MIN = 1;
 
 interface AddCorpusRequest {
   // Corpus IDs that do not have a current viewport
