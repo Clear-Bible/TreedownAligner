@@ -165,6 +165,7 @@ const recurseSyntax = (
               className="constituent-role"
               size="small"
               label={syntaxNode.content.role}
+              style={{fontSize: '0.7rem'}}
             />
           </Tooltip>
 
