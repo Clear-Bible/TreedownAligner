@@ -62,14 +62,23 @@ export const CorpusComponent = (props: CorpusProps): ReactElement => {
     <>
       <div
         style={{
-          textAlign: 'right',
-          padding: '0.5rem',
+          display: 'flex',
+          width: 'fit-content',
+          justifyContent: 'flex-end',
+          alignItems: 'center',
+          backdropFilter: 'blur(2px)',
+          paddingTop: '0.5rem',
+          paddingRight: '0.5rem',
+          paddingBottom: '0px',
+          marginLeft: 'auto',
+          marginBottom: '0px',
+          borderRadius: '500px',
           fontWeight: 'regular',
           position: 'sticky',
           top: '0',
         }}
       >
-        <Typography variant="h6" display="inline-block">
+        <Typography variant="h6" display="inline-block" style={{}}>
           {corpus.name}
         </Typography>
 
@@ -82,13 +91,14 @@ export const CorpusComponent = (props: CorpusProps): ReactElement => {
             </>
           }
         >
-          <div style={{ padding: '2px', display: 'inline-block' }}>
-            <InfoOutlined style={{ marginBottom: '-5px', padding: '2px' }} />
+          <div style={{ display: 'inline-block' }}>
+            <InfoOutlined
+              style={{ padding: '2px', marginTop: '6px', marginLeft: '4px' }}
+            />
           </div>
         </Tooltip>
         <IconButton
           style={{
-            marginBottom: '5px',
             marginLeft: '-8px',
             marginRight: '-24px',
           }}
