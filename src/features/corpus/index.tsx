@@ -60,56 +60,54 @@ export const CorpusComponent = (props: CorpusProps): ReactElement => {
 
   return (
     <>
-      <div className="corpus-scroll-container">
-        <div
+      <div
+        style={{
+          textAlign: 'right',
+          padding: '0.5rem',
+          fontWeight: 'regular',
+          position: 'sticky',
+          top: '0',
+        }}
+      >
+        <Typography variant="h6" display="inline-block">
+          {corpus.name}
+        </Typography>
+
+        <Tooltip
+          title={
+            <>
+              <Typography variant="h6">{corpus.fullName}</Typography>
+              <Typography>{corpus.name}</Typography>
+              <Typography>Language: {corpus.language}</Typography>
+            </>
+          }
+        >
+          <div style={{ padding: '2px', display: 'inline-block' }}>
+            <InfoOutlined style={{ marginBottom: '-5px', padding: '2px' }} />
+          </div>
+        </Tooltip>
+        <IconButton
           style={{
-            textAlign: 'right',
-            padding: '0.5rem',
-            fontWeight: 'regular',
-            position: 'sticky',
-            top: '0',
+            marginBottom: '5px',
+            marginLeft: '-8px',
+            marginRight: '-24px',
+          }}
+          onClick={() => {
+            setShowSettings(!showSettings);
           }}
         >
-          <Typography variant="h6" display="inline-block">
-            {corpus.name}
-          </Typography>
-
-          <Tooltip
-            title={
-              <>
-                <Typography variant="h6">{corpus.fullName}</Typography>
-                <Typography>{corpus.name}</Typography>
-                <Typography>Language: {corpus.language}</Typography>
-              </>
-            }
-          >
-            <div style={{ padding: '2px', display: 'inline-block' }}>
-              <InfoOutlined style={{ marginBottom: '-5px', padding: '2px' }} />
-            </div>
-          </Tooltip>
-          <IconButton
-            style={{
-              marginBottom: '5px',
-              marginLeft: '-8px',
-              marginRight: '-24px',
-            }}
-            onClick={() => {
-              setShowSettings(!showSettings);
-            }}
-          >
-            <Settings />
-          </IconButton>
-        </div>
-
-        {showSettings && (
-          <CorpusSettings
-            currentCorpusId={corpusId}
-            viewportIndex={viewportIndex}
-          />
-        )}
-
-        {!showSettings && determineCorpusView(corpus)}
+          <Settings />
+        </IconButton>
       </div>
+
+      {showSettings && (
+        <CorpusSettings
+          currentCorpusId={corpusId}
+          viewportIndex={viewportIndex}
+        />
+      )}
+
+      {!showSettings && determineCorpusView(corpus)}
     </>
   );
 };

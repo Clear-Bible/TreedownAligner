@@ -20,6 +20,7 @@ import {
   Park,
   Add,
   Remove,
+  SyncLock,
 } from '@mui/icons-material';
 
 import { useAppDispatch, useAppSelector } from 'app/hooks';
@@ -32,7 +33,11 @@ import {
   AlignmentMode,
 } from 'state/alignment.slice';
 
-import { addCorpusViewport, removeCorpusViewport } from 'state/app.slice';
+import {
+  addCorpusViewport,
+  removeCorpusViewport,
+  toggleScrollLock,
+} from 'state/app.slice';
 
 interface ControlPanelProps {
   alignmentUpdated: Function;
@@ -43,6 +48,8 @@ export const ControlPanel = (props: ControlPanelProps): ReactElement => {
   const dispatch = useAppDispatch();
 
   const [formats, setFormats] = useState([] as string[]);
+
+  const scrollLock = useAppSelector((state) => state.app.scrollLock);
 
   const anySegmentsSelected = useAppSelector((state) =>
     Boolean(state.alignment.present.inProgressLink)
@@ -83,6 +90,10 @@ export const ControlPanel = (props: ControlPanelProps): ReactElement => {
   const alignmentState = useAppSelector((state) => {
     return state.alignment.present.alignments;
   });
+
+  if (scrollLock && !formats.includes('scroll-lock')) {
+    setFormats(formats.concat(['scroll-lock']));
+  }
   return (
     <Stack
       direction="row"
@@ -106,9 +117,9 @@ export const ControlPanel = (props: ControlPanelProps): ReactElement => {
           onClick={() => {
             if (someSyntax) {
               if (formats.includes('tree')) {
-                setFormats([]);
+                setFormats(formats.filter((format) => format !== 'tree'));
               } else {
-                setFormats(['tree']);
+                setFormats(formats.concat(['tree']));
               }
               for (const corpus of corpora) {
                 if (corpus.syntax) {
@@ -119,6 +130,21 @@ export const ControlPanel = (props: ControlPanelProps): ReactElement => {
           }}
         >
           <Park />
+        </ToggleButton>
+
+        <ToggleButton
+          value="scroll-lock"
+          onClick={() => {
+            if (formats.includes('scroll-lock')) {
+              setFormats(formats.filter((item) => item !== 'scroll-lock'));
+            } else {
+              setFormats(formats.concat(['scroll-lock']));
+            }
+
+            dispatch(toggleScrollLock());
+          }}
+        >
+          <SyncLock />
         </ToggleButton>
       </ToggleButtonGroup>
 

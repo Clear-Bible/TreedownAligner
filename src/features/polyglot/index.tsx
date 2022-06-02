@@ -1,4 +1,4 @@
-import { ReactElement } from 'react';
+import { ReactElement, useRef } from 'react';
 import { Card, Container, Stack, Typography } from '@mui/material';
 
 import { useAppSelector } from 'app/hooks';
@@ -6,16 +6,19 @@ import useDebug from 'hooks/useDebug';
 import CorpusComponent from 'features/corpus';
 import { CorpusViewport } from 'structs';
 
-
 import './styles.css';
 
 export const Polyglot = (): ReactElement => {
   useDebug('PolyglotComponent');
-  const corpora = useAppSelector((state) => state.alignment.present.corpora);
 
+  const scrollLock = useAppSelector((state) => state.app.scrollLock);
+  const corpora = useAppSelector((state) => state.alignment.present.corpora);
   const corpusViewports = useAppSelector((state) => {
     return state.app.corpusViewports;
   });
+
+  const initialArray: HTMLDivElement[] = [];
+  const corpusViewportRefs = useRef(initialArray);
 
   return (
     <Stack
@@ -38,6 +41,20 @@ export const Polyglot = (): ReactElement => {
             const key = `text_${index}`;
             return (
               <Card
+                onScroll={(e) => {
+                  if (scrollLock) {
+                    const newScrollTop = (e.target as HTMLDivElement).scrollTop;
+                    console.log(newScrollTop);
+                    corpusViewportRefs.current.forEach((ref) => {
+                      ref.scrollTop = newScrollTop;
+                    });
+                  }
+                }}
+                ref={(el) => {
+                  if (el) {
+                    corpusViewportRefs.current[index] = el;
+                  }
+                }}
                 elevation={2}
                 className="corpus-container corpus-scroll-container"
                 key={key}
