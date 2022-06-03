@@ -34,11 +34,7 @@ const isPunctuation = (syntaxNode: SyntaxNode): boolean => {
 };
 
 const isAdjunct = (syntaxNode: SyntaxNode): boolean => {
-  return (
-    syntaxNode.content.role === 'adv' ||
-    syntaxNode.content.rule === 'sub-CL' ||
-    syntaxNode.content.rule === 'that-VP'
-  );
+  return syntaxNode.content.role === 'adv';
 };
 
 const renderMappedTextSegment = (syntaxNode: SyntaxNode, corpus: Corpus) => {
@@ -159,18 +155,20 @@ const recurseSyntax = (
             </span>
           )}
 
-          <Tooltip
-            title="An explanatory comment of this constituent."
-            arrow
-            describeChild
-          >
-            <Chip
-              className="constituent-role"
-              size="small"
-              label={syntaxNode.content.role}
-              style={{ fontSize: '0.7rem' }}
-            />
-          </Tooltip>
+          {syntaxNode.content.role !== 'adv' && (
+            <Tooltip
+              title="An explanatory comment of this constituent."
+              arrow
+              describeChild
+            >
+              <Chip
+                className="constituent-role"
+                size="small"
+                label={syntaxNode.content.role}
+                style={{ fontSize: '0.7rem' }}
+              />
+            </Tooltip>
+          )}
 
           {syntaxNode.children &&
             syntaxNode.children.map(
