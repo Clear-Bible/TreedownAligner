@@ -26,7 +26,7 @@ const availableCorpora: Corpus[] = [
     id: 'oshb',
     name: 'OSHB HOT',
     fullName: 'Open Scriptures Hebrew Bible',
-    language: 'grc',
+    language: 'hbo',
     words: [],
     syntax: undefined,
   },
@@ -92,6 +92,7 @@ export const queryText = (
 
   const words = text.split(' ').map((word: string, index: number) => {
     let id = '';
+    let language = '';
 
     if (corpus.id === 'sbl') {
       const bookString = String(book).padStart(2, '0');
@@ -99,6 +100,7 @@ export const queryText = (
       const verseString = String(verse).padStart(3, '0');
       const positionString = String(index + 1).padStart(3, '0');
       id = `${bookString}${chapterString}${verseString}${positionString}0010`;
+      language = 'grc';
     } else if (corpus.id === 'oshb') {
       const bookString = String(book).padStart(2, '0');
       const chapterString = String(chapter).padStart(3, '0');
@@ -106,6 +108,7 @@ export const queryText = (
       const positionString = String(index + 1).padStart(3, '0');
       const wordPartString = '1';
       id = `${bookString}${chapterString}${verseString}${positionString}${wordPartString}`;
+      language = 'hbo';
     } else {
       id = `${corpusId}_${index}`;
     }
@@ -115,6 +118,7 @@ export const queryText = (
       corpusId: corpusId,
       position: index,
       text: word,
+      language,
     };
   });
 

@@ -8,6 +8,7 @@ import TextSegment from 'features/textSegment';
 import Treedown from 'features/treedown';
 import CorpusSettings from 'features/corpusSettings';
 
+import determineTextDirection from 'helpers/determineTextDirection';
 import { Word, Corpus, CorpusViewType, TreedownType } from 'structs';
 
 interface CorpusProps {
@@ -24,6 +25,7 @@ const determineCorpusView = (corpus: Corpus) => {
           paddingBottom: '0.5rem',
           paddingLeft: '0.7rem',
           paddingRight: '0.7rem',
+          direction: determineTextDirection(corpus.language),
         }}
       >
         {corpus.words.map((word: Word): ReactElement => {

@@ -10,6 +10,7 @@ import { Corpus, SyntaxNode, TreedownType, Word } from 'structs';
 import TextSegment from 'features/textSegment';
 
 import { findWordById } from 'helpers/findWord';
+import determineTextDirection from 'helpers/determineTextDirection';
 
 import './styles.css';
 
@@ -268,6 +269,7 @@ export const TreedownComponent = (props: TreedownProps): ReactElement => {
       <div
         key={`corpus_wrapper_${corpus.id}_treedown`}
         style={{
+          direction: determineTextDirection(corpus.language),
           paddingTop: '0.5rem',
           paddingBottom: '0.5rem',
           paddingLeft: '0.7rem',
