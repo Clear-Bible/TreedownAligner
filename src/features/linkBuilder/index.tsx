@@ -6,8 +6,6 @@ import { Divider, Typography } from '@mui/material';
 import { Corpus, Word } from 'structs';
 import findWordById from 'helpers/findWord';
 
-import DragHandle from 'features/dragHandle';
-
 import cssVar from 'styles/cssVar';
 
 interface LinkBuilderProps {}
@@ -68,7 +66,6 @@ export const LinkBuilderComponent = (props: LinkBuilderProps): ReactElement => {
             Select a target word to begin building a link.
           </Typography>
         </div>
-        <DragHandle />
       </>
     );
   }
@@ -149,7 +146,6 @@ export const LinkBuilderComponent = (props: LinkBuilderProps): ReactElement => {
           </div>
         );
       })}
-      <DragHandle />
     </div>
   );
 };

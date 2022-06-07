@@ -1,6 +1,7 @@
 {
   "name": "treedown-aligner",
-  "version": "0.0.22",
+  "version": "0.0.24",
+  "license": "MIT",
   "private": false,
   "dependencies": {
     "@emotion/react": "^11.9.0",

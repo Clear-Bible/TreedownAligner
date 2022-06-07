@@ -2,9 +2,6 @@ import { ReactElement, useState, useEffect } from 'react';
 
 import { Corpus, SyntaxType, SyntaxRoot } from 'structs';
 
-// import cssVar from 'styles/cssVar';
-// import '../styles/theme.css';
-
 import EditorWrapper from 'features/editor';
 
 import fetchSyntaxData from 'workbench/fetchSyntaxData';
@@ -74,8 +71,6 @@ const Workbench = (props: WorkbenchProps): ReactElement => {
 
   const [theme, setTheme] = useState('night');
 
-  const themeVar = theme as 'night' | 'day';
-
   const [showSourceText, setShowSourceText] = useState(true);
   const [showTargetText, setShowTargetText] = useState(true);
   const [showLwcText, setShowLwcText] = useState(true);
@@ -118,14 +113,6 @@ const Workbench = (props: WorkbenchProps): ReactElement => {
     loadSyntaxData().catch(console.error);
   }, [bookDoc, book, chapter, verse]);
 
-  // if (theme === 'night') {
-  //   document.body.style.backgroundColor = 'var(--night-background)';
-  // }
-  //
-  // if (theme === 'day') {
-  //   document.body.style.backgroundColor = 'var(--day-background)';
-  // }
-
   const corpora: Corpus[] = [];
 
   if (showSourceText) {
@@ -156,13 +143,7 @@ const Workbench = (props: WorkbenchProps): ReactElement => {
   }
 
   return (
-    <div
-      style={
-        {
-          // backgroundColor: cssVar('background', themeVar),
-        }
-      }
-    >
+    <div>
       <div
         style={{
           display: 'flex',
@@ -170,13 +151,11 @@ const Workbench = (props: WorkbenchProps): ReactElement => {
           alignItems: 'center',
           padding: '2rem',
           border: '1px solid',
-          // borderColor: cssVar('border-color', themeVar),
           textAlign: 'center',
           margin: 'auto',
           marginTop: '1rem',
           marginBottom: '1rem',
           maxWidth: '800px',
-          // backgroundColor: cssVar('background', themeVar),
         }}
       >
         <div
@@ -186,13 +165,7 @@ const Workbench = (props: WorkbenchProps): ReactElement => {
             alignItems: 'flex-start',
           }}
         >
-          <label
-            style={
-              {
-                // color: cssVar('font-color', theme as 'night' | 'day')
-              }
-            }
-          >
+          <label>
             Book{' '}
             <select
               value={book}
@@ -213,13 +186,7 @@ const Workbench = (props: WorkbenchProps): ReactElement => {
               ;
             </select>
           </label>
-          <label
-            style={
-              {
-                // color: cssVar('font-color', theme as 'night' | 'day'),
-              }
-            }
-          >
+          <label>
             Chapter{' '}
             <select
               value={chapter}
@@ -236,13 +203,7 @@ const Workbench = (props: WorkbenchProps): ReactElement => {
               })}
             </select>
           </label>
-          <label
-            style={
-              {
-                // color: cssVar('font-color', theme as 'night' | 'day')
-              }
-            }
-          >
+          <label>
             Verse{' '}
             <select
               value={verse}
@@ -280,13 +241,7 @@ const Workbench = (props: WorkbenchProps): ReactElement => {
             alignItems: 'flex-start',
           }}
         >
-          <label
-            style={
-              {
-                // color: cssVar('font-color', theme as 'night' | 'day')
-              }
-            }
-          >
+          <label>
             <input
               type="checkbox"
               name="source"
@@ -297,13 +252,7 @@ const Workbench = (props: WorkbenchProps): ReactElement => {
             />
             Source
           </label>
-          <label
-            style={
-              {
-                // color: cssVar('font-color', theme as 'night' | 'day'),
-              }
-            }
-          >
+          <label>
             <input
               type="checkbox"
               name="source"
@@ -315,13 +264,7 @@ const Workbench = (props: WorkbenchProps): ReactElement => {
             Target
           </label>
 
-          <label
-            style={
-              {
-                // color: cssVar('font-color', theme as 'night' | 'day')
-              }
-            }
-          >
+          <label>
             <input
               type="checkbox"
               name="source"
@@ -332,13 +275,7 @@ const Workbench = (props: WorkbenchProps): ReactElement => {
             />
             LWC
           </label>
-          <label
-            style={
-              {
-                // color: cssVar('font-color', theme as 'night' | 'day')
-              }
-            }
-          >
+          <label>
             <input
               type="checkbox"
               name="source"
@@ -358,7 +295,6 @@ const Workbench = (props: WorkbenchProps): ReactElement => {
           justifyContent: 'center',
           padding: '2rem',
           border: '1px solid',
-          // borderColor: cssVar('border-color', themeVar),
           margin: 'auto',
           marginTop: '1rem',
           marginBottom: '1rem',

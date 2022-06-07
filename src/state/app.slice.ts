@@ -5,16 +5,17 @@ interface AppState {
   debug: boolean;
   theme: 'night' | 'day';
   corpusViewports: CorpusViewport[];
+  scrollLock: boolean;
 }
 
 const initialState: AppState = {
   debug: false,
   theme: 'night',
   corpusViewports: [],
+  scrollLock: true,
 };
 
 const CORPUS_VIEWPORT_MAX = 4;
-const CORPUS_VIEWPORT_MIN = 1;
 
 interface AddCorpusRequest {
   // Corpus IDs that do not have a current viewport
@@ -63,6 +64,9 @@ const appSlice = createSlice({
       state.corpusViewports[action.payload.viewportIndex] =
         action.payload.newViewport;
     },
+    toggleScrollLock: (state) => {
+      state.scrollLock = !state.scrollLock;
+    },
   },
 });
 
@@ -72,5 +76,6 @@ export const {
   addCorpusViewport,
   removeCorpusViewport,
   changeCorpusViewport,
+  toggleScrollLock,
 } = appSlice.actions;
 export default appSlice.reducer;

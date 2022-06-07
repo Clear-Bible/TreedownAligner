@@ -1,9 +1,7 @@
-import React, { ReactElement } from 'react';
+import { ReactElement } from 'react';
 
 import useDebug from 'hooks/useDebug';
 import { useAppSelector } from 'app/hooks';
-
-import DragHandle from 'features/dragHandle';
 
 import cssVar from 'styles/cssVar';
 
@@ -54,7 +52,6 @@ export const Context = (props: TextProps): ReactElement => {
         <span> </span>
         <span>{props.postText}</span>
       </p>
-      <DragHandle />
     </div>
   );
 };

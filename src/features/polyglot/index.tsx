@@ -1,56 +1,24 @@
-import React, { ReactElement } from 'react';
-import {
-  Card,
-  Container,
-  Stack,
-  Button,
-  ButtonGroup,
-  Typography,
-} from '@mui/material';
-import { Add, Remove } from '@mui/icons-material';
+import { ReactElement, useRef } from 'react';
+import { Card, Container, Stack, Typography } from '@mui/material';
 
 import { useAppSelector } from 'app/hooks';
 import useDebug from 'hooks/useDebug';
 import CorpusComponent from 'features/corpus';
-import { Corpus, CorpusViewport } from 'structs';
-
-// import cssVar from 'styles/cssVar';
+import { CorpusViewport } from 'structs';
 
 import './styles.css';
 
 export const Polyglot = (): ReactElement => {
   useDebug('PolyglotComponent');
-  const corpora = useAppSelector((state) => state.alignment.present.corpora);
 
+  const scrollLock = useAppSelector((state) => state.app.scrollLock);
+  const corpora = useAppSelector((state) => state.alignment.present.corpora);
   const corpusViewports = useAppSelector((state) => {
     return state.app.corpusViewports;
   });
 
-  // const layoutRange = Array.from({ length: corpora.length }, (x, i) => i);
-
-  // const layout = layoutRange.map((key: number) => {
-  //   const width = 24 / corpora.length;
-  //   const x = width * key;
-  //
-  //   return {
-  //     i: `text_${key}`,
-  //     x,
-  //     y: 0,
-  //     w: width === 24 ? 8 : width,
-  //     h: 12,
-  //     minW: width,
-  //     maxW: width,
-  //     isResizable: false,
-  //   };
-  // });
-  //
-  // const theme = useAppSelector((state) => {
-  //   return state.app.theme;
-  // });
-  //
-  // if (corpusViewports.length === 0) {
-  //   return <Typography>To begin, add a corpus viewport.</Typography>;
-  // }
+  const initialArray: HTMLDivElement[] = [];
+  const corpusViewportRefs = useRef(initialArray);
 
   return (
     <Stack
@@ -73,6 +41,20 @@ export const Polyglot = (): ReactElement => {
             const key = `text_${index}`;
             return (
               <Card
+                onScroll={(e) => {
+                  if (scrollLock) {
+                    const newScrollTop = (e.target as HTMLDivElement).scrollTop;
+                    console.log(newScrollTop);
+                    corpusViewportRefs.current.forEach((ref) => {
+                      ref.scrollTop = newScrollTop;
+                    });
+                  }
+                }}
+                ref={(el) => {
+                  if (el) {
+                    corpusViewportRefs.current[index] = el;
+                  }
+                }}
                 elevation={2}
                 className="corpus-container corpus-scroll-container"
                 key={key}

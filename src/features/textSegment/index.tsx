@@ -10,9 +10,6 @@ import { hover, relatedAlignments } from 'state/textSegmentHover.slice';
 import { Alignment, Word, Link } from 'structs';
 import findRelatedAlignments from 'helpers/findRelatedAlignments';
 
-// import '../../styles/theme.css';
-// import cssVar from 'styles/cssVar';
-
 import './textSegment.style.css';
 
 interface TextSegmentProps {
@@ -70,109 +67,12 @@ const computeDecoration = (
   return decoration;
 };
 
-// const defaultStyle = (theme: 'night' | 'day') => {
-//   return {
-//     cursor: 'pointer',
-//     lineHeight: '1.4rem',
-//     // color: cssVar('font-color', theme),
-//   };
-// };
-//
-// const focusedStyle = () => {
-//   return { textDecoration: 'underline' };
-// };
-//
-// const unlinkedStyle = (theme: 'night' | 'day') => {
-//   return {
-//     fontStyle: 'italic',
-//     // color: 'red',
-//   };
-// };
-//
-// const lockedStyle = () => {
-//   return { cursor: 'not-allowed' };
-// };
-//
-// const selectedStyle = (theme: 'night' | 'day') => {
-//   return {
-//     // backgroundColor: cssVar('selected-segment-background-color', theme),
-//     // color: cssVar('selected-segment-font-color', theme),
-//     borderRadius: '0.25rem',
-//   };
-// };
-//
-// const relatedStyle = () => {
-//   return {
-//     WebkitTextStroke: `1px black`,
-//     backgroundColor: 'yellow',
-//   };
-// };
-
-// const computeStyle = (
-//   isHovered: boolean,
-//   isSelected: boolean,
-//   isRelated: boolean,
-//   isLinked: boolean,
-//   isCurrentLinkMember: boolean,
-//   isInvolved: boolean,
-//   isMemberOfMultipleAlignments: boolean,
-//   mode: AlignmentMode,
-//   theme: 'night' | 'day'
-// ): Record<string, string> => {
-//   let computedStyle = { ...defaultStyle(theme) };
-//
-//   if (isRelated && !isSelected && !(mode === AlignmentMode.Edit)) {
-//     computedStyle = { ...computedStyle, ...relatedStyle() };
-//   }
-//
-//   if (isHovered && !isSelected) {
-//     computedStyle = { ...computedStyle, ...focusedStyle() };
-//   }
-//
-//   if (isSelected) {
-//     computedStyle = { ...computedStyle, ...selectedStyle(theme) };
-//   }
-//
-//   if (isLinked && mode === AlignmentMode.Edit && !isCurrentLinkMember) {
-//     computedStyle = { ...computedStyle, ...lockedStyle() };
-//   }
-//
-//   if (mode === AlignmentMode.Edit && isCurrentLinkMember && !isSelected) {
-//     computedStyle = { ...computedStyle, ...unlinkedStyle(theme) };
-//   }
-//
-//   if (!isLinked && !isSelected) {
-//     computedStyle = { ...computedStyle, ...unlinkedStyle(theme) };
-//   }
-//
-//   if (
-//     (!isInvolved && mode !== AlignmentMode.CleanSlate) ||
-//     (!isInvolved && isMemberOfMultipleAlignments)
-//   ) {
-//     computedStyle = { ...computedStyle, ...lockedStyle() };
-//   }
-//
-//   if (isInvolved && isMemberOfMultipleAlignments && isLinked) {
-//     computedStyle = { ...computedStyle, ...lockedStyle() };
-//   }
-//
-//   if (!isInvolved && mode === AlignmentMode.Edit) {
-//     computedStyle = { ...computedStyle, ...lockedStyle() };
-//   }
-//
-//   return computedStyle;
-// };
-
 export const TextSegment = (props: TextSegmentProps): ReactElement => {
   const { word } = props;
 
   useDebug('TextSegmentComponent');
 
   const dispatch = useAppDispatch();
-
-  const theme = useAppSelector((state) => {
-    return state.app.theme;
-  });
 
   const alignments = useAppSelector((state) => {
     return state.alignment.present.alignments;
@@ -325,18 +225,6 @@ export const TextSegment = (props: TextSegmentProps): ReactElement => {
     })
   );
 
-  // const computedStyle = computeStyle(
-  //   isHovered,
-  //   isSelected,
-  //   isRelated,
-  //   isLinked,
-  //   isCurrentLinkMember,
-  //   isInvolved,
-  //   isMemberOfMultipleAlignments,
-  //   mode,
-  //   theme
-  // );
-
   if (!word) {
     return <span>{'ERROR'}</span>;
   }
@@ -344,7 +232,8 @@ export const TextSegment = (props: TextSegmentProps): ReactElement => {
     <React.Fragment>
       <span> </span>
       <Typography
-        display="inline"
+        paragraph={false}
+        component="span"
         variant={computeVariant(isSelected, isLinked)}
         className={`text-segment ${computeDecoration(
           isHovered,
@@ -354,8 +243,6 @@ export const TextSegment = (props: TextSegmentProps): ReactElement => {
           isInvolved,
           isMemberOfMultipleAlignments
         )}`}
-        // variant="selected"
-        // className={`text-segment related focused locked`}
         style={{ padding: '1px' }}
         onMouseEnter={() => {
           dispatch(hover(word));

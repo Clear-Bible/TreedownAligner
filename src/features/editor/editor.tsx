@@ -13,7 +13,6 @@ import ContextPanel from 'features/contextPanel';
 import { Alignment, Corpus } from 'structs';
 import copySyntaxData from 'helpers/copySyntaxData';
 
-import cssVar from 'styles/cssVar';
 import '../../styles/theme.css';
 
 interface EditorProps {

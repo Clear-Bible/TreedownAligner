@@ -6,17 +6,9 @@
   text-decoration: underline;
 }
 
-/* .text-segment.unlinked { */
-/* } */
-/**/
-
 .text-segment.locked {
   cursor: not-allowed;
 }
-
-/* .text-segment.selected { */
-/*   borderradius: '0.25rem'; */
-/* } */
 
 .text-segment.related {
   -webkit-text-stroke: 1px black;
