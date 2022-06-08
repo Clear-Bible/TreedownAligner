@@ -93,7 +93,7 @@ const recurseSyntax = (
           key={`cl-${syntaxNode.content.n}-${index}-${graduatedDepth}`}
           className="cl"
           style={{
-            marginLeft: `${graduatedDepth}rem`,
+            marginInlineStart: `${graduatedDepth}rem`,
             marginTop: '5px',
             marginBottom: '5px',
           }}
@@ -236,7 +236,6 @@ const recurseSyntax = (
       if (treedownType === TreedownType.Mapped) {
         return renderMappedTextSegment(syntaxNode, corpus);
       }
-      console.log('non mapped', syntaxNode.content.n);
       return (
         <TextSegment
           word={{

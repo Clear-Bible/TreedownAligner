@@ -1,18 +1,20 @@
 import { ReactElement, useState, useEffect } from 'react';
 
-import { Corpus, SyntaxType, SyntaxRoot } from 'structs';
+import { Corpus, SyntaxType, SyntaxRoot, Word } from 'structs';
 
 // import cssVar from 'styles/cssVar';
 // import '../styles/theme.css';
 
 import EditorWrapper from 'features/editor';
 
-import fetchSyntaxData from 'workbench/fetchSyntaxData';
+// import fetchSyntaxData from 'workbench/fetchSyntaxData';
+import fetchData from 'workbench/fetchData';
 
-import { queryText } from 'workbench/query';
+// import { queryText } from 'workbench/query';
 import books from 'workbench/books';
 
 import placeholderTreedown from 'features/treedown/treedown.json';
+import { CircularProgress, Box } from '@mui/material';
 
 interface WorkbenchProps {}
 
@@ -89,6 +91,13 @@ const WorkbenchHebrew = (props: WorkbenchProps): ReactElement => {
     placeholderTreedown as SyntaxRoot
   );
 
+  const [words, setWords] = useState([] as Word[]);
+
+  // const defaultTestament: null | 'ot' | 'nt' = null;
+  const [testament, setTestament] = useState('');
+
+  const [loading, setLoading] = useState(false);
+
   const bookDoc = books.find((bookItem) => bookItem.BookNumber === book);
 
   let chapterCount = 0;
@@ -100,20 +109,30 @@ const WorkbenchHebrew = (props: WorkbenchProps): ReactElement => {
 
   const verses = Array.from(Array(200).keys()).map((x) => x + 1);
 
+  console.log(bookDoc, testament);
+
   useEffect(() => {
     const loadSyntaxData = async () => {
       try {
-        console.log('fetch', bookDoc, chapter, verse)
-        const syntaxData = await fetchSyntaxData(bookDoc, chapter, verse);
-        if (syntaxData) {
+        setLoading(true);
+        console.log('fetch', bookDoc, chapter, verse);
+        // const syntaxData = await fetchSyntaxData(bookDoc, chapter, verse);
+        const [syntaxData, words] = await fetchData(bookDoc, chapter, verse);
+        if (syntaxData && words && bookDoc) {
           console.log(syntaxData);
           setSyntaxData(syntaxData as SyntaxRoot);
+          setWords(words);
+          const testament = bookDoc?.BookNumber < 39 ? 'ot' : 'nt';
+          setTestament(testament);
+
           document.title = `${documentTitle} ${
             bookDoc ? bookDoc.OSIS : book
           }.${chapter}.${verse}`;
         }
+        setLoading(false);
       } catch (error) {
         console.error(error);
+        setLoading(false);
       }
     };
 
@@ -131,13 +150,36 @@ const WorkbenchHebrew = (props: WorkbenchProps): ReactElement => {
   const corpora: Corpus[] = [];
 
   if (showSourceText) {
-    const sourceCorpus = {
-      ...queryText('oshb', book, chapter, verse),
-      syntax: { ...syntaxData, _syntaxType: SyntaxType.Source },
-    };
-
-    console.log(sourceCorpus);
-    corpora.push(sourceCorpus);
+    if (testament === 'nt') {
+      if (words && words.length > 0) {
+        corpora.push({
+          id: 'nestle1904',
+          name: 'Nestle 1904 GNT',
+          fullName: 'Nestle 1904 Greek New Testament',
+          language: 'grc',
+          syntax: syntaxData,
+          words,
+        });
+      }
+    }
+    // const sourceCorpus = {
+    //   ...queryText('oshb', book, chapter, verse),
+    //   syntax: { ...syntaxData, _syntaxType: SyntaxType.Source },
+    // };
+    //
+    // console.log(sourceCorpus);
+    if (testament === 'ot') {
+      if (words && words.length > 0) {
+        corpora.push({
+          id: 'oshb',
+          name: 'OSHB',
+          fullName: 'Open Scriptures Hebrew Bible',
+          language: 'hbo',
+          syntax: syntaxData,
+          words,
+        });
+      }
+    }
   }
 
   // if (showTargetText) {
@@ -262,6 +304,17 @@ const WorkbenchHebrew = (props: WorkbenchProps): ReactElement => {
               })}
             </select>
           </label>
+
+          <Box
+            sx={{
+              display: 'flex',
+              width: '3.5rem',
+              height: '3.5rem',
+              padding: '0.5rem',
+            }}
+          >
+            {loading && <CircularProgress size="1.5rem" />}
+          </Box>
         </div>
         <button
           onClick={() => {
