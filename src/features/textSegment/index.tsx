@@ -86,6 +86,12 @@ export const TextSegment = (props: TextSegmentProps): ReactElement => {
     (state) => state.textSegmentHover.hovered?.id === word.id
   );
 
+  const corpus = useAppSelector((state) => {
+    return state.alignment.present.corpora.find(
+      (corpus) => corpus.id === word.corpusId
+    );
+  });
+
   const isMemberOfMultipleAlignments = useAppSelector((state) => {
     const relatedAlignments = state.alignment.present.alignments.filter(
       (alignment) => {
@@ -230,7 +236,6 @@ export const TextSegment = (props: TextSegmentProps): ReactElement => {
   }
   return (
     <React.Fragment>
-
       <Typography
         paragraph={false}
         component="span"
@@ -273,7 +278,8 @@ export const TextSegment = (props: TextSegmentProps): ReactElement => {
       >
         {props.word.text}
       </Typography>
-      {word.after && (<span>{word.after}</span>)}
+      {corpus?.language !== 'hbo' && <span> </span>}
+      {word.after && <span>{word.after}</span>}
     </React.Fragment>
   );
 };
