@@ -230,7 +230,7 @@ export const TextSegment = (props: TextSegmentProps): ReactElement => {
   }
   return (
     <React.Fragment>
-      <span> </span>
+
       <Typography
         paragraph={false}
         component="span"
@@ -243,7 +243,6 @@ export const TextSegment = (props: TextSegmentProps): ReactElement => {
           isInvolved,
           isMemberOfMultipleAlignments
         )}`}
-        style={{ padding: '1px' }}
         onMouseEnter={() => {
           dispatch(hover(word));
           dispatch(relatedAlignments(findRelatedAlignments(alignments, word)));
@@ -274,6 +273,7 @@ export const TextSegment = (props: TextSegmentProps): ReactElement => {
       >
         {props.word.text}
       </Typography>
+      {word.after && (<span>{word.after}</span>)}
     </React.Fragment>
   );
 };

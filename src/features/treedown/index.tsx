@@ -19,6 +19,8 @@ interface TreedownProps {
   treedownType: TreedownType;
 }
 
+const INDENTATION_CONSTANT = 0.6;
+
 let theme: 'night' | 'day' = 'night';
 
 const parsePosition = (osisId: string): number => {
@@ -63,7 +65,7 @@ const recurseSyntax = (
   treedownType: TreedownType
 ): any => {
   return [syntax].map((syntaxNode, index) => {
-    const graduatedDepth = depth * 0.5;
+    const graduatedDepth = depth * INDENTATION_CONSTANT;
 
     if (syntaxNode.content.elementType === 'pc') {
       return (
@@ -101,11 +103,10 @@ const recurseSyntax = (
           {isAdjunct(syntaxNode) && (
             <span
               style={{
-                fontSize: '0.7rem',
+                fontSize: '0.8rem',
                 margin: '0.2rem',
                 borderRadius: '0.1rem',
                 padding: '0.2rem',
-                color: cssVar('font-color', theme),
               }}
             >
               +
@@ -146,11 +147,9 @@ const recurseSyntax = (
           {isAdjunct(syntaxNode) && (
             <span
               style={{
-                fontSize: '0.7rem',
                 margin: '0.2rem',
                 borderRadius: '0.1rem',
                 padding: '0.2rem',
-                color: cssVar('font-color', theme),
               }}
             >
               +
@@ -167,7 +166,7 @@ const recurseSyntax = (
                 className="constituent-role"
                 size="small"
                 label={syntaxNode.content.role}
-                style={{ fontSize: '0.7rem' }}
+                style={{ fontSize: '0.7rem', marginInlineEnd: '0.2rem' }}
               />
             </Tooltip>
           )}
