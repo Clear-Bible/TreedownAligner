@@ -104,10 +104,7 @@ const fetchData = async (
   verseNum: number
 ): Promise<[SyntaxRoot, Word[]]> => {
   if (bookDoc) {
-    const bookRef = titleCase(bookDoc.ParaText);
-    const osisRef = `${bookRef}.${chapterNum}.${verseNum}`;
-
-    console.log('osis REF', osisRef);
+    const osisRef = `${titleCase(bookDoc.OSIS)}.${chapterNum}.${verseNum}`;
 
     if (Object.keys(cachedSyntaxData).includes(osisRef)) {
       const cachedSyntaxDatum = cachedSyntaxData[osisRef];
@@ -123,6 +120,9 @@ const fetchData = async (
 
     // OT
     if (bookDoc.BookNumber >= 1 && bookDoc.BookNumber <= 39) {
+      const osisRef = `${titleCase(
+        bookDoc.ParaText
+      )}.${chapterNum}.${verseNum}`;
       try {
         response = await fetch(
           `${MACULA_ENV_TEMP}/api/HOT/macula-hebrew/lowfat?osis-ref=${osisRef}`
@@ -135,6 +135,7 @@ const fetchData = async (
 
     // NT
     if (bookDoc.BookNumber > 39 && bookDoc.BookNumber <= 66) {
+      const osisRef = `${titleCase(bookDoc.OSIS)}.${chapterNum}.${verseNum}`;
       console.log('RESP', response);
       response = await fetch(
         `${MACULA_ENV}/api/GNT/Nestle1904/lowfat?osis-ref=${osisRef}`
@@ -155,6 +156,7 @@ const fetchData = async (
     }
   }
 
+  // This shouldn't actually happen.
   return [
     {
       _syntaxType: SyntaxType.Source,
