@@ -86,13 +86,28 @@ const parseSyntaxData = async (xmlDoc: string): Promise<SyntaxRoot | null> => {
   }
 };
 
+const titleCase = (input: string): string => {
+  return input
+    .split('')
+    .map((letter, index) => {
+      if (index === 0) {
+        return letter.toUpperCase();
+      }
+      return letter.toLowerCase();
+    })
+    .join('');
+};
+
 const fetchData = async (
   bookDoc: any,
   chapterNum: number,
   verseNum: number
 ): Promise<[SyntaxRoot, Word[]]> => {
   if (bookDoc) {
-    const osisRef = `${bookDoc.OSIS}.${chapterNum}.${verseNum}`;
+    const bookRef = titleCase(bookDoc.ParaText);
+    const osisRef = `${bookRef}.${chapterNum}.${verseNum}`;
+
+    console.log('osis REF', osisRef);
 
     if (Object.keys(cachedSyntaxData).includes(osisRef)) {
       const cachedSyntaxDatum = cachedSyntaxData[osisRef];
