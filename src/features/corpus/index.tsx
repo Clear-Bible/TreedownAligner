@@ -56,9 +56,9 @@ export const CorpusComponent = (props: CorpusProps): ReactElement => {
     });
   });
 
-  if (!corpusId || !corpus) {
-    return <Typography>Empty State</Typography>;
-  }
+  // if (!corpusId || !corpus) {
+  //   return <Typography>Empty State</Typography>;
+  // }
 
   return (
     <>
@@ -80,25 +80,33 @@ export const CorpusComponent = (props: CorpusProps): ReactElement => {
           top: '0',
         }}
       >
-        <Typography variant="h6" display="inline-block" style={{}}>
-          {corpus.name}
-        </Typography>
+        {corpus && (
+          <>
+            <Typography variant="h6" display="inline-block" style={{}}>
+              {corpus.name}
+            </Typography>
+            <Tooltip
+              title={
+                <>
+                  <Typography variant="h6">{corpus.fullName}</Typography>
+                  <Typography>{corpus.name}</Typography>
+                  <Typography>Language: {corpus.language}</Typography>
+                </>
+              }
+            >
+              <div style={{ display: 'inline-block' }}>
+                <InfoOutlined
+                  style={{
+                    padding: '2px',
+                    marginTop: '6px',
+                    marginLeft: '4px',
+                  }}
+                />
+              </div>
+            </Tooltip>
+          </>
+        )}
 
-        <Tooltip
-          title={
-            <>
-              <Typography variant="h6">{corpus.fullName}</Typography>
-              <Typography>{corpus.name}</Typography>
-              <Typography>Language: {corpus.language}</Typography>
-            </>
-          }
-        >
-          <div style={{ display: 'inline-block' }}>
-            <InfoOutlined
-              style={{ padding: '2px', marginTop: '6px', marginLeft: '4px' }}
-            />
-          </div>
-        </Tooltip>
         <IconButton
           style={{
             marginLeft: '-8px',
@@ -119,7 +127,10 @@ export const CorpusComponent = (props: CorpusProps): ReactElement => {
         />
       )}
 
-      {!showSettings && determineCorpusView(corpus)}
+      {!showSettings && !corpus && (
+        <Typography>Please select a corpus to view.</Typography>
+      )}
+      {!showSettings && corpus && determineCorpusView(corpus)}
     </>
   );
 };
