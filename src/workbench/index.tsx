@@ -1,16 +1,20 @@
-// @ts-nocheck
 import { ReactElement, useState, useEffect } from 'react';
 
-import { Corpus, SyntaxType, SyntaxRoot } from 'structs';
+import { Corpus, SyntaxType, SyntaxRoot, Word } from 'structs';
+
+// import cssVar from 'styles/cssVar';
+// import '../styles/theme.css';
 
 import EditorWrapper from 'features/editor';
 
-import fetchSyntaxData from 'workbench/fetchSyntaxData';
+// import fetchSyntaxData from 'workbench/fetchSyntaxData';
+import fetchData from 'workbench/fetchData';
 
 import { queryText } from 'workbench/query';
 import books from 'workbench/books';
 
 import placeholderTreedown from 'features/treedown/treedown.json';
+import { CircularProgress, Box } from '@mui/material';
 
 interface WorkbenchProps {}
 
@@ -30,9 +34,9 @@ const getRefParam = (): string | null => {
 };
 
 const getDefaultRef = (): number[] => {
-  let book = 45;
-  let chapter = 5;
-  let verse = 3;
+  let book = 1;
+  let chapter = 1;
+  let verse = 1;
 
   const refParam = getRefParam();
 
@@ -61,7 +65,7 @@ const getDefaultRef = (): number[] => {
   return [book, chapter, verse];
 };
 
-const Workbench = (props: WorkbenchProps): ReactElement => {
+const WorkbenchHebrew = (props: WorkbenchProps): ReactElement => {
   const [defaultBook, defaultChapter, defaultVerse] = getDefaultRef();
 
   const [updatedAlignments, setUpdatedAlignments] = useState(null);
@@ -71,6 +75,8 @@ const Workbench = (props: WorkbenchProps): ReactElement => {
     : documentTitle;
 
   const [theme, setTheme] = useState('night');
+
+  const themeVar = theme as 'night' | 'day';
 
   const [showSourceText, setShowSourceText] = useState(true);
   const [showTargetText, setShowTargetText] = useState(true);
@@ -85,6 +91,13 @@ const Workbench = (props: WorkbenchProps): ReactElement => {
     placeholderTreedown as SyntaxRoot
   );
 
+  const [words, setWords] = useState([] as Word[]);
+
+  // const defaultTestament: null | 'ot' | 'nt' = null;
+  const [testament, setTestament] = useState('');
+
+  const [loading, setLoading] = useState(false);
+
   const bookDoc = books.find((bookItem) => bookItem.BookNumber === book);
 
   let chapterCount = 0;
@@ -96,55 +109,106 @@ const Workbench = (props: WorkbenchProps): ReactElement => {
 
   const verses = Array.from(Array(200).keys()).map((x) => x + 1);
 
+  console.log(bookDoc, testament);
+
   useEffect(() => {
     const loadSyntaxData = async () => {
       try {
-        const syntaxData = await fetchSyntaxData(bookDoc, chapter, verse);
-        if (syntaxData) {
+        setLoading(true);
+        console.log('fetch', bookDoc, chapter, verse);
+        // const syntaxData = await fetchSyntaxData(bookDoc, chapter, verse);
+        const [syntaxData, words] = await fetchData(bookDoc, chapter, verse);
+        if (syntaxData && words && bookDoc) {
+          console.log(syntaxData);
           setSyntaxData(syntaxData as SyntaxRoot);
+          setWords(words);
+          const testament = bookDoc?.BookNumber < 39 ? 'ot' : 'nt';
+          setTestament(testament);
+
           document.title = `${documentTitle} ${
             bookDoc ? bookDoc.OSIS : book
           }.${chapter}.${verse}`;
         }
+        setLoading(false);
       } catch (error) {
         console.error(error);
+        setLoading(false);
       }
     };
 
     loadSyntaxData().catch(console.error);
   }, [bookDoc, book, chapter, verse]);
 
+  // if (theme === 'night') {
+  //   document.body.style.backgroundColor = 'var(--night-background)';
+  // }
+  //
+  // if (theme === 'day') {
+  //   document.body.style.backgroundColor = 'var(--day-background)';
+  // }
+
   const corpora: Corpus[] = [];
 
   if (showSourceText) {
-    const sourceCorpus = {
-      ...queryText('sbl', book, chapter, verse),
-      syntax: { ...syntaxData, _syntaxType: SyntaxType.Source },
-    };
-
-    corpora.push(sourceCorpus);
+    if (testament === 'nt') {
+      if (words && words.length > 0) {
+        corpora.push({
+          id: 'nestle1904',
+          name: 'Nestle 1904 GNT',
+          fullName: 'Nestle 1904 Greek New Testament',
+          language: 'grc',
+          syntax: syntaxData,
+          words,
+        });
+      }
+    }
+    // const sourceCorpus = {
+    //   ...queryText('oshb', book, chapter, verse),
+    //   syntax: { ...syntaxData, _syntaxType: SyntaxType.Source },
+    // };
+    //
+    // console.log(sourceCorpus);
+    if (testament === 'ot') {
+      if (words && words.length > 0) {
+        corpora.push({
+          id: 'oshb',
+          name: 'OSHB',
+          fullName: 'Open Scriptures Hebrew Bible',
+          language: 'hbo',
+          syntax: syntaxData,
+          words,
+        });
+      }
+    }
   }
 
   if (showTargetText) {
     corpora.push({
-      ...queryText('nvi', book, chapter, verse),
+      ...queryText('nvi', `${bookDoc?.OSIS}.${chapter}.${verse}`),
       syntax: { ...syntaxData, _syntaxType: SyntaxType.Mapped },
     });
   }
 
   if (showLwcText) {
     corpora.push({
-      ...queryText('leb', book, chapter, verse),
+      ...queryText('leb', `${bookDoc?.OSIS}.${chapter}.${verse}`),
       syntax: { ...syntaxData, _syntaxType: SyntaxType.MappedSecondary },
     });
   }
-
   if (showBackText) {
-    corpora.push(queryText('backTrans', book, chapter, verse));
+    corpora.push(
+      queryText('backTrans', `${bookDoc?.OSIS}.${chapter}.${verse}`)
+    );
   }
 
   return (
-    <div>
+    <div
+      style={
+        {
+          // backgroundColor: cssVar('background', themeVar),
+        }
+      }
+    >
       <div
         style={{
           display: 'flex',
@@ -152,11 +216,13 @@ const Workbench = (props: WorkbenchProps): ReactElement => {
           alignItems: 'center',
           padding: '2rem',
           border: '1px solid',
+          // borderColor: cssVar('border-color', themeVar),
           textAlign: 'center',
           margin: 'auto',
           marginTop: '1rem',
           marginBottom: '1rem',
           maxWidth: '800px',
+          // backgroundColor: cssVar('background', themeVar),
         }}
       >
         <div
@@ -166,7 +232,13 @@ const Workbench = (props: WorkbenchProps): ReactElement => {
             alignItems: 'flex-start',
           }}
         >
-          <label>
+          <label
+            style={
+              {
+                // color: cssVar('font-color', theme as 'night' | 'day')
+              }
+            }
+          >
             Book{' '}
             <select
               value={book}
@@ -187,7 +259,13 @@ const Workbench = (props: WorkbenchProps): ReactElement => {
               ;
             </select>
           </label>
-          <label>
+          <label
+            style={
+              {
+                // color: cssVar('font-color', theme as 'night' | 'day'),
+              }
+            }
+          >
             Chapter{' '}
             <select
               value={chapter}
@@ -204,7 +282,13 @@ const Workbench = (props: WorkbenchProps): ReactElement => {
               })}
             </select>
           </label>
-          <label>
+          <label
+            style={
+              {
+                // color: cssVar('font-color', theme as 'night' | 'day')
+              }
+            }
+          >
             Verse{' '}
             <select
               value={verse}
@@ -221,6 +305,17 @@ const Workbench = (props: WorkbenchProps): ReactElement => {
               })}
             </select>
           </label>
+
+          <Box
+            sx={{
+              display: 'flex',
+              width: '3.5rem',
+              height: '3.5rem',
+              padding: '0.5rem',
+            }}
+          >
+            {loading && <CircularProgress size="1.5rem" />}
+          </Box>
         </div>
         <button
           onClick={() => {
@@ -242,7 +337,13 @@ const Workbench = (props: WorkbenchProps): ReactElement => {
             alignItems: 'flex-start',
           }}
         >
-          <label>
+          <label
+            style={
+              {
+                // color: cssVar('font-color', theme as 'night' | 'day')
+              }
+            }
+          >
             <input
               type="checkbox"
               name="source"
@@ -253,7 +354,13 @@ const Workbench = (props: WorkbenchProps): ReactElement => {
             />
             Source
           </label>
-          <label>
+          <label
+            style={
+              {
+                // color: cssVar('font-color', theme as 'night' | 'day'),
+              }
+            }
+          >
             <input
               type="checkbox"
               name="source"
@@ -265,7 +372,13 @@ const Workbench = (props: WorkbenchProps): ReactElement => {
             Target
           </label>
 
-          <label>
+          <label
+            style={
+              {
+                // color: cssVar('font-color', theme as 'night' | 'day')
+              }
+            }
+          >
             <input
               type="checkbox"
               name="source"
@@ -276,7 +389,13 @@ const Workbench = (props: WorkbenchProps): ReactElement => {
             />
             LWC
           </label>
-          <label>
+          <label
+            style={
+              {
+                // color: cssVar('font-color', theme as 'night' | 'day')
+              }
+            }
+          >
             <input
               type="checkbox"
               name="source"
@@ -296,6 +415,7 @@ const Workbench = (props: WorkbenchProps): ReactElement => {
           justifyContent: 'center',
           padding: '2rem',
           border: '1px solid',
+          // borderColor: cssVar('border-color', themeVar),
           margin: 'auto',
           marginTop: '1rem',
           marginBottom: '1rem',
@@ -332,7 +452,7 @@ const Workbench = (props: WorkbenchProps): ReactElement => {
               },
             },
             {
-              source: 'sbl',
+              source: 'nestle1904',
               target: 'nvi',
               links: [
                 { sources: ['450050030010010'], targets: ['nvi_1'] },
@@ -369,4 +489,4 @@ const Workbench = (props: WorkbenchProps): ReactElement => {
   );
 };
 
-export default Workbench;
+export default WorkbenchHebrew;
