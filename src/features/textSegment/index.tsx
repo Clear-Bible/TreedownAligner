@@ -279,7 +279,7 @@ export const TextSegment = (props: TextSegmentProps): ReactElement => {
         {props.word.text}
       </Typography>
       {corpus?.language !== 'hbo' && <span> </span>}
-      {word.after && <Typography>{word.after}</Typography>}
+      {word.after && <Typography display="inline">{word.after}</Typography>}
     </React.Fragment>
   );
 };
