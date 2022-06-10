@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { ReactElement, useState, useEffect } from 'react';
 
 import { Corpus, SyntaxType, SyntaxRoot } from 'structs';

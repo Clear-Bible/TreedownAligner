@@ -6,7 +6,22 @@ const MACULA_ENV = 'http://labs.clear.bible/symphony-dev';
 const MACULA_ENV_TEMP =
   'https://v2022-05-24-002---symphony-api-dev-25c5xl4maa-uk.a.run.app/symphony-dev';
 
-const parseWords = async (xmlDoc: string): Promise<Word[]> => {
+const determineCorpusId = (isOT: boolean, isNT: boolean) => {
+  if (isOT) {
+    return 'oshb';
+  }
+
+  if (isNT) {
+    return 'nestle1904';
+  }
+};
+
+const parseWords = async (
+  xmlDoc: string,
+  isOT: boolean,
+  isNT: boolean
+): Promise<Word[]> => {
+  const corpusId = determineCorpusId(isOT, isNT);
   const parser = new DOMParser();
 
   const document = parser.parseFromString(xmlDoc, 'text/xml');
@@ -34,7 +49,7 @@ const parseWords = async (xmlDoc: string): Promise<Word[]> => {
   const words = sortedElements.map((w, index): Word => {
     const word: Word = {
       id: w.attributes.getNamedItem('n')?.value ?? '',
-      corpusId: 'oshb',
+      corpusId: corpusId ?? '',
       text: w.innerHTML,
       position: index,
     };
@@ -104,12 +119,16 @@ const fetchData = async (
   verseNum: number
 ): Promise<[SyntaxRoot, Word[]]> => {
   if (bookDoc) {
+    const isOT = bookDoc.BookNumber >= 1 && bookDoc.BookNumber <= 39;
+    const isNT = bookDoc.BookNumber > 39 && bookDoc.BookNumber <= 66;
     const osisRef = `${titleCase(bookDoc.OSIS)}.${chapterNum}.${verseNum}`;
+
+    console.log('QUERY SOURCE OSIS', osisRef);
 
     if (Object.keys(cachedSyntaxData).includes(osisRef)) {
       const cachedSyntaxDatum = cachedSyntaxData[osisRef];
       const syntaxData = await parseSyntaxData(cachedSyntaxDatum);
-      const words = await parseWords(cachedSyntaxDatum);
+      const words = await parseWords(cachedSyntaxDatum, isOT, isNT);
 
       if (syntaxData && words) {
         return [syntaxData, words];
@@ -119,7 +138,7 @@ const fetchData = async (
     let response = null;
 
     // OT
-    if (bookDoc.BookNumber >= 1 && bookDoc.BookNumber <= 39) {
+    if (isOT) {
       const osisRef = `${titleCase(
         bookDoc.ParaText
       )}.${chapterNum}.${verseNum}`;
@@ -134,7 +153,7 @@ const fetchData = async (
     }
 
     // NT
-    if (bookDoc.BookNumber > 39 && bookDoc.BookNumber <= 66) {
+    if (isNT) {
       const osisRef = `${titleCase(bookDoc.OSIS)}.${chapterNum}.${verseNum}`;
       console.log('RESP', response);
       response = await fetch(
@@ -149,7 +168,7 @@ const fetchData = async (
 
     const xmlDoc = await response.text();
     const syntaxData = await parseSyntaxData(xmlDoc);
-    const words = await parseWords(xmlDoc);
+    const words = await parseWords(xmlDoc, isOT, isNT);
 
     if (syntaxData && words) {
       return [syntaxData, words];

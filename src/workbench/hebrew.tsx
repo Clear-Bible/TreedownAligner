@@ -10,7 +10,7 @@ import EditorWrapper from 'features/editor';
 // import fetchSyntaxData from 'workbench/fetchSyntaxData';
 import fetchData from 'workbench/fetchData';
 
-// import { queryText } from 'workbench/query';
+import { queryText } from 'workbench/query';
 import books from 'workbench/books';
 
 import placeholderTreedown from 'features/treedown/treedown.json';
@@ -182,23 +182,24 @@ const WorkbenchHebrew = (props: WorkbenchProps): ReactElement => {
     }
   }
 
-  // if (showTargetText) {
-  //   corpora.push({
-  //     ...queryText('nvi', book, chapter, verse),
-  //     syntax: { ...syntaxData, _syntaxType: SyntaxType.Mapped },
-  //   });
-  // }
+  if (showTargetText) {
+    corpora.push({
+      ...queryText('nvi', `${bookDoc?.OSIS}.${chapter}.${verse}`),
+      syntax: { ...syntaxData, _syntaxType: SyntaxType.Mapped },
+    });
+  }
 
-  // if (showLwcText) {
-  //   corpora.push({
-  //     ...queryText('leb', book, chapter, verse),
-  //     syntax: { ...syntaxData, _syntaxType: SyntaxType.MappedSecondary },
-  //   });
-  // }
-
-  // if (showBackText) {
-  //   corpora.push(queryText('backTrans', book, chapter, verse));
-  // }
+  if (showLwcText) {
+    corpora.push({
+      ...queryText('leb', `${bookDoc?.OSIS}.${chapter}.${verse}`),
+      syntax: { ...syntaxData, _syntaxType: SyntaxType.MappedSecondary },
+    });
+  }
+  if (showBackText) {
+    corpora.push(
+      queryText('backTrans', `${bookDoc?.OSIS}.${chapter}.${verse}`)
+    );
+  }
 
   return (
     <div
@@ -451,7 +452,7 @@ const WorkbenchHebrew = (props: WorkbenchProps): ReactElement => {
               },
             },
             {
-              source: 'sbl',
+              source: 'nestle1904',
               target: 'nvi',
               links: [
                 { sources: ['450050030010010'], targets: ['nvi_1'] },
