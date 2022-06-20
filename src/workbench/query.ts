@@ -1,8 +1,9 @@
-import { Corpus } from 'structs';
+import { Alignment, Corpus } from 'structs';
 
 import nvi from 'workbench/texts/nvi';
 import leb from 'workbench/texts/leb';
 import backTrans from 'workbench/texts/backTrans';
+import alignments from 'workbench/alignments';
 
 const placeholder = 'No text for this reference.';
 
@@ -73,4 +74,40 @@ export const queryText = (corpusId: string, osisRef: string): Corpus => {
     language: corpus?.language ?? '',
     words: words,
   };
+};
+
+export const queryAlignment = (
+  osisRef: string,
+  isOT: boolean,
+  isNT: boolean
+): Alignment[] => {
+  if (!alignments[osisRef]) {
+    if (isOT) {
+      return alignments['baseOT'];
+    }
+
+    if (isNT) {
+      return alignments['baseNT'];
+    }
+  }
+  return alignments[osisRef];
+};
+
+export const hasAlignment = (corpusId: string, osisRef: string): boolean => {
+  const alignmentDataForOsisRef = alignments[osisRef];
+
+  if (!alignmentDataForOsisRef) {
+    return false;
+  }
+
+  let found: boolean = false;
+  alignmentDataForOsisRef.forEach((alignmentDatum) => {
+    if (
+      alignmentDatum.source === corpusId ||
+      alignmentDatum.target === corpusId
+    ) {
+      found = true;
+    }
+  });
+  return found;
 };

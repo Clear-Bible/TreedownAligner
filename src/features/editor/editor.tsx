@@ -33,7 +33,8 @@ export const Editor = (props: EditorProps): ReactElement => {
   }, [dispatch, theme]);
 
   useEffect(() => {
-    if (alignments) {
+    if (alignments && alignments.length > 0) {
+      console.log('ALIGNMENTS', alignments);
       dispatch(loadAlignments(alignments));
     }
 

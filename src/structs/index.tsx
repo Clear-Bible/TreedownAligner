@@ -91,6 +91,8 @@ export interface SyntaxContent {
   elementType: string;
   class?: string;
 
+  id?: string;
+  usfmId?: string;
   n?: string;
   osisId?: string;
   lemma?: string;

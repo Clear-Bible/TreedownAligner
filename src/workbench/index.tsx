@@ -10,7 +10,7 @@ import EditorWrapper from 'features/editor';
 // import fetchSyntaxData from 'workbench/fetchSyntaxData';
 import fetchData from 'workbench/fetchData';
 
-import { queryText } from 'workbench/query';
+import { queryText, queryAlignment, hasAlignment } from 'workbench/query';
 import books from 'workbench/books';
 
 import placeholderTreedown from 'features/treedown/treedown.json';
@@ -149,344 +149,300 @@ const WorkbenchHebrew = (props: WorkbenchProps): ReactElement => {
 
   const corpora: Corpus[] = [];
 
-  if (showSourceText) {
-    if (testament === 'nt') {
-      if (words && words.length > 0) {
-        corpora.push({
-          id: 'nestle1904',
-          name: 'Nestle 1904 GNT',
-          fullName: 'Nestle 1904 Greek New Testament',
-          language: 'grc',
-          syntax: syntaxData,
-          words,
-        });
-      }
-    }
-    // const sourceCorpus = {
-    //   ...queryText('oshb', book, chapter, verse),
-    //   syntax: { ...syntaxData, _syntaxType: SyntaxType.Source },
-    // };
-    //
-    // console.log(sourceCorpus);
-    if (testament === 'ot') {
-      if (words && words.length > 0) {
-        corpora.push({
-          id: 'oshb',
-          name: 'OSHB',
-          fullName: 'Open Scriptures Hebrew Bible',
-          language: 'hbo',
-          syntax: syntaxData,
-          words,
-        });
-      }
-    }
-  }
+  if (bookDoc) {
+    const osisRef = `${bookDoc?.OSIS}.${chapter}.${verse}`;
+    const isOT = bookDoc?.BookNumber >= 1 && bookDoc?.BookNumber <= 39;
+    const isNT = bookDoc?.BookNumber > 39 && bookDoc?.BookNumber <= 66;
 
-  if (showTargetText) {
-    corpora.push({
-      ...queryText('nvi', `${bookDoc?.OSIS}.${chapter}.${verse}`),
-      syntax: { ...syntaxData, _syntaxType: SyntaxType.Mapped },
-    });
-  }
-
-  if (showLwcText) {
-    corpora.push({
-      ...queryText('leb', `${bookDoc?.OSIS}.${chapter}.${verse}`),
-      syntax: { ...syntaxData, _syntaxType: SyntaxType.MappedSecondary },
-    });
-  }
-  if (showBackText) {
-    corpora.push(
-      queryText('backTrans', `${bookDoc?.OSIS}.${chapter}.${verse}`)
-    );
-  }
-
-  return (
-    <div
-      style={
-        {
-          // backgroundColor: cssVar('background', themeVar),
+    if (showSourceText) {
+      if (testament === 'nt') {
+        if (words && words.length > 0) {
+          corpora.push({
+            id: 'nestle1904',
+            name: 'Nestle 1904 GNT',
+            fullName: 'Nestle 1904 Greek New Testament',
+            language: 'grc',
+            syntax: syntaxData,
+            words,
+          });
         }
       }
-    >
+      // const sourceCorpus = {
+      //   ...queryText('oshb', book, chapter, verse),
+      //   syntax: { ...syntaxData, _syntaxType: SyntaxType.Source },
+      // };
+      //
+      // console.log(sourceCorpus);
+      if (testament === 'ot') {
+        if (words && words.length > 0) {
+          corpora.push({
+            id: 'oshb',
+            name: 'OSHB',
+            fullName: 'Open Scriptures Hebrew Bible',
+            language: 'hbo',
+            syntax: syntaxData,
+            words,
+          });
+        }
+      }
+    }
+
+    if (showTargetText) {
+      corpora.push({
+        ...queryText('nvi', osisRef),
+        syntax: hasAlignment('nvi', osisRef)
+          ? { ...syntaxData, _syntaxType: SyntaxType.Mapped }
+          : undefined,
+      });
+    }
+
+    if (showLwcText) {
+      corpora.push({
+        ...queryText('leb', osisRef),
+        syntax: hasAlignment('leb', osisRef)
+          ? { ...syntaxData, _syntaxType: SyntaxType.MappedSecondary }
+          : undefined,
+      });
+    }
+    if (showBackText) {
+      corpora.push(queryText('backTrans', osisRef));
+    }
+
+    return (
       <div
-        style={{
-          display: 'flex',
-          justifyContent: 'space-around',
-          alignItems: 'center',
-          padding: '2rem',
-          border: '1px solid',
-          // borderColor: cssVar('border-color', themeVar),
-          textAlign: 'center',
-          margin: 'auto',
-          marginTop: '1rem',
-          marginBottom: '1rem',
-          maxWidth: '800px',
-          // backgroundColor: cssVar('background', themeVar),
-        }}
+        style={
+          {
+            // backgroundColor: cssVar('background', themeVar),
+          }
+        }
       >
         <div
           style={{
             display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'flex-start',
+            justifyContent: 'space-around',
+            alignItems: 'center',
+            padding: '2rem',
+            border: '1px solid',
+            // borderColor: cssVar('border-color', themeVar),
+            textAlign: 'center',
+            margin: 'auto',
+            marginTop: '1rem',
+            marginBottom: '1rem',
+            maxWidth: '800px',
+            // backgroundColor: cssVar('background', themeVar),
           }}
         >
-          <label
-            style={
-              {
-                // color: cssVar('font-color', theme as 'night' | 'day')
-              }
-            }
-          >
-            Book{' '}
-            <select
-              value={book}
-              onChange={(e) => {
-                setBook(Number(e.target.value));
-              }}
-            >
-              {books.map((book: any) => {
-                return (
-                  <option
-                    key={`book_option_${book.BookNumber}`}
-                    value={`${book.BookNumber}`}
-                  >
-                    {book.EnglishBookName}
-                  </option>
-                );
-              })}
-              ;
-            </select>
-          </label>
-          <label
-            style={
-              {
-                // color: cssVar('font-color', theme as 'night' | 'day'),
-              }
-            }
-          >
-            Chapter{' '}
-            <select
-              value={chapter}
-              onChange={(e) => {
-                setChapter(Number(e.target.value));
-              }}
-            >
-              {chapters.map((chapter) => {
-                return (
-                  <option key={`chapter_option_${chapter}`} value={chapter}>
-                    {chapter}
-                  </option>
-                );
-              })}
-            </select>
-          </label>
-          <label
-            style={
-              {
-                // color: cssVar('font-color', theme as 'night' | 'day')
-              }
-            }
-          >
-            Verse{' '}
-            <select
-              value={verse}
-              onChange={(e) => {
-                setVerse(Number(e.target.value));
-              }}
-            >
-              {verses.map((verse) => {
-                return (
-                  <option key={`verse_option_${verse}`} value={verse}>
-                    {verse}
-                  </option>
-                );
-              })}
-            </select>
-          </label>
-
-          <Box
-            sx={{
+          <div
+            style={{
               display: 'flex',
-              width: '3.5rem',
-              height: '3.5rem',
-              padding: '0.5rem',
+              flexDirection: 'column',
+              alignItems: 'flex-start',
             }}
           >
-            {loading && <CircularProgress size="1.5rem" />}
-          </Box>
-        </div>
-        <button
-          onClick={() => {
-            if (theme === 'night') {
-              setTheme('day');
-            }
+            <label
+              style={
+                {
+                  // color: cssVar('font-color', theme as 'night' | 'day')
+                }
+              }
+            >
+              Book{' '}
+              <select
+                value={book}
+                onChange={(e) => {
+                  setBook(Number(e.target.value));
+                }}
+              >
+                {books.map((book: any) => {
+                  return (
+                    <option
+                      key={`book_option_${book.BookNumber}`}
+                      value={`${book.BookNumber}`}
+                    >
+                      {book.EnglishBookName}
+                    </option>
+                  );
+                })}
+                ;
+              </select>
+            </label>
+            <label
+              style={
+                {
+                  // color: cssVar('font-color', theme as 'night' | 'day'),
+                }
+              }
+            >
+              Chapter{' '}
+              <select
+                value={chapter}
+                onChange={(e) => {
+                  setChapter(Number(e.target.value));
+                }}
+              >
+                {chapters.map((chapter) => {
+                  return (
+                    <option key={`chapter_option_${chapter}`} value={chapter}>
+                      {chapter}
+                    </option>
+                  );
+                })}
+              </select>
+            </label>
+            <label
+              style={
+                {
+                  // color: cssVar('font-color', theme as 'night' | 'day')
+                }
+              }
+            >
+              Verse{' '}
+              <select
+                value={verse}
+                onChange={(e) => {
+                  setVerse(Number(e.target.value));
+                }}
+              >
+                {verses.map((verse) => {
+                  return (
+                    <option key={`verse_option_${verse}`} value={verse}>
+                      {verse}
+                    </option>
+                  );
+                })}
+              </select>
+            </label>
 
-            if (theme === 'day') {
-              setTheme('night');
-            }
-          }}
-        >
-          Toggle Theme
-        </button>
+            <Box
+              sx={{
+                display: 'flex',
+                width: '3.5rem',
+                height: '3.5rem',
+                padding: '0.5rem',
+              }}
+            >
+              {loading && <CircularProgress size="1.5rem" />}
+            </Box>
+          </div>
+          <button
+            onClick={() => {
+              if (theme === 'night') {
+                setTheme('day');
+              }
+
+              if (theme === 'day') {
+                setTheme('night');
+              }
+            }}
+          >
+            Toggle Theme
+          </button>
+          <div
+            style={{
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'flex-start',
+            }}
+          >
+            <label
+              style={
+                {
+                  // color: cssVar('font-color', theme as 'night' | 'day')
+                }
+              }
+            >
+              <input
+                type="checkbox"
+                name="source"
+                checked={showSourceText}
+                onChange={() => {
+                  setShowSourceText(!showSourceText);
+                }}
+              />
+              Source
+            </label>
+            <label
+              style={
+                {
+                  // color: cssVar('font-color', theme as 'night' | 'day'),
+                }
+              }
+            >
+              <input
+                type="checkbox"
+                name="source"
+                checked={showTargetText}
+                onChange={() => {
+                  setShowTargetText(!showTargetText);
+                }}
+              />
+              Target
+            </label>
+
+            <label
+              style={
+                {
+                  // color: cssVar('font-color', theme as 'night' | 'day')
+                }
+              }
+            >
+              <input
+                type="checkbox"
+                name="source"
+                checked={showLwcText}
+                onChange={() => {
+                  setShowLwcText(!showLwcText);
+                }}
+              />
+              LWC
+            </label>
+            <label
+              style={
+                {
+                  // color: cssVar('font-color', theme as 'night' | 'day')
+                }
+              }
+            >
+              <input
+                type="checkbox"
+                name="source"
+                checked={showBackText}
+                onChange={() => {
+                  setShowBackText(!showBackText);
+                }}
+              />
+              Back
+            </label>
+          </div>
+        </div>
+
         <div
           style={{
             display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'flex-start',
+            justifyContent: 'center',
+            padding: '2rem',
+            border: '1px solid',
+            // borderColor: cssVar('border-color', themeVar),
+            margin: 'auto',
+            marginTop: '1rem',
+            marginBottom: '1rem',
+            maxWidth: '1200px',
           }}
         >
-          <label
-            style={
-              {
-                // color: cssVar('font-color', theme as 'night' | 'day')
-              }
-            }
-          >
-            <input
-              type="checkbox"
-              name="source"
-              checked={showSourceText}
-              onChange={() => {
-                setShowSourceText(!showSourceText);
-              }}
-            />
-            Source
-          </label>
-          <label
-            style={
-              {
-                // color: cssVar('font-color', theme as 'night' | 'day'),
-              }
-            }
-          >
-            <input
-              type="checkbox"
-              name="source"
-              checked={showTargetText}
-              onChange={() => {
-                setShowTargetText(!showTargetText);
-              }}
-            />
-            Target
-          </label>
-
-          <label
-            style={
-              {
-                // color: cssVar('font-color', theme as 'night' | 'day')
-              }
-            }
-          >
-            <input
-              type="checkbox"
-              name="source"
-              checked={showLwcText}
-              onChange={() => {
-                setShowLwcText(!showLwcText);
-              }}
-            />
-            LWC
-          </label>
-          <label
-            style={
-              {
-                // color: cssVar('font-color', theme as 'night' | 'day')
-              }
-            }
-          >
-            <input
-              type="checkbox"
-              name="source"
-              checked={showBackText}
-              onChange={() => {
-                setShowBackText(!showBackText);
-              }}
-            />
-            Back
-          </label>
+          <EditorWrapper
+            theme={theme as 'night' | 'day'}
+            corpora={corpora}
+            alignments={queryAlignment(osisRef, isOT, isNT)}
+            alignmentUpdated={(alignments: any) => {
+              setUpdatedAlignments(alignments);
+            }}
+          />
         </div>
+        <div>{JSON.stringify(updatedAlignments, null, 2)}</div>
       </div>
-
-      <div
-        style={{
-          display: 'flex',
-          justifyContent: 'center',
-          padding: '2rem',
-          border: '1px solid',
-          // borderColor: cssVar('border-color', themeVar),
-          margin: 'auto',
-          marginTop: '1rem',
-          marginBottom: '1rem',
-          maxWidth: '1200px',
-        }}
-      >
-        <EditorWrapper
-          theme={theme as 'night' | 'day'}
-          corpora={corpora}
-          alignments={[
-            {
-              source: 'leb',
-              target: 'nvi',
-              links: [
-                { targets: ['nvi_0'], sources: ['leb_0'] },
-                { targets: ['nvi_1'], sources: ['leb_1'] },
-                { targets: ['nvi_2'], sources: ['leb_2'] },
-                { targets: ['nvi_4'], sources: ['leb_3'] },
-                { targets: ['nvi_5'], sources: ['leb_4'] },
-                { targets: ['nvi_6'], sources: ['leb_6'] },
-                { targets: ['nvi_7'], sources: ['leb_8'] },
-                { targets: ['nvi_8', 'nvi_9'], sources: ['leb_9', 'leb_10'] },
-                { targets: ['nvi_10'], sources: ['leb_11'] },
-                { targets: ['nvi_11'], sources: ['leb_12', 'leb_13'] },
-                { targets: ['nvi_12'], sources: ['leb_14'] },
-                { targets: ['nvi_14'], sources: ['leb_15'] },
-                { targets: ['nvi_15'], sources: ['leb_16'] },
-                { targets: ['nvi_16'], sources: ['leb_17', 'leb_18'] },
-              ],
-              polarity: {
-                type: 'secondary',
-                mappedSide: 'targets',
-                nonMappedSide: 'sources',
-              },
-            },
-            {
-              source: 'nestle1904',
-              target: 'nvi',
-              links: [
-                { sources: ['450050030010010'], targets: ['nvi_1'] },
-                { targets: ['nvi_2'], sources: ['450050030020010'] },
-                { targets: ['nvi_0'], sources: ['450050030030010'] },
-                { targets: ['nvi_5'], sources: ['450050030040010'] },
-                { targets: ['nvi_6'], sources: ['450050030050010'] },
-                { targets: ['nvi_7'], sources: ['450050030070010'] },
-                {
-                  targets: ['nvi_8', 'nvi_9'],
-                  sources: ['450050030080010', '450050030090010'],
-                },
-                { targets: ['nvi_11'], sources: ['450050030100010'] },
-                { targets: ['nvi_12'], sources: ['450050030110010'] },
-                { targets: ['nvi_13'], sources: ['450050030120010'] },
-                { targets: ['nvi_14'], sources: ['450050030130010'] },
-                { targets: ['nvi_16'], sources: ['450050030140010'] },
-                { targets: ['nvi_15'], sources: ['450050030150010'] },
-              ],
-              polarity: {
-                type: 'primary',
-                syntaxSide: 'sources',
-                nonSyntaxSide: 'targets',
-              },
-            },
-          ]}
-          alignmentUpdated={(alignments: any) => {
-            setUpdatedAlignments(alignments);
-          }}
-        />
-      </div>
-      <div>{JSON.stringify(updatedAlignments, null, 2)}</div>
-    </div>
-  );
+    );
+  }
+  return <p> {'No book doc?'} </p>;
 };
 
 export default WorkbenchHebrew;

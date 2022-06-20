@@ -64,9 +64,9 @@ const _syntaxMapper = (
   alignment: Alignment,
   secondaryAlignment: Alignment | null
 ): any => {
-  if (syntaxNode.content?.elementType === 'w' && syntaxNode.content.n) {
+  if (syntaxNode.content?.elementType === 'w' && syntaxNode.content.id) {
     syntaxNode.content.alignedWordIds = mapAlignedWords(
-      syntaxNode.content.n,
+      syntaxNode.content.id,
       alignment,
       secondaryAlignment
     );

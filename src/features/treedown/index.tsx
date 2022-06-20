@@ -21,8 +21,6 @@ interface TreedownProps {
 
 const INDENTATION_CONSTANT = 0.6;
 
-let theme: 'night' | 'day' = 'night';
-
 const parsePosition = (osisId: string): number => {
   //Number(/^.*!(\w)/.exec(syntaxNode.content.osisId)[1]
   return 0;
@@ -92,7 +90,7 @@ const recurseSyntax = (
     if (isClause(syntaxNode)) {
       return (
         <div
-          key={`cl-${syntaxNode.content.n}-${index}-${graduatedDepth}`}
+          key={`cl-${syntaxNode.content.id}-${index}-${graduatedDepth}`}
           className="cl"
           style={{
             marginInlineStart: `${graduatedDepth}rem`,
@@ -135,7 +133,7 @@ const recurseSyntax = (
 
       return (
         <div
-          key={`consituent-${syntaxNode.content.n}-${index}-${graduatedDepth}`}
+          key={`consituent-${syntaxNode.content.id}-${index}-${graduatedDepth}`}
           className="constituent"
           style={{
             marginTop: '5px',
@@ -185,8 +183,8 @@ const recurseSyntax = (
             )}
 
           {syntaxNode.content.elementType === 'w' &&
-            syntaxNode.content.n &&
-            syntaxNode.content.osisId &&
+            syntaxNode.content.id &&
+            // syntaxNode.content.usfmId &&
             syntaxNode.content.text && (
               <Typography
                 paragraph={false}
@@ -199,10 +197,10 @@ const recurseSyntax = (
                 {treedownType === TreedownType.Source && (
                   <TextSegment
                     word={{
-                      id: syntaxNode.content.n,
+                      id: syntaxNode.content.id,
                       corpusId: corpus.id,
                       text: syntaxNode.content.text,
-                      position: parsePosition(syntaxNode.content.osisId),
+                      position: 0, //parsePosition(syntaxNode.content.usfmId),
                     }}
                   />
                 )}
@@ -228,8 +226,8 @@ const recurseSyntax = (
 
     if (
       syntaxNode.content.elementType === 'w' &&
-      syntaxNode.content.n &&
-      syntaxNode.content.osisId &&
+      syntaxNode.content.id &&
+      // syntaxNode.content.usfmRef &&
       syntaxNode.content.text
     ) {
       if (treedownType === TreedownType.Mapped) {
@@ -238,10 +236,10 @@ const recurseSyntax = (
       return (
         <TextSegment
           word={{
-            id: syntaxNode.content.n,
+            id: syntaxNode.content.id,
             corpusId: corpus.id,
             text: syntaxNode.content.text,
-            position: parsePosition(syntaxNode.content.osisId),
+            position: 0, //parsePosition(syntaxNode.content.osisId),
           }}
         />
       );
@@ -255,12 +253,6 @@ export const TreedownComponent = (props: TreedownProps): ReactElement => {
   const { corpus, treedownType } = props;
 
   useDebug('TreedownComponent');
-
-  const reactTheme = useAppSelector((state) => {
-    return state.app.theme;
-  });
-
-  theme = reactTheme as 'night' | 'day';
 
   if (corpus.syntax && Object.keys(corpus.syntax).length > 0) {
     return (

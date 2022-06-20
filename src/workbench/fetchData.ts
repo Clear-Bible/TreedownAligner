@@ -5,6 +5,8 @@ import { SyntaxRoot, Word, SyntaxType } from 'structs';
 const MACULA_ENV = 'http://labs.clear.bible/symphony-dev';
 const MACULA_ENV_TEMP =
   'https://v2022-05-24-002---symphony-api-dev-25c5xl4maa-uk.a.run.app/symphony-dev';
+const MACULA_PR_ENV =
+  'https://pr-63---symphony-api-dev-25c5xl4maa-uk.a.run.app/symphony-dev';
 
 const determineCorpusId = (isOT: boolean, isNT: boolean) => {
   if (isOT) {
@@ -28,8 +30,8 @@ const parseWords = async (
   const elements = Array.from(document.getElementsByTagName('w'));
 
   const sortedElements = elements.sort((a, b): number => {
-    const aN = a.attributes.getNamedItem('n')?.value ?? '';
-    const bN = b.attributes.getNamedItem('n')?.value ?? '';
+    const aN = a.attributes.getNamedItem('id')?.value ?? '';
+    const bN = b.attributes.getNamedItem('id')?.value ?? '';
 
     if (!aN || !bN) {
       return 0;
@@ -48,7 +50,7 @@ const parseWords = async (
 
   const words = sortedElements.map((w, index): Word => {
     const word: Word = {
-      id: w.attributes.getNamedItem('n')?.value ?? '',
+      id: w.attributes.getNamedItem('id')?.value ?? '',
       corpusId: corpusId ?? '',
       text: w.innerHTML,
       position: index,
@@ -85,6 +87,7 @@ const parseSyntaxData = async (xmlDoc: string): Promise<SyntaxRoot | null> => {
         'articular',
         'det',
         'type',
+        'id',
         'n',
         'gloss',
         'strong',
@@ -139,12 +142,10 @@ const fetchData = async (
 
     // OT
     if (isOT) {
-      const osisRef = `${titleCase(
-        bookDoc.ParaText
-      )}.${chapterNum}.${verseNum}`;
+      const usfmRef = `${bookDoc.ParaText.toUpperCase()}%20${chapterNum}:${verseNum}`;
       try {
         response = await fetch(
-          `${MACULA_ENV_TEMP}/api/HOT/macula-hebrew/lowfat?osis-ref=${osisRef}`
+          `${MACULA_PR_ENV}/api/HOT/macula-hebrew/lowfat?usfm-ref=${usfmRef}`
         );
         console.log('RESP', response);
       } catch (err) {
@@ -154,10 +155,11 @@ const fetchData = async (
 
     // NT
     if (isNT) {
-      const osisRef = `${titleCase(bookDoc.OSIS)}.${chapterNum}.${verseNum}`;
+      const usfmRef = `${bookDoc.ParaText.toUpperCase()}%20${chapterNum}:${verseNum}`;
+      // const osisRef = `${titleCase(bookDoc.ParaText)}.${chapterNum}.${verseNum}`;
       console.log('RESP', response);
       response = await fetch(
-        `${MACULA_ENV}/api/GNT/Nestle1904/lowfat?osis-ref=${osisRef}`
+        `${MACULA_PR_ENV}/api/GNT/Nestle1904/lowfat?usfm-ref=${usfmRef}`
       );
     }
 
