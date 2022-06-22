@@ -1,9 +1,14 @@
 {
   "_syntaxType": "source",
-  "content": { "elementType": "sentence" },
+  "content": {
+    "elementType": "sentence"
+  },
   "children": [
     {
-      "content": { "elementType": "wg", "role": "cl" },
+      "content": {
+        "elementType": "wg",
+        "role": "cl"
+      },
       "children": [
         {
           "content": {
@@ -458,7 +463,10 @@
                       "children": []
                     },
                     {
-                      "content": { "elementType": "pc", "text": "." },
+                      "content": {
+                        "elementType": "pc",
+                        "text": "."
+                      },
                       "children": []
                     }
                   ]
