@@ -92,6 +92,7 @@ const parseSyntaxData = async (xmlDoc: string): Promise<SyntaxRoot | null> => {
         'gloss',
         'strong',
         'osisId',
+        'after',
       ],
       'sentences'
     );

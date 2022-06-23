@@ -201,6 +201,7 @@ const recurseSyntax = (
                       corpusId: corpus.id,
                       text: syntaxNode.content.text,
                       position: 0, //parsePosition(syntaxNode.content.usfmId),
+                      after: syntaxNode.content.after,
                     }}
                   />
                 )}
@@ -239,6 +240,7 @@ const recurseSyntax = (
             id: syntaxNode.content.id,
             corpusId: corpus.id,
             text: syntaxNode.content.text,
+            after: syntaxNode.content.after,
             position: 0, //parsePosition(syntaxNode.content.osisId),
           }}
         />

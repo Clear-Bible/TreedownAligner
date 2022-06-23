@@ -101,6 +101,7 @@ export interface SyntaxContent {
   text?: string;
   rule?: string;
   role?: string;
+  after?: string;
 
   head?: string;
   discontinuous?: string;
