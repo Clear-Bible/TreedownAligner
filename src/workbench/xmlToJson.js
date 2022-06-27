@@ -73,15 +73,12 @@ const mapper = (parsedXml) => {
 };
 
 const convert = async (xmlData, requestedAttrs, rootNode) => {
-  console.log('xmlToJson', xmlData);
   attrsToKeep = requestedAttrs;
 
   const parserResult = parseXml(xmlData);
-  console.log(parserResult.toJSON(), parserResult.children);
 
   const parsedXml = parserResult.children
     .find((item) => {
-      console.log(item);
       return item.name === rootNode;
     })
     .toJSON();

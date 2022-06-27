@@ -35,7 +35,8 @@ const computeDecoration = (
   mode: AlignmentMode,
   isLinked: boolean,
   isInvolved: boolean,
-  isMemberOfMultipleAlignments: boolean
+  isMemberOfMultipleAlignments: boolean,
+  isPeripheral: boolean
 ): string => {
   let decoration = '';
   if (mode === AlignmentMode.Edit || mode === AlignmentMode.Select) {
@@ -62,6 +63,10 @@ const computeDecoration = (
 
   if (isMemberOfMultipleAlignments) {
     decoration += ' locked';
+  }
+
+  if (isPeripheral) {
+    decoration += ' peripheral';
   }
 
   return decoration;
@@ -246,7 +251,8 @@ export const TextSegment = (props: TextSegmentProps): ReactElement => {
           mode,
           isLinked,
           isInvolved,
-          isMemberOfMultipleAlignments
+          isMemberOfMultipleAlignments,
+          Boolean(word.peripheral)
         )}`}
         onMouseEnter={() => {
           dispatch(hover(word));
@@ -279,7 +285,11 @@ export const TextSegment = (props: TextSegmentProps): ReactElement => {
         {props.word.text}
       </Typography>
       {corpus?.language !== 'hbo' && <span> </span>}
-      {word.after && <Typography display="inline">{word.after}</Typography>}
+      {word.after && (
+        <Typography display="inline" component="span">
+          {word.after}
+        </Typography>
+      )}
     </React.Fragment>
   );
 };

@@ -16,7 +16,7 @@ import books from 'workbench/books';
 import placeholderTreedown from 'features/treedown/treedown.json';
 import { CircularProgress, Box } from '@mui/material';
 
-interface WorkbenchProps {}
+interface WorkbenchProps { }
 
 const documentTitle = '🌲⬇️';
 
@@ -34,9 +34,13 @@ const getRefParam = (): string | null => {
 };
 
 const getDefaultRef = (): number[] => {
-  let book = 1;
-  let chapter = 1;
-  let verse = 1;
+  // let book = 1;
+  // let chapter = 1;
+  // let verse = 1;
+
+  let book = 45;
+  let chapter = 5;
+  let verse = 3;
 
   const refParam = getRefParam();
 
@@ -109,25 +113,20 @@ const WorkbenchHebrew = (props: WorkbenchProps): ReactElement => {
 
   const verses = Array.from(Array(200).keys()).map((x) => x + 1);
 
-  console.log(bookDoc, testament);
-
   useEffect(() => {
     const loadSyntaxData = async () => {
       try {
         setLoading(true);
-        console.log('fetch', bookDoc, chapter, verse);
         // const syntaxData = await fetchSyntaxData(bookDoc, chapter, verse);
         const [syntaxData, words] = await fetchData(bookDoc, chapter, verse);
         if (syntaxData && words && bookDoc) {
-          console.log(syntaxData);
           setSyntaxData(syntaxData as SyntaxRoot);
           setWords(words);
           const testament = bookDoc?.BookNumber < 39 ? 'ot' : 'nt';
           setTestament(testament);
 
-          document.title = `${documentTitle} ${
-            bookDoc ? bookDoc.OSIS : book
-          }.${chapter}.${verse}`;
+          document.title = `${documentTitle} ${bookDoc ? bookDoc.OSIS : book
+            }.${chapter}.${verse}`;
         }
         setLoading(false);
       } catch (error) {

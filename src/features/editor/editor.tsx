@@ -34,7 +34,6 @@ export const Editor = (props: EditorProps): ReactElement => {
 
   useEffect(() => {
     if (alignments && alignments.length > 0) {
-      console.log('ALIGNMENTS', alignments);
       dispatch(loadAlignments(alignments));
     }
 

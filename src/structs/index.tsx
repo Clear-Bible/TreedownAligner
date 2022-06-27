@@ -25,6 +25,7 @@ export interface Word {
   text: string;
   position: number;
   after?: string;
+  peripheral?: boolean;
 }
 
 export interface CorpusViewport {

@@ -18,10 +18,29 @@ const determineCorpusId = (isOT: boolean, isNT: boolean) => {
   }
 };
 
+const determinePeripherality = (
+  id: string,
+  contextualBook: number,
+  contextualChapter: number,
+  contextualVerse: number
+): boolean => {
+  const book = new String(contextualBook).padStart(2, '0');
+  const chapter = new String(contextualChapter).padStart(3, '0');
+  const verse = new String(contextualVerse).padStart(3, '0');
+
+  const contextualId = `${book}${chapter}${verse}`;
+  const actualId = id.replace(/[^0-9]/g, '').substring(0, 8);
+
+  return contextualId !== actualId;
+};
+
 const parseWords = async (
   xmlDoc: string,
   isOT: boolean,
-  isNT: boolean
+  isNT: boolean,
+  bookDoc: any,
+  chapterNum: number,
+  verseNum: number
 ): Promise<Word[]> => {
   const corpusId = determineCorpusId(isOT, isNT);
   const parser = new DOMParser();
@@ -49,18 +68,29 @@ const parseWords = async (
   });
 
   const words = sortedElements.map((w, index): Word => {
-    const word: Word = {
-      id: w.attributes.getNamedItem('id')?.value ?? '',
-      corpusId: corpusId ?? '',
-      text: w.innerHTML,
-      position: index,
-    };
+    const extractedId = w.attributes.getNamedItem('id')?.value;
+    if (extractedId) {
+      const word: Word = {
+        id: w.attributes.getNamedItem('id')?.value ?? '',
+        corpusId: corpusId ?? '',
+        text: w.innerHTML,
+        position: index,
+        peripheral: determinePeripherality(
+          extractedId,
+          bookDoc.BookNumber,
+          chapterNum,
+          verseNum
+        ),
+      };
 
-    if (w.attributes.getNamedItem('after')) {
-      word.after = w.attributes.getNamedItem('after')?.value;
+      if (w.attributes.getNamedItem('after')) {
+        word.after = w.attributes.getNamedItem('after')?.value;
+      }
+
+      return word;
     }
 
-    return word;
+    throw new Error();
   });
 
   return words;
@@ -127,12 +157,17 @@ const fetchData = async (
     const isNT = bookDoc.BookNumber > 39 && bookDoc.BookNumber <= 66;
     const osisRef = `${titleCase(bookDoc.OSIS)}.${chapterNum}.${verseNum}`;
 
-    console.log('QUERY SOURCE OSIS', osisRef);
-
     if (Object.keys(cachedSyntaxData).includes(osisRef)) {
       const cachedSyntaxDatum = cachedSyntaxData[osisRef];
       const syntaxData = await parseSyntaxData(cachedSyntaxDatum);
-      const words = await parseWords(cachedSyntaxDatum, isOT, isNT);
+      const words = await parseWords(
+        cachedSyntaxDatum,
+        isOT,
+        isNT,
+        bookDoc,
+        chapterNum,
+        verseNum
+      );
 
       if (syntaxData && words) {
         return [syntaxData, words];
@@ -148,7 +183,6 @@ const fetchData = async (
         response = await fetch(
           `${MACULA_PR_ENV}/api/HOT/macula-hebrew/lowfat?usfm-ref=${usfmRef}`
         );
-        console.log('RESP', response);
       } catch (err) {
         console.error(err);
       }
@@ -158,7 +192,6 @@ const fetchData = async (
     if (isNT) {
       const usfmRef = `${bookDoc.ParaText.toUpperCase()}%20${chapterNum}:${verseNum}`;
       // const osisRef = `${titleCase(bookDoc.ParaText)}.${chapterNum}.${verseNum}`;
-      console.log('RESP', response);
       response = await fetch(
         `${MACULA_PR_ENV}/api/GNT/Nestle1904/lowfat?usfm-ref=${usfmRef}`
       );
@@ -171,7 +204,14 @@ const fetchData = async (
 
     const xmlDoc = await response.text();
     const syntaxData = await parseSyntaxData(xmlDoc);
-    const words = await parseWords(xmlDoc, isOT, isNT);
+    const words = await parseWords(
+      xmlDoc,
+      isOT,
+      isNT,
+      bookDoc,
+      chapterNum,
+      verseNum
+    );
 
     if (syntaxData && words) {
       return [syntaxData, words];
