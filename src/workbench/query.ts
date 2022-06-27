@@ -94,20 +94,20 @@ export const queryAlignment = (
 };
 
 export const hasAlignment = (corpusId: string, osisRef: string): boolean => {
-  const alignmentDataForOsisRef = alignments[osisRef];
+  // const alignmentDataForOsisRef = alignments[osisRef];
 
-  if (!alignmentDataForOsisRef) {
-    return false;
-  }
+  // if (!alignmentDataForOsisRef) {
+  //   return false;
+  // }
 
-  let found: boolean = false;
-  alignmentDataForOsisRef.forEach((alignmentDatum) => {
-    if (
-      alignmentDatum.source === corpusId ||
-      alignmentDatum.target === corpusId
-    ) {
-      found = true;
-    }
-  });
+  let found: boolean = true;
+  // alignmentDataForOsisRef.forEach((alignmentDatum) => {
+  //   if (
+  //     alignmentDatum.source === corpusId ||
+  //     alignmentDatum.target === corpusId
+  //   ) {
+  //     found = true;
+  //   }
+  // });
   return found;
 };
