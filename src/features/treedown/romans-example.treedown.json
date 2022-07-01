@@ -1,0 +1,601 @@
+{
+  "content": {
+    "elementType": "sentences"
+  },
+  "children": [
+    {
+      "content": {
+        "elementType": "sentence"
+      },
+      "children": [
+        {
+          "content": {
+            "elementType": "wg",
+            "role": "cl"
+          },
+          "children": [
+            {
+              "content": {
+                "elementType": "wg",
+                "class": "cl",
+                "rule": "Conj-CL",
+                "id": "450050030030230"
+              },
+              "children": [
+                {
+                  "content": {
+                    "elementType": "w",
+                    "after": ",",
+                    "class": "conj",
+                    "id": "n45005003003",
+                    "lemma": "δέ",
+                    "strong": "1161",
+                    "discontinuous": "true",
+                    "gloss": "now",
+                    "text": "δέ",
+                    "alignedWordIds": ["nvi_0"]
+                  },
+                  "children": []
+                },
+                {
+                  "content": {
+                    "elementType": "wg",
+                    "class": "cl",
+                    "rule": "notCLbutCL2CL",
+                    "id": "450050030010220"
+                  },
+                  "children": [
+                    {
+                      "content": {
+                        "elementType": "w",
+                        "after": " ",
+                        "class": "adv",
+                        "id": "n45005003001",
+                        "lemma": "οὐ",
+                        "strong": "3756",
+                        "gloss": "Not",
+                        "text": "οὐ",
+                        "alignedWordIds": ["nvi_1"]
+                      },
+                      "children": []
+                    },
+                    {
+                      "content": {
+                        "elementType": "wg",
+                        "class": "cl",
+                        "rule": "ADV2CL",
+                        "id": "450050030020013"
+                      },
+                      "children": [
+                        {
+                          "content": {
+                            "elementType": "w",
+                            "role": "adv",
+                            "after": " ",
+                            "class": "adj",
+                            "id": "n45005003002",
+                            "lemma": "μόνος",
+                            "strong": "3440",
+                            "number": "singular",
+                            "gender": "neuter",
+                            "case": "accusative",
+                            "gloss": "only [so]",
+                            "text": "μόνον",
+                            "alignedWordIds": ["nvi_2"]
+                          },
+                          "children": []
+                        }
+                      ]
+                    },
+                    {
+                      "content": {
+                        "elementType": "w",
+                        "after": " ",
+                        "class": "conj",
+                        "id": "n45005003004",
+                        "lemma": "ἀλλά",
+                        "strong": "235",
+                        "gloss": "but",
+                        "text": "ἀλλὰ",
+                        "alignedWordIds": ["nvi_5"]
+                      },
+                      "children": []
+                    },
+                    {
+                      "content": {
+                        "elementType": "wg",
+                        "class": "cl",
+                        "head": "true",
+                        "rule": "ADV-V-ADV-ADV",
+                        "id": "450050030050190"
+                      },
+                      "children": [
+                        {
+                          "content": {
+                            "elementType": "w",
+                            "role": "adv",
+                            "after": " ",
+                            "class": "adv",
+                            "id": "n45005003005",
+                            "lemma": "καί",
+                            "strong": "2532",
+                            "gloss": "also",
+                            "text": "καὶ",
+                            "alignedWordIds": ["nvi_6"]
+                          },
+                          "children": []
+                        },
+                        {
+                          "content": {
+                            "elementType": "w",
+                            "role": "v",
+                            "after": " ",
+                            "class": "verb",
+                            "id": "n45005003006",
+                            "lemma": "καυχάομαι",
+                            "strong": "2744",
+                            "number": "plural",
+                            "person": "first",
+                            "tense": "present",
+                            "voice": "middlepassive",
+                            "mood": "indicative",
+                            "head": "true",
+                            "gloss": "we glory",
+                            "text": "καυχώμεθα",
+                            "alignedWordIds": []
+                          },
+                          "children": []
+                        },
+                        {
+                          "content": {
+                            "elementType": "wg",
+                            "role": "adv",
+                            "id": "450050030070031",
+                            "class": "pp",
+                            "articular": "true",
+                            "rule": "PrepNp"
+                          },
+                          "children": [
+                            {
+                              "content": {
+                                "elementType": "w",
+                                "after": " ",
+                                "class": "prep",
+                                "id": "n45005003007",
+                                "lemma": "ἐν",
+                                "strong": "1722",
+                                "gloss": "in",
+                                "text": "ἐν",
+                                "alignedWordIds": ["nvi_7"]
+                              },
+                              "children": []
+                            },
+                            {
+                              "content": {
+                                "elementType": "wg",
+                                "class": "np",
+                                "articular": "true",
+                                "head": "true",
+                                "rule": "DetNP",
+                                "id": "450050030080020"
+                              },
+                              "children": [
+                                {
+                                  "content": {
+                                    "elementType": "w",
+                                    "after": " ",
+                                    "class": "det",
+                                    "id": "n45005003008",
+                                    "lemma": "ὁ",
+                                    "strong": "3588",
+                                    "number": "plural",
+                                    "gender": "feminine",
+                                    "case": "dative",
+                                    "gloss": "-",
+                                    "text": "ταῖς",
+                                    "alignedWordIds": ["nvi_8"]
+                                  },
+                                  "children": []
+                                },
+                                {
+                                  "content": {
+                                    "elementType": "w",
+                                    "after": ",",
+                                    "class": "noun",
+                                    "type": "common",
+                                    "id": "n45005003009",
+                                    "lemma": "θλῖψις",
+                                    "strong": "2347",
+                                    "number": "plural",
+                                    "gender": "feminine",
+                                    "case": "dative",
+                                    "head": "true",
+                                    "gloss": "tribulations",
+                                    "text": "θλίψεσιν",
+                                    "alignedWordIds": ["nvi_9"]
+                                  },
+                                  "children": []
+                                }
+                              ]
+                            }
+                          ]
+                        },
+                        {
+                          "content": {
+                            "elementType": "wg",
+                            "role": "adv",
+                            "id": "450050030100141",
+                            "class": "cl",
+                            "rule": "ClCl"
+                          },
+                          "children": [
+                            {
+                              "content": {
+                                "elementType": "wg",
+                                "class": "cl",
+                                "head": "true",
+                                "rule": "V2CL",
+                                "id": "450050030100013"
+                              },
+                              "children": [
+                                {
+                                  "content": {
+                                    "elementType": "w",
+                                    "role": "v",
+                                    "after": " ",
+                                    "class": "verb",
+                                    "id": "n45005003010",
+                                    "lemma": "οἶδα",
+                                    "strong": "1492",
+                                    "number": "plural",
+                                    "gender": "masculine",
+                                    "case": "nominative",
+                                    "tense": "perfect",
+                                    "voice": "active",
+                                    "mood": "participle",
+                                    "type": "?",
+                                    "head": "true",
+                                    "gloss": "knowing",
+                                    "text": "εἰδότες",
+                                    "alignedWordIds": ["nvi_11"]
+                                  },
+                                  "children": []
+                                }
+                              ]
+                            },
+                            {
+                              "content": {
+                                "elementType": "wg",
+                                "class": "cl",
+                                "rule": "that-VP",
+                                "id": "450050030110130"
+                              },
+                              "children": [
+                                {
+                                  "content": {
+                                    "elementType": "w",
+                                    "after": " ",
+                                    "class": "conj",
+                                    "id": "n45005003011",
+                                    "lemma": "ὅτι",
+                                    "strong": "3754",
+                                    "gloss": "that",
+                                    "text": "ὅτι",
+                                    "alignedWordIds": ["nvi_12"]
+                                  },
+                                  "children": []
+                                },
+                                {
+                                  "content": {
+                                    "elementType": "wg",
+                                    "class": "cl",
+                                    "rule": "Conj3CL",
+                                    "id": "450050030120120"
+                                  },
+                                  "children": [
+                                    {
+                                      "content": {
+                                        "elementType": "wg",
+                                        "class": "cl",
+                                        "head": "true",
+                                        "rule": "S-O-V",
+                                        "id": "450050030120040"
+                                      },
+                                      "children": [
+                                        {
+                                          "content": {
+                                            "elementType": "wg",
+                                            "role": "s",
+                                            "id": "450050030120021",
+                                            "class": "np",
+                                            "articular": "true",
+                                            "rule": "DetNP"
+                                          },
+                                          "children": [
+                                            {
+                                              "content": {
+                                                "elementType": "w",
+                                                "after": " ",
+                                                "class": "det",
+                                                "id": "n45005003012",
+                                                "lemma": "ὁ",
+                                                "strong": "3588",
+                                                "number": "singular",
+                                                "gender": "feminine",
+                                                "case": "nominative",
+                                                "gloss": "-",
+                                                "text": "ἡ",
+                                                "alignedWordIds": ["nvi_13"]
+                                              },
+                                              "children": []
+                                            },
+                                            {
+                                              "content": {
+                                                "elementType": "w",
+                                                "after": " ",
+                                                "class": "noun",
+                                                "type": "common",
+                                                "id": "n45005003013",
+                                                "lemma": "θλῖψις",
+                                                "strong": "2347",
+                                                "number": "singular",
+                                                "gender": "feminine",
+                                                "case": "nominative",
+                                                "head": "true",
+                                                "gloss": "tribulation",
+                                                "text": "θλῖψις",
+                                                "alignedWordIds": ["nvi_14"]
+                                              },
+                                              "children": []
+                                            }
+                                          ]
+                                        },
+                                        {
+                                          "content": {
+                                            "elementType": "w",
+                                            "role": "o",
+                                            "after": " ",
+                                            "class": "noun",
+                                            "type": "common",
+                                            "id": "n45005003014",
+                                            "lemma": "ὑπομονή",
+                                            "strong": "5281",
+                                            "number": "singular",
+                                            "gender": "feminine",
+                                            "case": "accusative",
+                                            "gloss": "perseverance",
+                                            "text": "ὑπομονὴν",
+                                            "alignedWordIds": ["nvi_16"]
+                                          },
+                                          "children": []
+                                        },
+                                        {
+                                          "content": {
+                                            "elementType": "w",
+                                            "role": "v",
+                                            "after": ",",
+                                            "class": "verb",
+                                            "id": "n45005003015",
+                                            "lemma": "κατεργάζομαι",
+                                            "strong": "2716",
+                                            "number": "singular",
+                                            "person": "third",
+                                            "tense": "present",
+                                            "voice": "middlepassive",
+                                            "mood": "indicative",
+                                            "head": "true",
+                                            "gloss": "produces",
+                                            "text": "κατεργάζεται",
+                                            "alignedWordIds": ["nvi_15"]
+                                          },
+                                          "children": []
+                                        }
+                                      ]
+                                    },
+                                    {
+                                      "content": {
+                                        "elementType": "w",
+                                        "after": " ",
+                                        "class": "conj",
+                                        "id": "n45005004002",
+                                        "lemma": "δέ",
+                                        "strong": "1161",
+                                        "discontinuous": "true",
+                                        "gloss": "And",
+                                        "text": "δὲ",
+                                        "alignedWordIds": []
+                                      },
+                                      "children": []
+                                    },
+                                    {
+                                      "content": {
+                                        "elementType": "wg",
+                                        "class": "cl",
+                                        "articular": "true",
+                                        "rule": "S-O",
+                                        "id": "450050040010030"
+                                      },
+                                      "children": [
+                                        {
+                                          "content": {
+                                            "elementType": "wg",
+                                            "role": "s",
+                                            "id": "450050040010021",
+                                            "class": "np",
+                                            "articular": "true",
+                                            "head": "true",
+                                            "rule": "DetNP"
+                                          },
+                                          "children": [
+                                            {
+                                              "content": {
+                                                "elementType": "w",
+                                                "after": " ",
+                                                "class": "det",
+                                                "id": "n45005004001",
+                                                "lemma": "ὁ",
+                                                "strong": "3588",
+                                                "number": "singular",
+                                                "gender": "feminine",
+                                                "case": "nominative",
+                                                "gloss": "-",
+                                                "text": "ἡ",
+                                                "alignedWordIds": []
+                                              },
+                                              "children": []
+                                            },
+                                            {
+                                              "content": {
+                                                "elementType": "w",
+                                                "after": " ",
+                                                "class": "noun",
+                                                "type": "common",
+                                                "id": "n45005004003",
+                                                "lemma": "ὑπομονή",
+                                                "strong": "5281",
+                                                "number": "singular",
+                                                "gender": "feminine",
+                                                "case": "nominative",
+                                                "head": "true",
+                                                "gloss": "perseverance",
+                                                "text": "ὑπομονὴ",
+                                                "alignedWordIds": []
+                                              },
+                                              "children": []
+                                            }
+                                          ]
+                                        },
+                                        {
+                                          "content": {
+                                            "elementType": "w",
+                                            "role": "o",
+                                            "after": ",",
+                                            "class": "noun",
+                                            "type": "common",
+                                            "id": "n45005004004",
+                                            "lemma": "δοκιμή",
+                                            "strong": "1382",
+                                            "number": "singular",
+                                            "gender": "feminine",
+                                            "case": "accusative",
+                                            "gloss": "character",
+                                            "text": "δοκιμήν",
+                                            "alignedWordIds": []
+                                          },
+                                          "children": []
+                                        }
+                                      ]
+                                    },
+                                    {
+                                      "content": {
+                                        "elementType": "w",
+                                        "after": " ",
+                                        "class": "conj",
+                                        "id": "n45005004006",
+                                        "lemma": "δέ",
+                                        "strong": "1161",
+                                        "discontinuous": "true",
+                                        "gloss": "and",
+                                        "text": "δὲ",
+                                        "alignedWordIds": []
+                                      },
+                                      "children": []
+                                    },
+                                    {
+                                      "content": {
+                                        "elementType": "wg",
+                                        "class": "cl",
+                                        "articular": "true",
+                                        "rule": "S-O",
+                                        "id": "450050040050030"
+                                      },
+                                      "children": [
+                                        {
+                                          "content": {
+                                            "elementType": "wg",
+                                            "role": "s",
+                                            "id": "450050040050021",
+                                            "class": "np",
+                                            "articular": "true",
+                                            "head": "true",
+                                            "rule": "DetNP"
+                                          },
+                                          "children": [
+                                            {
+                                              "content": {
+                                                "elementType": "w",
+                                                "after": " ",
+                                                "class": "det",
+                                                "id": "n45005004005",
+                                                "lemma": "ὁ",
+                                                "strong": "3588",
+                                                "number": "singular",
+                                                "gender": "feminine",
+                                                "case": "nominative",
+                                                "gloss": "-",
+                                                "text": "ἡ",
+                                                "alignedWordIds": []
+                                              },
+                                              "children": []
+                                            },
+                                            {
+                                              "content": {
+                                                "elementType": "w",
+                                                "after": " ",
+                                                "class": "noun",
+                                                "type": "common",
+                                                "id": "n45005004007",
+                                                "lemma": "δοκιμή",
+                                                "strong": "1382",
+                                                "number": "singular",
+                                                "gender": "feminine",
+                                                "case": "nominative",
+                                                "head": "true",
+                                                "gloss": "character",
+                                                "text": "δοκιμὴ",
+                                                "alignedWordIds": []
+                                              },
+                                              "children": []
+                                            }
+                                          ]
+                                        },
+                                        {
+                                          "content": {
+                                            "elementType": "w",
+                                            "role": "o",
+                                            "after": "·",
+                                            "class": "noun",
+                                            "type": "common",
+                                            "id": "n45005004008",
+                                            "lemma": "ἐλπίς",
+                                            "strong": "1680",
+                                            "number": "singular",
+                                            "gender": "feminine",
+                                            "case": "accusative",
+                                            "gloss": "hope",
+                                            "text": "ἐλπίδα",
+                                            "alignedWordIds": []
+                                          },
+                                          "children": []
+                                        }
+                                      ]
+                                    }
+                                  ]
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "_syntaxType": "mapped"
+}

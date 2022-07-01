@@ -1,87 +1,35 @@
 {
-  "content": { "elementType": "sentence" },
+  "content": {
+    "elementType": "sentences"
+  },
   "children": [
     {
-      "content": { "elementType": "wg", "role": "cl" },
+      "content": {
+        "elementType": "sentence"
+      },
       "children": [
         {
           "content": {
             "elementType": "wg",
-            "class": "cl",
-            "n": "450050030030230"
+            "role": "cl"
           },
           "children": [
             {
               "content": {
-                "elementType": "w",
-                "class": "conj",
-                "osisId": "Rom.5.3!3",
-                "n": "450050030030010",
-                "lemma": "δέ",
-                "strong": "1161",
-                "discontinuous": "true",
-                "gloss": "now",
-                "text": "δέ"
-              },
-              "children": []
-            },
-            { "content": { "elementType": "pc", "text": "," }, "children": [] },
-            {
-              "content": {
                 "elementType": "wg",
                 "class": "cl",
-                "n": "450050030010220"
+                "rule": "Conj-CL",
+                "id": "410160010010200"
               },
               "children": [
                 {
                   "content": {
                     "elementType": "w",
-                    "class": "adv",
-                    "osisId": "Rom.5.3!1",
-                    "n": "450050030010010",
-                    "lemma": "οὐ",
-                    "strong": "3756",
-                    "gloss": "Not",
-                    "text": "οὐ"
-                  },
-                  "children": []
-                },
-                {
-                  "content": {
-                    "elementType": "wg",
-                    "class": "cl",
-                    "n": "450050030020013"
-                  },
-                  "children": [
-                    {
-                      "content": {
-                        "elementType": "w",
-                        "role": "adv",
-                        "class": "adj",
-                        "osisId": "Rom.5.3!2",
-                        "n": "450050030020010",
-                        "lemma": "μόνος",
-                        "strong": "3440",
-                        "number": "singular",
-                        "gender": "neuter",
-                        "case": "accusative",
-                        "gloss": "only [so]",
-                        "text": "μόνον"
-                      },
-                      "children": []
-                    }
-                  ]
-                },
-                {
-                  "content": {
-                    "elementType": "w",
                     "class": "conj",
-                    "osisId": "Rom.5.3!4",
-                    "n": "450050030040010",
-                    "lemma": "ἀλλά",
-                    "strong": "235",
-                    "gloss": "but",
-                    "text": "ἀλλὰ"
+                    "id": "n41016001001",
+                    "lemma": "καί",
+                    "strong": "2532",
+                    "text": "Καὶ"
                   },
                   "children": []
                 },
@@ -89,63 +37,168 @@
                   "content": {
                     "elementType": "wg",
                     "class": "cl",
-                    "n": "450050030050190",
-                    "head": "true"
+                    "rule": "V-S",
+                    "id": "410160010020030"
                   },
                   "children": [
-                    {
-                      "content": {
-                        "elementType": "w",
-                        "role": "adv",
-                        "class": "adv",
-                        "osisId": "Rom.5.3!5",
-                        "n": "450050030050010",
-                        "lemma": "καί",
-                        "strong": "2532",
-                        "gloss": "also",
-                        "text": "καὶ"
-                      },
-                      "children": []
-                    },
                     {
                       "content": {
                         "elementType": "w",
                         "role": "v",
                         "class": "verb",
-                        "osisId": "Rom.5.3!6",
-                        "n": "450050030060010",
-                        "lemma": "καυχάομαι",
-                        "strong": "2744",
-                        "number": "plural",
-                        "person": "first",
-                        "tense": "present",
-                        "voice": "middlepassive",
-                        "mood": "indicative",
+                        "id": "n41016001002",
+                        "lemma": "διαγίνομαι",
+                        "strong": "1230",
+                        "number": "singular",
+                        "gender": "neuter",
+                        "case": "genitive",
+                        "tense": "aorist",
+                        "voice": "middle",
+                        "mood": "participle",
+                        "type": "?",
                         "head": "true",
-                        "gloss": "we glory",
-                        "text": "καυχώμεθα"
+                        "text": "διαγενομένου"
                       },
                       "children": []
                     },
                     {
                       "content": {
                         "elementType": "wg",
-                        "role": "adv",
-                        "class": "pp",
-                        "n": "450050030070030",
-                        "articular": "true"
+                        "role": "s",
+                        "id": "410160010030021",
+                        "class": "np",
+                        "articular": "true",
+                        "rule": "DetNP"
                       },
                       "children": [
                         {
                           "content": {
                             "elementType": "w",
-                            "class": "prep",
-                            "osisId": "Rom.5.3!7",
-                            "n": "450050030070010",
-                            "lemma": "ἐν",
-                            "strong": "1722",
-                            "gloss": "in",
-                            "text": "ἐν"
+                            "class": "det",
+                            "id": "n41016001003",
+                            "lemma": "ὁ",
+                            "strong": "3588",
+                            "number": "singular",
+                            "gender": "neuter",
+                            "case": "genitive",
+                            "text": "τοῦ"
+                          },
+                          "children": []
+                        },
+                        {
+                          "content": {
+                            "elementType": "w",
+                            "class": "noun",
+                            "type": "common",
+                            "id": "n41016001004",
+                            "lemma": "σάββατον",
+                            "strong": "4521",
+                            "number": "singular",
+                            "gender": "neuter",
+                            "case": "genitive",
+                            "head": "true",
+                            "text": "σαββάτου"
+                          },
+                          "children": []
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "content": {
+                    "elementType": "wg",
+                    "class": "cl",
+                    "head": "true",
+                    "rule": "S-V-O",
+                    "id": "410160010050120"
+                  },
+                  "children": [
+                    {
+                      "content": {
+                        "elementType": "wg",
+                        "role": "s",
+                        "id": "410160010050101",
+                        "class": "np",
+                        "rule": "Conj3Np"
+                      },
+                      "children": [
+                        {
+                          "content": {
+                            "elementType": "wg",
+                            "class": "np",
+                            "head": "true",
+                            "rule": "Np-Appos",
+                            "id": "410160010050030"
+                          },
+                          "children": [
+                            {
+                              "content": {
+                                "elementType": "w",
+                                "class": "noun",
+                                "type": "proper",
+                                "id": "n41016001005",
+                                "lemma": "Μαρία",
+                                "strong": "3137",
+                                "number": "singular",
+                                "gender": "feminine",
+                                "case": "nominative",
+                                "head": "true",
+                                "text": "Μαρία"
+                              },
+                              "children": []
+                            },
+                            {
+                              "content": {
+                                "elementType": "wg",
+                                "class": "np",
+                                "articular": "true",
+                                "rule": "DetNP",
+                                "id": "410160010060020"
+                              },
+                              "children": [
+                                {
+                                  "content": {
+                                    "elementType": "w",
+                                    "class": "det",
+                                    "id": "n41016001006",
+                                    "lemma": "ὁ",
+                                    "strong": "3588",
+                                    "number": "singular",
+                                    "gender": "feminine",
+                                    "case": "nominative",
+                                    "text": "ἡ"
+                                  },
+                                  "children": []
+                                },
+                                {
+                                  "content": {
+                                    "elementType": "w",
+                                    "class": "noun",
+                                    "type": "proper",
+                                    "id": "n41016001007",
+                                    "lemma": "Μαγδαληνή",
+                                    "strong": "3094",
+                                    "number": "singular",
+                                    "gender": "feminine",
+                                    "case": "nominative",
+                                    "head": "true",
+                                    "text": "Μαγδαληνὴ"
+                                  },
+                                  "children": []
+                                }
+                              ]
+                            }
+                          ]
+                        },
+                        {
+                          "content": {
+                            "elementType": "w",
+                            "class": "conj",
+                            "id": "n41016001008",
+                            "lemma": "καί",
+                            "strong": "2532",
+                            "text": "καὶ"
                           },
                           "children": []
                         },
@@ -153,405 +206,85 @@
                           "content": {
                             "elementType": "wg",
                             "class": "np",
-                            "n": "450050030080020",
-                            "articular": "true",
-                            "head": "true"
+                            "rule": "Np-Appos",
+                            "id": "410160010090040"
                           },
                           "children": [
-                            {
-                              "content": {
-                                "elementType": "w",
-                                "class": "det",
-                                "osisId": "Rom.5.3!8",
-                                "n": "450050030080010",
-                                "lemma": "ὁ",
-                                "strong": "3588",
-                                "number": "plural",
-                                "gender": "feminine",
-                                "case": "dative",
-                                "gloss": "-",
-                                "text": "ταῖς"
-                              },
-                              "children": []
-                            },
                             {
                               "content": {
                                 "elementType": "w",
                                 "class": "noun",
-                                "type": "common",
-                                "osisId": "Rom.5.3!9",
-                                "n": "450050030090010",
-                                "lemma": "θλῖψις",
-                                "strong": "2347",
-                                "number": "plural",
+                                "type": "proper",
+                                "id": "n41016001009",
+                                "lemma": "Μαρία",
+                                "strong": "3137",
+                                "number": "singular",
                                 "gender": "feminine",
-                                "case": "dative",
-                                "head": "true",
-                                "gloss": "tribulations",
-                                "text": "θλίψεσιν"
-                              },
-                              "children": []
-                            },
-                            {
-                              "content": { "elementType": "pc", "text": "," },
-                              "children": []
-                            }
-                          ]
-                        }
-                      ]
-                    },
-                    {
-                      "content": {
-                        "elementType": "wg",
-                        "role": "adv",
-                        "class": "cl",
-                        "n": "450050030100140"
-                      },
-                      "children": [
-                        {
-                          "content": {
-                            "elementType": "wg",
-                            "class": "cl",
-                            "n": "450050030100013",
-                            "head": "true"
-                          },
-                          "children": [
-                            {
-                              "content": {
-                                "elementType": "w",
-                                "role": "v",
-                                "class": "verb",
-                                "osisId": "Rom.5.3!10",
-                                "n": "450050030100010",
-                                "lemma": "οἶδα",
-                                "strong": "1492",
-                                "number": "plural",
-                                "gender": "masculine",
                                 "case": "nominative",
-                                "tense": "perfect",
-                                "voice": "active",
-                                "mood": "participle",
-                                "type": "?",
                                 "head": "true",
-                                "gloss": "knowing",
-                                "text": "εἰδότες"
-                              },
-                              "children": []
-                            }
-                          ]
-                        },
-                        {
-                          "content": {
-                            "elementType": "wg",
-                            "class": "cl",
-                            "n": "450050030110130"
-                          },
-                          "children": [
-                            {
-                              "content": {
-                                "elementType": "w",
-                                "class": "conj",
-                                "osisId": "Rom.5.3!11",
-                                "n": "450050030110010",
-                                "lemma": "ὅτι",
-                                "strong": "3754",
-                                "gloss": "that",
-                                "text": "ὅτι"
+                                "text": "Μαρία"
                               },
                               "children": []
                             },
                             {
                               "content": {
                                 "elementType": "wg",
-                                "class": "cl",
-                                "n": "450050030120120"
+                                "class": "np",
+                                "rule": "NPofNP",
+                                "id": "410160010100030"
                               },
                               "children": [
                                 {
                                   "content": {
+                                    "elementType": "w",
+                                    "class": "det",
+                                    "id": "n41016001010",
+                                    "lemma": "ὁ",
+                                    "strong": "3588",
+                                    "number": "singular",
+                                    "gender": "feminine",
+                                    "case": "nominative",
+                                    "head": "true",
+                                    "text": "ἡ"
+                                  },
+                                  "children": []
+                                },
+                                {
+                                  "content": {
                                     "elementType": "wg",
-                                    "class": "cl",
-                                    "n": "450050030120040",
-                                    "head": "true"
+                                    "class": "np",
+                                    "articular": "true",
+                                    "rule": "DetNP",
+                                    "id": "410160010110020"
                                   },
                                   "children": [
                                     {
                                       "content": {
-                                        "elementType": "wg",
-                                        "role": "s",
-                                        "class": "np",
-                                        "n": "450050030120020",
-                                        "articular": "true"
-                                      },
-                                      "children": [
-                                        {
-                                          "content": {
-                                            "elementType": "w",
-                                            "class": "det",
-                                            "osisId": "Rom.5.3!12",
-                                            "n": "450050030120010",
-                                            "lemma": "ὁ",
-                                            "strong": "3588",
-                                            "number": "singular",
-                                            "gender": "feminine",
-                                            "case": "nominative",
-                                            "gloss": "-",
-                                            "text": "ἡ"
-                                          },
-                                          "children": []
-                                        },
-                                        {
-                                          "content": {
-                                            "elementType": "w",
-                                            "class": "noun",
-                                            "type": "common",
-                                            "osisId": "Rom.5.3!13",
-                                            "n": "450050030130010",
-                                            "lemma": "θλῖψις",
-                                            "strong": "2347",
-                                            "number": "singular",
-                                            "gender": "feminine",
-                                            "case": "nominative",
-                                            "head": "true",
-                                            "gloss": "tribulation",
-                                            "text": "θλῖψις"
-                                          },
-                                          "children": []
-                                        }
-                                      ]
-                                    },
-                                    {
-                                      "content": {
                                         "elementType": "w",
-                                        "role": "o",
-                                        "class": "noun",
-                                        "type": "common",
-                                        "osisId": "Rom.5.3!14",
-                                        "n": "450050030140010",
-                                        "lemma": "ὑπομονή",
-                                        "strong": "5281",
+                                        "class": "det",
+                                        "id": "n41016001011",
+                                        "lemma": "ὁ",
+                                        "strong": "3588",
                                         "number": "singular",
-                                        "gender": "feminine",
-                                        "case": "accusative",
-                                        "gloss": "perseverance",
-                                        "text": "ὑπομονὴν"
+                                        "gender": "masculine",
+                                        "case": "genitive",
+                                        "text": "τοῦ"
                                       },
                                       "children": []
                                     },
                                     {
                                       "content": {
                                         "elementType": "w",
-                                        "role": "v",
-                                        "class": "verb",
-                                        "osisId": "Rom.5.3!15",
-                                        "n": "450050030150010",
-                                        "lemma": "κατεργάζομαι",
-                                        "strong": "2716",
+                                        "class": "noun",
+                                        "type": "proper",
+                                        "id": "n41016001012",
+                                        "lemma": "Ἰάκωβος",
+                                        "strong": "2385",
                                         "number": "singular",
-                                        "person": "third",
-                                        "tense": "present",
-                                        "voice": "middlepassive",
-                                        "mood": "indicative",
+                                        "gender": "masculine",
+                                        "case": "genitive",
                                         "head": "true",
-                                        "gloss": "produces",
-                                        "text": "κατεργάζεται"
-                                      },
-                                      "children": []
-                                    },
-                                    {
-                                      "content": {
-                                        "elementType": "pc",
-                                        "text": ","
-                                      },
-                                      "children": []
-                                    }
-                                  ]
-                                },
-                                {
-                                  "content": {
-                                    "elementType": "w",
-                                    "class": "conj",
-                                    "osisId": "Rom.5.4!2",
-                                    "n": "450050040020010",
-                                    "lemma": "δέ",
-                                    "strong": "1161",
-                                    "discontinuous": "true",
-                                    "gloss": "And",
-                                    "text": "δὲ"
-                                  },
-                                  "children": []
-                                },
-                                {
-                                  "content": {
-                                    "elementType": "wg",
-                                    "class": "cl",
-                                    "n": "450050040010030",
-                                    "articular": "true"
-                                  },
-                                  "children": [
-                                    {
-                                      "content": {
-                                        "elementType": "wg",
-                                        "role": "s",
-                                        "class": "np",
-                                        "n": "450050040010020",
-                                        "articular": "true",
-                                        "head": "true"
-                                      },
-                                      "children": [
-                                        {
-                                          "content": {
-                                            "elementType": "w",
-                                            "class": "det",
-                                            "osisId": "Rom.5.4!1",
-                                            "n": "450050040010010",
-                                            "lemma": "ὁ",
-                                            "strong": "3588",
-                                            "number": "singular",
-                                            "gender": "feminine",
-                                            "case": "nominative",
-                                            "gloss": "-",
-                                            "text": "ἡ"
-                                          },
-                                          "children": []
-                                        },
-                                        {
-                                          "content": {
-                                            "elementType": "w",
-                                            "class": "noun",
-                                            "type": "common",
-                                            "osisId": "Rom.5.4!3",
-                                            "n": "450050040030010",
-                                            "lemma": "ὑπομονή",
-                                            "strong": "5281",
-                                            "number": "singular",
-                                            "gender": "feminine",
-                                            "case": "nominative",
-                                            "head": "true",
-                                            "gloss": "perseverance",
-                                            "text": "ὑπομονὴ"
-                                          },
-                                          "children": []
-                                        }
-                                      ]
-                                    },
-                                    {
-                                      "content": {
-                                        "elementType": "w",
-                                        "role": "o",
-                                        "class": "noun",
-                                        "type": "common",
-                                        "osisId": "Rom.5.4!4",
-                                        "n": "450050040040010",
-                                        "lemma": "δοκιμή",
-                                        "strong": "1382",
-                                        "number": "singular",
-                                        "gender": "feminine",
-                                        "case": "accusative",
-                                        "gloss": "character",
-                                        "text": "δοκιμήν"
-                                      },
-                                      "children": []
-                                    },
-                                    {
-                                      "content": {
-                                        "elementType": "pc",
-                                        "text": ","
-                                      },
-                                      "children": []
-                                    }
-                                  ]
-                                },
-                                {
-                                  "content": {
-                                    "elementType": "w",
-                                    "class": "conj",
-                                    "osisId": "Rom.5.4!6",
-                                    "n": "450050040060010",
-                                    "lemma": "δέ",
-                                    "strong": "1161",
-                                    "discontinuous": "true",
-                                    "gloss": "and",
-                                    "text": "δὲ"
-                                  },
-                                  "children": []
-                                },
-                                {
-                                  "content": {
-                                    "elementType": "wg",
-                                    "class": "cl",
-                                    "n": "450050040050030",
-                                    "articular": "true"
-                                  },
-                                  "children": [
-                                    {
-                                      "content": {
-                                        "elementType": "wg",
-                                        "role": "s",
-                                        "class": "np",
-                                        "n": "450050040050020",
-                                        "articular": "true",
-                                        "head": "true"
-                                      },
-                                      "children": [
-                                        {
-                                          "content": {
-                                            "elementType": "w",
-                                            "class": "det",
-                                            "osisId": "Rom.5.4!5",
-                                            "n": "450050040050010",
-                                            "lemma": "ὁ",
-                                            "strong": "3588",
-                                            "number": "singular",
-                                            "gender": "feminine",
-                                            "case": "nominative",
-                                            "gloss": "-",
-                                            "text": "ἡ"
-                                          },
-                                          "children": []
-                                        },
-                                        {
-                                          "content": {
-                                            "elementType": "w",
-                                            "class": "noun",
-                                            "type": "common",
-                                            "osisId": "Rom.5.4!7",
-                                            "n": "450050040070010",
-                                            "lemma": "δοκιμή",
-                                            "strong": "1382",
-                                            "number": "singular",
-                                            "gender": "feminine",
-                                            "case": "nominative",
-                                            "head": "true",
-                                            "gloss": "character",
-                                            "text": "δοκιμὴ"
-                                          },
-                                          "children": []
-                                        }
-                                      ]
-                                    },
-                                    {
-                                      "content": {
-                                        "elementType": "w",
-                                        "role": "o",
-                                        "class": "noun",
-                                        "type": "common",
-                                        "osisId": "Rom.5.4!8",
-                                        "n": "450050040080010",
-                                        "lemma": "ἐλπίς",
-                                        "strong": "1680",
-                                        "number": "singular",
-                                        "gender": "feminine",
-                                        "case": "accusative",
-                                        "gloss": "hope",
-                                        "text": "ἐλπίδα"
-                                      },
-                                      "children": []
-                                    },
-                                    {
-                                      "content": {
-                                        "elementType": "pc",
-                                        "text": "·"
+                                        "text": "Ἰακώβου"
                                       },
                                       "children": []
                                     }
@@ -560,6 +293,150 @@
                               ]
                             }
                           ]
+                        },
+                        {
+                          "content": {
+                            "elementType": "w",
+                            "class": "conj",
+                            "id": "n41016001013",
+                            "lemma": "καί",
+                            "strong": "2532",
+                            "text": "καὶ"
+                          },
+                          "children": []
+                        },
+                        {
+                          "content": {
+                            "elementType": "w",
+                            "class": "noun",
+                            "type": "proper",
+                            "id": "n41016001014",
+                            "lemma": "Σαλώμη",
+                            "strong": "4539",
+                            "number": "singular",
+                            "gender": "feminine",
+                            "case": "nominative",
+                            "text": "Σαλώμη"
+                          },
+                          "children": []
+                        }
+                      ]
+                    },
+                    {
+                      "content": {
+                        "elementType": "w",
+                        "role": "v",
+                        "class": "verb",
+                        "id": "n41016001015",
+                        "lemma": "ἀγοράζω",
+                        "strong": "59",
+                        "number": "plural",
+                        "person": "third",
+                        "tense": "aorist",
+                        "voice": "active",
+                        "mood": "indicative",
+                        "head": "true",
+                        "text": "ἠγόρασαν"
+                      },
+                      "children": []
+                    },
+                    {
+                      "content": {
+                        "elementType": "w",
+                        "role": "o",
+                        "class": "noun",
+                        "type": "common",
+                        "id": "n41016001016",
+                        "lemma": "ἄρωμα",
+                        "strong": "759",
+                        "number": "plural",
+                        "gender": "neuter",
+                        "case": "accusative",
+                        "text": "ἀρώματα"
+                      },
+                      "children": []
+                    }
+                  ]
+                },
+                {
+                  "content": {
+                    "elementType": "wg",
+                    "class": "cl",
+                    "rule": "sub-CL",
+                    "id": "410160010170040"
+                  },
+                  "children": [
+                    {
+                      "content": {
+                        "elementType": "w",
+                        "class": "conj",
+                        "id": "n41016001017",
+                        "lemma": "ἵνα",
+                        "strong": "2443",
+                        "text": "ἵνα"
+                      },
+                      "children": []
+                    },
+                    {
+                      "content": {
+                        "elementType": "wg",
+                        "class": "cl",
+                        "rule": "ADV-V-O",
+                        "id": "410160010180030"
+                      },
+                      "children": [
+                        {
+                          "content": {
+                            "elementType": "w",
+                            "role": "adv",
+                            "class": "verb",
+                            "id": "n41016001018",
+                            "lemma": "ἔρχομαι",
+                            "strong": "2064",
+                            "number": "plural",
+                            "gender": "feminine",
+                            "case": "nominative",
+                            "tense": "aorist",
+                            "voice": "active",
+                            "mood": "participle",
+                            "type": "?",
+                            "text": "ἐλθοῦσαι"
+                          },
+                          "children": []
+                        },
+                        {
+                          "content": {
+                            "elementType": "w",
+                            "role": "v",
+                            "class": "verb",
+                            "id": "n41016001019",
+                            "lemma": "ἀλείφω",
+                            "strong": "218",
+                            "number": "plural",
+                            "person": "third",
+                            "tense": "aorist",
+                            "voice": "active",
+                            "mood": "subjunctive",
+                            "head": "true",
+                            "text": "ἀλείψωσιν"
+                          },
+                          "children": []
+                        },
+                        {
+                          "content": {
+                            "elementType": "w",
+                            "role": "o",
+                            "class": "pron",
+                            "type": "personal",
+                            "id": "n41016001020",
+                            "lemma": "αὐτός",
+                            "strong": "846",
+                            "number": "singular",
+                            "gender": "masculine",
+                            "case": "accusative",
+                            "text": "αὐτόν."
+                          },
+                          "children": []
                         }
                       ]
                     }
@@ -572,5 +449,5 @@
       ]
     }
   ],
-  "_syntaxType": "mappedSecondary"
+  "_syntaxType": "source"
 }

@@ -13,7 +13,7 @@ import fetchData from 'workbench/fetchData';
 import { queryText, queryAlignment, hasAlignment } from 'workbench/query';
 import books from 'workbench/books';
 
-import placeholderTreedown from 'features/treedown/treedown.json';
+import placeholderTreedown from 'features/treedown/romans-example.treedown.json';
 import { CircularProgress, Box } from '@mui/material';
 
 interface WorkbenchProps { }

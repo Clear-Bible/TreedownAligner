@@ -1,17 +1,18 @@
 import { SyntaxRoot } from 'structs';
 
-import treedownSyntax from 'features/treedown/treedown.json';
 import markSyntax from 'features/treedown/mark-example.treedown.json';
+import romansSyntax from 'features/treedown/romans-example.treedown.json';
+import genSyntax from 'features/treedown/genesis-example.treedown.json';
 import syntaxMapper from 'features/treedown/syntaxMapper';
 
 describe('syntaxMapper', () => {
   it('can map a single aligned word', () => {
     const result = syntaxMapper(
-      treedownSyntax as unknown as SyntaxRoot,
+      markSyntax as unknown as SyntaxRoot,
       {
         target: 'an interesting greek source',
         source: 'a very good english translation',
-        links: [{ targets: ['410160010010010'], sources: ['en_6'] }],
+        links: [{ targets: ['n41016001001'], sources: ['en_6'] }],
         polarity: {
           type: 'primary',
           syntaxSide: 'targets',
@@ -22,18 +23,19 @@ describe('syntaxMapper', () => {
     );
 
     expect(
-      result.children[0].children[0].children[0].content.alignedWordIds
+      result.children[0].children[0].children[0].children[0].content
+        .alignedWordIds
     ).toEqual(['en_6']);
   });
 
   it('can map three aligned words', () => {
     const result = syntaxMapper(
-      treedownSyntax as unknown as SyntaxRoot,
+      markSyntax as unknown as SyntaxRoot,
       {
         target: 'an interesting greek source',
         source: 'a very good english translation',
         links: [
-          { targets: ['410160010010010'], sources: ['en_4', 'en_5', 'en_7'] },
+          { targets: ['n41016001001'], sources: ['en_4', 'en_5', 'en_7'] },
         ],
         polarity: {
           type: 'primary',
@@ -45,24 +47,21 @@ describe('syntaxMapper', () => {
     );
 
     expect(
-      result.children[0].children[0].children[0].content.alignedWordIds
+      result.children[0].children[0].children[0].children[0].content
+        .alignedWordIds
     ).toEqual(['en_4', 'en_5', 'en_7']);
   });
 
   describe('link refactoring', () => {
     it('refactors many:many links into 1:many (symmetric)', () => {
       const result = syntaxMapper(
-        treedownSyntax as unknown as SyntaxRoot,
+        markSyntax as unknown as SyntaxRoot,
         {
           target: 'an interesting greek source',
           source: 'a very good english translation',
           links: [
             {
-              targets: [
-                '410160010010010',
-                '410160010020010',
-                '410160010030010',
-              ],
+              targets: ['n41016001001', 'n41016001002', 'n41016001003'],
               sources: ['en_4', 'en_5', 'en_7'],
             },
           ],
@@ -76,33 +75,30 @@ describe('syntaxMapper', () => {
       );
 
       expect(
-        result.children[0].children[0].children[0].content.alignedWordIds
+        result.children[0].children[0].children[0].children[0].content
+          .alignedWordIds
       ).toEqual(['en_4']);
 
       expect(
-        result.children[0].children[0].children[1].children[0].content
-          .alignedWordIds
+        result.children[0].children[0].children[0].children[1].children[0]
+          .content.alignedWordIds
       ).toEqual(['en_5']);
 
       expect(
-        result.children[0].children[0].children[1].children[1].children[0]
-          .content.alignedWordIds
+        result.children[0].children[0].children[0].children[1].children[1]
+          .children[0].content.alignedWordIds
       ).toEqual(['en_7']);
     });
 
     it('refactors many:many links into 1:many (asymmetric)', () => {
       const result = syntaxMapper(
-        treedownSyntax as unknown as SyntaxRoot,
+        markSyntax as unknown as SyntaxRoot,
         {
           target: 'an interesting greek source',
           source: 'a very good english translation',
           links: [
             {
-              targets: [
-                '410160010010010',
-                '410160010020010',
-                '410160010030010',
-              ],
+              targets: ['n41016001001', 'n41016001002', 'n41016001003'],
               sources: ['en_4', 'en_5', 'en_7', 'en_8'],
             },
           ],
@@ -116,33 +112,30 @@ describe('syntaxMapper', () => {
       );
 
       expect(
-        result.children[0].children[0].children[0].content.alignedWordIds
+        result.children[0].children[0].children[0].children[0].content
+          .alignedWordIds
       ).toEqual(['en_4']);
 
       expect(
-        result.children[0].children[0].children[1].children[0].content
-          .alignedWordIds
+        result.children[0].children[0].children[0].children[1].children[0]
+          .content.alignedWordIds
       ).toEqual(['en_5']);
 
       expect(
-        result.children[0].children[0].children[1].children[1].children[0]
-          .content.alignedWordIds
+        result.children[0].children[0].children[0].children[1].children[1]
+          .children[0].content.alignedWordIds
       ).toEqual(['en_7', 'en_8']);
     });
 
     it('refactors many:many links into 1:many (asymmetric surplus)', () => {
       const result = syntaxMapper(
-        treedownSyntax as unknown as SyntaxRoot,
+        markSyntax as unknown as SyntaxRoot,
         {
           target: 'an interesting greek source',
           source: 'a very good english translation',
           links: [
             {
-              targets: [
-                '410160010010010',
-                '410160010020010',
-                '410160010030010',
-              ],
+              targets: ['n41016001001', 'n41016001002', 'n41016001003'],
               sources: ['en_4', 'en_5', 'en_7', 'en_8'],
             },
           ],
@@ -156,33 +149,30 @@ describe('syntaxMapper', () => {
       );
 
       expect(
-        result.children[0].children[0].children[0].content.alignedWordIds
+        result.children[0].children[0].children[0].children[0].content
+          .alignedWordIds
       ).toEqual(['en_4']);
 
       expect(
-        result.children[0].children[0].children[1].children[0].content
-          .alignedWordIds
+        result.children[0].children[0].children[0].children[1].children[0]
+          .content.alignedWordIds
       ).toEqual(['en_5']);
 
       expect(
-        result.children[0].children[0].children[1].children[1].children[0]
-          .content.alignedWordIds
+        result.children[0].children[0].children[0].children[1].children[1]
+          .children[0].content.alignedWordIds
       ).toEqual(['en_7', 'en_8']);
     });
 
     it('refactors many:many links into 1:many (asymmetric deficit)', () => {
       const result = syntaxMapper(
-        treedownSyntax as unknown as SyntaxRoot,
+        markSyntax as unknown as SyntaxRoot,
         {
           target: 'an interesting greek source',
           source: 'a very good english translation',
           links: [
             {
-              targets: [
-                '410160010010010',
-                '410160010020010',
-                '410160010030010',
-              ],
+              targets: ['n41016001001', 'n41016001002', 'n41016001003'],
               sources: ['en_4', 'en_5'],
             },
           ],
@@ -196,27 +186,28 @@ describe('syntaxMapper', () => {
       );
 
       expect(
-        result.children[0].children[0].children[0].content.alignedWordIds
+        result.children[0].children[0].children[0].children[0].content
+          .alignedWordIds
       ).toEqual(['en_4']);
 
       expect(
-        result.children[0].children[0].children[1].children[0].content
-          .alignedWordIds
+        result.children[0].children[0].children[0].children[1].children[0]
+          .content.alignedWordIds
       ).toEqual(['en_5']);
 
       expect(
-        result.children[0].children[0].children[1].children[1].children[0]
-          .content.alignedWordIds
+        result.children[0].children[0].children[0].children[1].children[1]
+          .children[0].content.alignedWordIds
       ).toEqual([]);
     });
 
     it('does not duplicate 1 many:1 link to multiple', () => {
-      const result = syntaxMapper(treedownSyntax as unknown as SyntaxRoot, {
+      const result = syntaxMapper(markSyntax as unknown as SyntaxRoot, {
         target: 'an interesting greek source',
         source: 'a very good english translation',
         links: [
           {
-            targets: ['410160010010010', '410160010020010'],
+            targets: ['n41016001001', 'n41016001002'],
             sources: ['en_4'],
           },
         ],
@@ -228,12 +219,13 @@ describe('syntaxMapper', () => {
       });
 
       expect(
-        result.children[0].children[0].children[0].content.alignedWordIds
+        result.children[0].children[0].children[0].children[0].content
+          .alignedWordIds
       ).toEqual(['en_4']);
 
       expect(
-        result.children[0].children[0].children[1].children[0].content
-          .alignedWordIds
+        result.children[0].children[0].children[0].children[1].children[0]
+          .content.alignedWordIds
       ).toEqual([]);
     });
   });
@@ -241,13 +233,13 @@ describe('syntaxMapper', () => {
   describe('mapping secondary alignments', () => {
     it('secondarily maps a single word', () => {
       const result = syntaxMapper(
-        treedownSyntax as unknown as SyntaxRoot,
+        markSyntax as unknown as SyntaxRoot,
         {
           target: 'an interesting greek source',
           source: 'a very good english translation',
           links: [
             {
-              targets: ['410160010010010', '410160010020010'],
+              targets: ['n41016001001', 'n41016001002'],
               sources: ['en_4'],
             },
           ],
@@ -270,20 +262,21 @@ describe('syntaxMapper', () => {
       );
 
       expect(
-        result.children[0].children[0].children[0].content.alignedWordIds
+        result.children[0].children[0].children[0].children[0].content
+          .alignedWordIds
       ).toEqual(['spa_2']);
     });
 
     it('secondarily maps a single word (reversed)', () => {
       // Greek (ms) <> Spanish (trans) <> English (lwc)
       const result = syntaxMapper(
-        treedownSyntax as unknown as SyntaxRoot,
+        markSyntax as unknown as SyntaxRoot,
         {
           source: 'nestle1904',
           target: 'nvi',
           links: [
             {
-              sources: ['410160010010010', '410160010020010'],
+              sources: ['n41016001001', 'n41016001002'],
               targets: ['nvi_2'],
             },
           ],
@@ -306,7 +299,8 @@ describe('syntaxMapper', () => {
       );
 
       expect(
-        result.children[0].children[0].children[0].content.alignedWordIds
+        result.children[0].children[0].children[0].children[0].content
+          .alignedWordIds
       ).toEqual(['en_4']);
     });
   });
@@ -314,27 +308,27 @@ describe('syntaxMapper', () => {
   describe('real life data', () => {
     it('maps primary', () => {
       const result = syntaxMapper(
-        markSyntax as unknown as SyntaxRoot,
+        romansSyntax as unknown as SyntaxRoot,
         {
           source: 'sbl',
           target: 'nvi',
           links: [
-            { sources: ['450050030010010'], targets: ['nvi_1'] },
-            { targets: ['nvi_2'], sources: ['450050030020010'] },
-            { targets: ['nvi_0'], sources: ['450050030030010'] },
-            { targets: ['nvi_5'], sources: ['450050030040010'] },
-            { targets: ['nvi_6'], sources: ['450050030050010'] },
-            { targets: ['nvi_7'], sources: ['450050030070010'] },
+            { sources: ['n45005003001'], targets: ['nvi_1'] },
+            { targets: ['nvi_2'], sources: ['n45005003002'] },
+            { targets: ['nvi_0'], sources: ['n45005003003'] },
+            { targets: ['nvi_5'], sources: ['n45005003004'] },
+            { targets: ['nvi_6'], sources: ['n45005003005'] },
+            { targets: ['nvi_7'], sources: ['n45005003007'] },
             {
               targets: ['nvi_8', 'nvi_9'],
-              sources: ['450050030080010', '450050030090010'],
+              sources: ['n45005003008', 'n45005003009'],
             },
-            { targets: ['nvi_11'], sources: ['450050030100010'] },
-            { targets: ['nvi_12'], sources: ['450050030110010'] },
-            { targets: ['nvi_13'], sources: ['450050030120010'] },
-            { targets: ['nvi_14'], sources: ['450050030130010'] },
-            { targets: ['nvi_16'], sources: ['450050030140010'] },
-            { targets: ['nvi_15'], sources: ['450050030150010'] },
+            { targets: ['nvi_11'], sources: ['n45005003010'] },
+            { targets: ['nvi_12'], sources: ['n45005003011'] },
+            { targets: ['nvi_13'], sources: ['n45005003012'] },
+            { targets: ['nvi_14'], sources: ['n45005003013'] },
+            { targets: ['nvi_16'], sources: ['n45005003014'] },
+            { targets: ['nvi_15'], sources: ['n45005003015'] },
           ],
           polarity: {
             type: 'primary',
@@ -347,33 +341,34 @@ describe('syntaxMapper', () => {
       );
 
       expect(
-        result.children[0].children[0].children[0].content.alignedWordIds
+        result.children[0].children[0].children[0].children[0].content
+          .alignedWordIds
       ).toEqual(['nvi_0']);
     });
 
     it('maps secondary', () => {
       const result = syntaxMapper(
-        markSyntax as unknown as SyntaxRoot,
+        romansSyntax as unknown as SyntaxRoot,
         {
           source: 'sbl',
           target: 'nvi',
           links: [
-            { sources: ['450050030010010'], targets: ['nvi_1'] },
-            { targets: ['nvi_2'], sources: ['450050030020010'] },
-            { targets: ['nvi_0'], sources: ['450050030030010'] },
-            { targets: ['nvi_5'], sources: ['450050030040010'] },
-            { targets: ['nvi_6'], sources: ['450050030050010'] },
-            { targets: ['nvi_7'], sources: ['450050030070010'] },
+            { sources: ['n45005003001'], targets: ['nvi_1'] },
+            { targets: ['nvi_2'], sources: ['n45005003002'] },
+            { targets: ['nvi_0'], sources: ['n45005003003'] },
+            { targets: ['nvi_5'], sources: ['n45005003004'] },
+            { targets: ['nvi_6'], sources: ['n45005003005'] },
+            { targets: ['nvi_7'], sources: ['n45005003007'] },
             {
               targets: ['nvi_8', 'nvi_9'],
-              sources: ['450050030080010', '450050030090010'],
+              sources: ['n45005003008', 'n45005003009'],
             },
-            { targets: ['nvi_11'], sources: ['450050030100010'] },
-            { targets: ['nvi_12'], sources: ['450050030110010'] },
-            { targets: ['nvi_13'], sources: ['450050030120010'] },
-            { targets: ['nvi_14'], sources: ['450050030130010'] },
-            { targets: ['nvi_16'], sources: ['450050030140010'] },
-            { targets: ['nvi_15'], sources: ['450050030150010'] },
+            { targets: ['nvi_11'], sources: ['n45005003010'] },
+            { targets: ['nvi_12'], sources: ['n45005003011'] },
+            { targets: ['nvi_13'], sources: ['n45005003012'] },
+            { targets: ['nvi_14'], sources: ['n45005003013'] },
+            { targets: ['nvi_16'], sources: ['n45005003014'] },
+            { targets: ['nvi_15'], sources: ['n45005003015'] },
           ],
           polarity: {
             type: 'primary',
@@ -410,8 +405,46 @@ describe('syntaxMapper', () => {
       );
 
       expect(
-        result.children[0].children[0].children[0].content.alignedWordIds
+        result.children[0].children[0].children[0].children[0].content
+          .alignedWordIds
       ).toEqual(['leb_0']);
+    });
+
+    it('maps secondary (multiple words)', () => {
+      const result = syntaxMapper(
+        genSyntax as unknown as SyntaxRoot,
+        {
+          source: 'oshb',
+          target: 'nvi',
+          links: [
+            { sources: ['o010010010011'], targets: ['nvi_1'] },
+            { sources: ['o010010010012'], targets: ['nvi_2', 'nvi_3'] },
+          ],
+          polarity: {
+            type: 'primary',
+            syntaxSide: 'sources',
+            nonSyntaxSide: 'targets',
+          },
+        },
+        {
+          source: 'leb',
+          target: 'nvi',
+          links: [
+            { sources: ['leb_0'], targets: ['nvi_1'] },
+            { sources: ['leb_1', 'leb_2'], targets: ['nvi_2', 'nvi_3'] },
+          ],
+          polarity: {
+            type: 'secondary',
+            mappedSide: 'targets',
+            nonMappedSide: 'sources',
+          },
+        }
+      );
+
+      expect(
+        result.children[0].children[0].children[0].children[1].content
+          .alignedWordIds
+      ).toEqual(['leb_1', 'leb_2']);
     });
   });
 });

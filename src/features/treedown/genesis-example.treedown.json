@@ -1,0 +1,199 @@
+{
+  "content": {
+    "elementType": "sentences"
+  },
+  "children": [
+    {
+      "content": {
+        "elementType": "sentence"
+      },
+      "children": [
+        {
+          "content": {
+            "elementType": "wg",
+            "class": "cl",
+            "id": "0100100100110110"
+          },
+          "children": [
+            {
+              "content": {
+                "elementType": "wg",
+                "role": "pp",
+                "class": "pp",
+                "id": "0100100100110020"
+              },
+              "children": [
+                {
+                  "content": {
+                    "elementType": "w",
+                    "id": "o010010010011",
+                    "lemma": "b",
+                    "text": "בְּ"
+                  },
+                  "children": []
+                },
+                {
+                  "content": {
+                    "elementType": "w",
+                    "id": "o010010010012",
+                    "lemma": "7225",
+                    "gender": "feminine",
+                    "number": "singular",
+                    "after": " ",
+                    "text": "רֵאשִׁ֖ית"
+                  },
+                  "children": []
+                }
+              ]
+            },
+            {
+              "content": {
+                "elementType": "w",
+                "role": "v",
+                "id": "o010010010021",
+                "lemma": "1254 a",
+                "gender": "masculine",
+                "number": "singular",
+                "person": "third",
+                "after": " ",
+                "text": "בָּרָ֣א"
+              },
+              "children": []
+            },
+            {
+              "content": {
+                "elementType": "w",
+                "role": "s",
+                "id": "o010010010031",
+                "lemma": "430",
+                "gender": "masculine",
+                "number": "plural",
+                "after": " ",
+                "text": "אֱלֹהִ֑ים"
+              },
+              "children": []
+            },
+            {
+              "content": {
+                "elementType": "wg",
+                "role": "o",
+                "class": "np",
+                "id": "0100100100410070"
+              },
+              "children": [
+                {
+                  "content": {
+                    "elementType": "wg",
+                    "class": "np",
+                    "id": "0100100100410030"
+                  },
+                  "children": [
+                    {
+                      "content": {
+                        "elementType": "w",
+                        "id": "o010010010041",
+                        "lemma": "853",
+                        "after": " ",
+                        "text": "אֵ֥ת"
+                      },
+                      "children": []
+                    },
+                    {
+                      "content": {
+                        "elementType": "wg",
+                        "class": "np",
+                        "id": "0100100100510020"
+                      },
+                      "children": [
+                        {
+                          "content": {
+                            "elementType": "w",
+                            "id": "o010010010051",
+                            "lemma": "d",
+                            "text": "הַ"
+                          },
+                          "children": []
+                        },
+                        {
+                          "content": {
+                            "elementType": "w",
+                            "id": "o010010010052",
+                            "lemma": "8064",
+                            "gender": "masculine",
+                            "number": "plural",
+                            "after": " ",
+                            "text": "שָּׁמַ֖יִם"
+                          },
+                          "children": []
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "content": {
+                    "elementType": "w",
+                    "id": "o010010010061",
+                    "lemma": "c",
+                    "text": "וְ"
+                  },
+                  "children": []
+                },
+                {
+                  "content": {
+                    "elementType": "wg",
+                    "class": "np",
+                    "id": "0100100100620030"
+                  },
+                  "children": [
+                    {
+                      "content": {
+                        "elementType": "w",
+                        "id": "o010010010062",
+                        "lemma": "853",
+                        "after": " ",
+                        "text": "אֵ֥ת"
+                      },
+                      "children": []
+                    },
+                    {
+                      "content": {
+                        "elementType": "wg",
+                        "class": "np",
+                        "id": "0100100100710020"
+                      },
+                      "children": [
+                        {
+                          "content": {
+                            "elementType": "w",
+                            "id": "o010010010071",
+                            "lemma": "d",
+                            "text": "הָ"
+                          },
+                          "children": []
+                        },
+                        {
+                          "content": {
+                            "elementType": "w",
+                            "id": "o010010010072",
+                            "lemma": "776",
+                            "gender": "both",
+                            "number": "singular",
+                            "after": "׃",
+                            "text": "אָֽרֶץ"
+                          },
+                          "children": []
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "_syntaxType": "mappedSecondary"
+}

@@ -24,9 +24,10 @@ const mapAlignedWords = (
       const mappedSideName = secondaryAlignment.polarity.mappedSide;
       const nonMappedSideName = secondaryAlignment.polarity.nonMappedSide;
 
+      console.log('matchedLinks', matchedLinks);
       secondaryMatchedLinks = matchedLinks
         .map((matchedLink: Link) => {
-          const secondaryLink = secondaryAlignment.links.find(
+          const secondaryLink = secondaryAlignment.links.filter(
             (secondaryLink: Link) => {
               return secondaryLink[mappedSideName].find(
                 (secondaryLinkMappedId: string) => {
@@ -40,6 +41,7 @@ const mapAlignedWords = (
 
           return secondaryLink;
         })
+        .flat()
         .filter((x): x is Link => Boolean(x));
 
       if (secondaryMatchedLinks.length > 0) {
