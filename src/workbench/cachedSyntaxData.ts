@@ -86,71 +86,440 @@ const cachedSyntaxData: Record<string, string> = {
 </wg>
 </sentence>
 </sentences>`,
-  'Rom.5.3': `<sentences xml:lang="grc" ref="ROM 5:3">
+  'Rom.5.3': `
+<sentences xml:lang="grc" ref="ROM 5:3">
 <sentence>
-<p>
-<milestone unit="verse" id="ROM 5:3">ROM 5:3</milestone>
-<milestone unit="verse" id="ROM 5:4">ROM 5:4</milestone>
-οὐ μόνον δέ, ἀλλὰ καὶ καυχώμεθα ἐν ταῖς θλίψεσιν, εἰδότες ὅτι ἡ θλῖψις ὑπομονὴν κατεργάζεται, ἡ δὲ ὑπομονὴ δοκιμήν, ἡ δὲ δοκιμὴ ἐλπίδα·
-</p>
-<wg role="cl">
-<wg class="cl" rule="Conj-CL" id="450050030030230">
-<w ref="ROM 5:3!3" class="conj" id="n45005003003" lemma="δέ" normalized="δέ" strong="1161" discontinuous="true">δέ,</w>
-<wg class="cl" rule="notCLbutCL2CL" id="450050030010220">
-<w ref="ROM 5:3!1" class="adv" id="n45005003001" lemma="οὐ" normalized="οὐ" strong="3756">οὐ</w>
-<wg class="cl" rule="ADV2CL" id="450050030020013">
-<w role="adv" ref="ROM 5:3!2" class="adj" id="n45005003002" lemma="μόνος" normalized="μόνον" strong="3440" number="singular" gender="neuter" case="accusative">μόνον</w>
-</wg>
-<w ref="ROM 5:3!4" class="conj" id="n45005003004" lemma="ἀλλά" normalized="ἀλλά" strong="235">ἀλλὰ</w>
-<wg class="cl" head="true" rule="ADV-V-ADV-ADV" id="450050030050190">
-<w role="adv" ref="ROM 5:3!5" class="adv" id="n45005003005" lemma="καί" normalized="καί" strong="2532">καὶ</w>
-<w role="v" ref="ROM 5:3!6" class="verb" id="n45005003006" lemma="καυχάομαι" normalized="καυχώμεθα" strong="2744" number="plural" person="first" tense="present" voice="middlepassive" mood="indicative" head="true">καυχώμεθα</w>
-<wg role="adv" id="450050030070031" class="pp" articular="true" rule="PrepNp">
-<w ref="ROM 5:3!7" class="prep" id="n45005003007" lemma="ἐν" normalized="ἐν" strong="1722">ἐν</w>
-<wg class="np" articular="true" head="true" rule="DetNP" id="450050030080020">
-<w ref="ROM 5:3!8" class="det" id="n45005003008" lemma="ὁ" normalized="ταῖς" strong="3588" number="plural" gender="feminine" case="dative">ταῖς</w>
-<w ref="ROM 5:3!9" class="noun" type="common" id="n45005003009" lemma="θλῖψις" normalized="θλίψεσιν" strong="2347" number="plural" gender="feminine" case="dative" head="true">θλίψεσιν,</w>
-</wg>
-</wg>
-<wg role="adv" id="450050030100141" class="cl" rule="ClCl">
-<wg class="cl" head="true" rule="V2CL" id="450050030100013">
-<w role="v" ref="ROM 5:3!10" class="verb" id="n45005003010" lemma="οἶδα" normalized="εἰδότες" strong="1492" number="plural" gender="masculine" case="nominative" tense="perfect" voice="active" mood="participle" type="?" head="true">εἰδότες</w>
-</wg>
-<wg class="cl" rule="that-VP" id="450050030110130">
-<w ref="ROM 5:3!11" class="conj" id="n45005003011" lemma="ὅτι" normalized="ὅτι" strong="3754">ὅτι</w>
-<wg class="cl" rule="Conj3CL" id="450050030120120">
-<wg class="cl" head="true" rule="S-O-V" id="450050030120040">
-<wg role="s" id="450050030120021" class="np" articular="true" rule="DetNP">
-<w ref="ROM 5:3!12" class="det" id="n45005003012" lemma="ὁ" normalized="ἡ" strong="3588" number="singular" gender="feminine" case="nominative">ἡ</w>
-<w ref="ROM 5:3!13" class="noun" type="common" id="n45005003013" lemma="θλῖψις" normalized="θλῖψις" strong="2347" number="singular" gender="feminine" case="nominative" head="true">θλῖψις</w>
-</wg>
-<w role="o" ref="ROM 5:3!14" class="noun" type="common" id="n45005003014" lemma="ὑπομονή" normalized="ὑπομονήν" strong="5281" number="singular" gender="feminine" case="accusative">ὑπομονὴν</w>
-<w role="v" ref="ROM 5:3!15" class="verb" id="n45005003015" lemma="κατεργάζομαι" normalized="κατεργάζεται" strong="2716" number="singular" person="third" tense="present" voice="middlepassive" mood="indicative" head="true">κατεργάζεται,</w>
-</wg>
-<w ref="ROM 5:4!2" class="conj" id="n45005004002" lemma="δέ" normalized="δέ" strong="1161" discontinuous="true">δὲ</w>
-<wg class="cl" articular="true" rule="S-O" id="450050040010030">
-<wg role="s" id="450050040010021" class="np" articular="true" head="true" rule="DetNP">
-<w ref="ROM 5:4!1" class="det" id="n45005004001" lemma="ὁ" normalized="ἡ" strong="3588" number="singular" gender="feminine" case="nominative">ἡ</w>
-<w ref="ROM 5:4!3" class="noun" type="common" id="n45005004003" lemma="ὑπομονή" normalized="ὑπομονή" strong="5281" number="singular" gender="feminine" case="nominative" head="true">ὑπομονὴ</w>
-</wg>
-<w role="o" ref="ROM 5:4!4" class="noun" type="common" id="n45005004004" lemma="δοκιμή" normalized="δοκιμήν" strong="1382" number="singular" gender="feminine" case="accusative">δοκιμήν,</w>
-</wg>
-<w ref="ROM 5:4!6" class="conj" id="n45005004006" lemma="δέ" normalized="δέ" strong="1161" discontinuous="true">δὲ</w>
-<wg class="cl" articular="true" rule="S-O" id="450050040050030">
-<wg role="s" id="450050040050021" class="np" articular="true" head="true" rule="DetNP">
-<w ref="ROM 5:4!5" class="det" id="n45005004005" lemma="ὁ" normalized="ἡ" strong="3588" number="singular" gender="feminine" case="nominative">ἡ</w>
-<w ref="ROM 5:4!7" class="noun" type="common" id="n45005004007" lemma="δοκιμή" normalized="δοκιμή" strong="1382" number="singular" gender="feminine" case="nominative" head="true">δοκιμὴ</w>
-</wg>
-<w role="o" ref="ROM 5:4!8" class="noun" type="common" id="n45005004008" lemma="ἐλπίς" normalized="ἐλπίδα" strong="1680" number="singular" gender="feminine" case="accusative">ἐλπίδα·</w>
-</wg>
-</wg>
-</wg>
-</wg>
-</wg>
-</wg>
-</wg>
-</wg>
-</sentence>
+      <p>
+         <milestone unit="verse" id="ROM 5:3">ROM 5:3</milestone>
+         <milestone unit="verse" id="ROM 5:4">ROM 5:4</milestone> οὐ μόνον δέ, ἀλλὰ καὶ καυχώμεθα ἐν ταῖς θλίψεσιν, εἰδότες ὅτι ἡ θλῖψις ὑπομονὴν κατεργάζεται, ἡ δὲ ὑπομονὴ δοκιμήν, ἡ δὲ δοκιμὴ ἐλπίδα·</p>
+      <wg role="cl">
+         <wg class="cl" rule="Conj-CL" id="450050030030230">
+            <w ref="ROM 5:3!3"
+               after=","
+               class="conj"
+               id="n45005003003"
+               lemma="δέ"
+               normalized="δέ"
+               strong="1161"
+               discontinuous="true"
+               gloss="now"
+               domain="089017"
+               ln="89.94"
+               morph="CONJ"
+               unicode="δέ,">δέ</w>
+            <wg class="cl" rule="notCLbutCL2CL" id="450050030010220">
+               <w ref="ROM 5:3!1"
+                  after=" "
+                  class="adv"
+                  id="n45005003001"
+                  lemma="οὐ"
+                  normalized="οὐ"
+                  strong="3756"
+                  gloss="Not"
+                  domain="069002"
+                  ln="69.3"
+                  morph="PRT-N"
+                  unicode="οὐ">οὐ</w>
+               <wg class="cl"
+                   rule="ADV2CL"
+                   cltype="VerbElided"
+                   id="450050030020013">
+                  <w role="adv"
+                     ref="ROM 5:3!2"
+                     after=" "
+                     class="adj"
+                     id="n45005003002"
+                     lemma="μόνος"
+                     normalized="μόνον"
+                     strong="3440"
+                     number="singular"
+                     gender="neuter"
+                     case="accusative"
+                     gloss="only [so]"
+                     morph="ADV"
+                     unicode="μόνον">μόνον</w>
+               </wg>
+               <w ref="ROM 5:3!4"
+                  after=" "
+                  class="conj"
+                  id="n45005003004"
+                  lemma="ἀλλά"
+                  normalized="ἀλλά"
+                  strong="235"
+                  gloss="but"
+                  domain="089023"
+                  ln="89.125"
+                  morph="CONJ"
+                  unicode="ἀλλὰ">ἀλλὰ</w>
+               <wg class="cl"
+                   head="true"
+                   rule="ADV-V-ADV-ADV"
+                   id="450050030050190">
+                  <w role="adv"
+                     ref="ROM 5:3!5"
+                     after=" "
+                     class="adv"
+                     id="n45005003005"
+                     lemma="καί"
+                     normalized="καί"
+                     strong="2532"
+                     gloss="also"
+                     domain="089017"
+                     ln="89.93"
+                     morph="CONJ"
+                     unicode="καὶ">καὶ</w>
+                  <w role="v"
+                     ref="ROM 5:3!6"
+                     after=" "
+                     class="verb"
+                     id="n45005003006"
+                     lemma="καυχάομαι"
+                     normalized="καυχώμεθα"
+                     strong="2744"
+                     number="plural"
+                     person="first"
+                     tense="present"
+                     voice="middlepassive"
+                     mood="indicative"
+                     head="true"
+                     gloss="we glory"
+                     domain="033039"
+                     ln="33.368"
+                     morph="V-PNI-1P"
+                     unicode="καυχώμεθα"
+                     frame="A0:n45001001001;n45001015008;n45004024009"
+                     subjref="n45001001001 n45001015008 n45004024009">καυχώμεθα</w>
+                  <wg role="adv"
+                      id="450050030070031"
+                      class="pp"
+                      articular="true"
+                      rule="PrepNp">
+                     <w ref="ROM 5:3!7"
+                        after=" "
+                        class="prep"
+                        id="n45005003007"
+                        lemma="ἐν"
+                        normalized="ἐν"
+                        strong="1722"
+                        gloss="in"
+                        domain="013001"
+                        ln="13.8"
+                        morph="PREP"
+                        unicode="ἐν">ἐν</w>
+                     <wg class="np"
+                         articular="true"
+                         head="true"
+                         rule="DetNP"
+                         id="450050030080020">
+                        <w ref="ROM 5:3!8"
+                           after=" "
+                           class="det"
+                           id="n45005003008"
+                           lemma="ὁ"
+                           normalized="ταῖς"
+                           strong="3588"
+                           number="plural"
+                           gender="feminine"
+                           case="dative"
+                           gloss="-"
+                           domain="092004"
+                           ln="92.24"
+                           morph="T-DPF"
+                           unicode="ταῖς">ταῖς</w>
+                        <w ref="ROM 5:3!9"
+                           after=","
+                           class="noun"
+                           type="common"
+                           id="n45005003009"
+                           lemma="θλῖψις"
+                           normalized="θλίψεσιν"
+                           strong="2347"
+                           number="plural"
+                           gender="feminine"
+                           case="dative"
+                           head="true"
+                           gloss="tribulations"
+                           domain="022001"
+                           ln="22.2"
+                           morph="N-DPF"
+                           unicode="θλίψεσιν,">θλίψεσιν</w>
+                     </wg>
+                  </wg>
+                  <wg role="adv" id="450050030100141" class="cl" rule="ClCl">
+                     <wg class="cl" head="true" rule="V2CL" id="450050030100013">
+                        <w role="v"
+                           ref="ROM 5:3!10"
+                           after=" "
+                           class="verb"
+                           id="n45005003010"
+                           lemma="οἶδα"
+                           normalized="εἰδότες"
+                           strong="1492"
+                           number="plural"
+                           gender="masculine"
+                           case="nominative"
+                           tense="perfect"
+                           voice="active"
+                           mood="participle"
+                           type="?"
+                           head="true"
+                           gloss="knowing"
+                           domain="028001"
+                           ln="28.1"
+                           morph="V-RAP-NPM"
+                           unicode="εἰδότες"
+                           frame="A0:n45001001001;n45001015008;n45004024009"
+                           subjref="n45001001001 n45001015008 n45004024009">εἰδότες</w>
+                     </wg>
+                     <wg class="cl" rule="that-VP" id="450050030110130">
+                        <w ref="ROM 5:3!11"
+                           after=" "
+                           class="conj"
+                           id="n45005003011"
+                           lemma="ὅτι"
+                           normalized="ὅτι"
+                           strong="3754"
+                           gloss="that"
+                           domain="090006"
+                           ln="90.21"
+                           morph="CONJ"
+                           unicode="ὅτι">ὅτι</w>
+                        <wg class="cl" rule="Conj3CL" id="450050030120120">
+                           <wg class="cl" head="true" rule="S-O-V" id="450050030120040">
+                              <wg role="s"
+                                  id="450050030120021"
+                                  class="np"
+                                  articular="true"
+                                  rule="DetNP">
+                                 <w ref="ROM 5:3!12"
+                                    after=" "
+                                    class="det"
+                                    id="n45005003012"
+                                    lemma="ὁ"
+                                    normalized="ἡ"
+                                    strong="3588"
+                                    number="singular"
+                                    gender="feminine"
+                                    case="nominative"
+                                    gloss="-"
+                                    domain="092004"
+                                    ln="92.24"
+                                    morph="T-NSF"
+                                    unicode="ἡ">ἡ</w>
+                                 <w ref="ROM 5:3!13"
+                                    after=" "
+                                    class="noun"
+                                    type="common"
+                                    id="n45005003013"
+                                    lemma="θλῖψις"
+                                    normalized="θλῖψις"
+                                    strong="2347"
+                                    number="singular"
+                                    gender="feminine"
+                                    case="nominative"
+                                    head="true"
+                                    gloss="tribulation"
+                                    domain="022001"
+                                    ln="22.2"
+                                    morph="N-NSF"
+                                    unicode="θλῖψις">θλῖψις</w>
+                              </wg>
+                              <w role="o"
+                                 ref="ROM 5:3!14"
+                                 after=" "
+                                 class="noun"
+                                 type="common"
+                                 id="n45005003014"
+                                 lemma="ὑπομονή"
+                                 normalized="ὑπομονήν"
+                                 strong="5281"
+                                 number="singular"
+                                 gender="feminine"
+                                 case="accusative"
+                                 gloss="perseverance"
+                                 domain="025015"
+                                 ln="25.174"
+                                 morph="N-ASF"
+                                 unicode="ὑπομονὴν">ὑπομονὴν</w>
+                              <w role="v"
+                                 ref="ROM 5:3!15"
+                                 after=","
+                                 class="verb"
+                                 id="n45005003015"
+                                 lemma="κατεργάζομαι"
+                                 normalized="κατεργάζεται"
+                                 strong="2716"
+                                 number="singular"
+                                 person="third"
+                                 tense="present"
+                                 voice="middlepassive"
+                                 mood="indicative"
+                                 head="true"
+                                 gloss="produces"
+                                 domain="013001"
+                                 ln="13.9"
+                                 morph="V-PNI-3S"
+                                 unicode="κατεργάζεται,"
+                                 frame="A0:n45005003013 A1:n45005003014">κατεργάζεται</w>
+                           </wg>
+                           <w ref="ROM 5:4!2"
+                              after=" "
+                              class="conj"
+                              id="n45005004002"
+                              lemma="δέ"
+                              normalized="δέ"
+                              strong="1161"
+                              discontinuous="true"
+                              gloss="And"
+                              domain="089015"
+                              ln="89.87"
+                              morph="CONJ"
+                              unicode="δὲ">δὲ</w>
+                           <wg class="cl"
+                               articular="true"
+                               rule="S-O"
+                               cltype="VerbElided"
+                               id="450050040010030">
+                              <wg role="s"
+                                  id="450050040010021"
+                                  class="np"
+                                  articular="true"
+                                  head="true"
+                                  rule="DetNP">
+                                 <w ref="ROM 5:4!1"
+                                    after=" "
+                                    class="det"
+                                    id="n45005004001"
+                                    lemma="ὁ"
+                                    normalized="ἡ"
+                                    strong="3588"
+                                    number="singular"
+                                    gender="feminine"
+                                    case="nominative"
+                                    gloss="-"
+                                    domain="092004"
+                                    ln="92.24"
+                                    morph="T-NSF"
+                                    unicode="ἡ">ἡ</w>
+                                 <w ref="ROM 5:4!3"
+                                    after=" "
+                                    class="noun"
+                                    type="common"
+                                    id="n45005004003"
+                                    lemma="ὑπομονή"
+                                    normalized="ὑπομονή"
+                                    strong="5281"
+                                    number="singular"
+                                    gender="feminine"
+                                    case="nominative"
+                                    head="true"
+                                    gloss="perseverance"
+                                    domain="025015"
+                                    ln="25.174"
+                                    morph="N-NSF"
+                                    unicode="ὑπομονὴ">ὑπομονὴ</w>
+                              </wg>
+                              <w role="o"
+                                 ref="ROM 5:4!4"
+                                 after=","
+                                 class="noun"
+                                 type="common"
+                                 id="n45005004004"
+                                 lemma="δοκιμή"
+                                 normalized="δοκιμήν"
+                                 strong="1382"
+                                 number="singular"
+                                 gender="feminine"
+                                 case="accusative"
+                                 gloss="character"
+                                 domain="065001"
+                                 ln="65.12"
+                                 morph="N-ASF"
+                                 unicode="δοκιμήν,">δοκιμήν</w>
+                           </wg>
+                           <w ref="ROM 5:4!6"
+                              after=" "
+                              class="conj"
+                              id="n45005004006"
+                              lemma="δέ"
+                              normalized="δέ"
+                              strong="1161"
+                              discontinuous="true"
+                              gloss="and"
+                              domain="089015"
+                              ln="89.87"
+                              morph="CONJ"
+                              unicode="δὲ">δὲ</w>
+                           <wg class="cl"
+                               articular="true"
+                               rule="S-O"
+                               cltype="VerbElided"
+                               id="450050040050030">
+                              <wg role="s"
+                                  id="450050040050021"
+                                  class="np"
+                                  articular="true"
+                                  head="true"
+                                  rule="DetNP">
+                                 <w ref="ROM 5:4!5"
+                                    after=" "
+                                    class="det"
+                                    id="n45005004005"
+                                    lemma="ὁ"
+                                    normalized="ἡ"
+                                    strong="3588"
+                                    number="singular"
+                                    gender="feminine"
+                                    case="nominative"
+                                    gloss="-"
+                                    domain="092004"
+                                    ln="92.24"
+                                    morph="T-NSF"
+                                    unicode="ἡ">ἡ</w>
+                                 <w ref="ROM 5:4!7"
+                                    after=" "
+                                    class="noun"
+                                    type="common"
+                                    id="n45005004007"
+                                    lemma="δοκιμή"
+                                    normalized="δοκιμή"
+                                    strong="1382"
+                                    number="singular"
+                                    gender="feminine"
+                                    case="nominative"
+                                    head="true"
+                                    gloss="character"
+                                    domain="065001"
+                                    ln="65.12"
+                                    morph="N-NSF"
+                                    unicode="δοκιμὴ">δοκιμὴ</w>
+                              </wg>
+                              <w role="o"
+                                 ref="ROM 5:4!8"
+                                 after="·"
+                                 class="noun"
+                                 type="common"
+                                 id="n45005004008"
+                                 lemma="ἐλπίς"
+                                 normalized="ἐλπίδα"
+                                 strong="1680"
+                                 number="singular"
+                                 gender="feminine"
+                                 case="accusative"
+                                 gloss="hope"
+                                 domain="025004"
+                                 ln="25.59"
+                                 morph="N-ASF"
+                                 unicode="ἐλπίδα·">ἐλπίδα</w>
+                           </wg>
+                        </wg>
+                     </wg>
+                  </wg>
+               </wg>
+            </wg>
+         </wg>
+      </wg>
+   </sentence>
 </sentences>`,
 };
 

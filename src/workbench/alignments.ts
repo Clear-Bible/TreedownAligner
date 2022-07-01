@@ -45,8 +45,34 @@ const alignments: Record<string, Alignment[]> = {
       },
     },
   ],
-
-  // 'Gen.1.1.': '',
+  'Gen.1.1': [
+    {
+      source: 'leb',
+      target: 'nvi',
+      links: [
+        { sources: ['leb_0'], targets: ['nvi_1'] },
+        { sources: ['leb_1', 'leb_2'], targets: ['nvi_2', 'nvi_3'] },
+      ],
+      polarity: {
+        type: 'secondary',
+        mappedSide: 'targets',
+        nonMappedSide: 'sources',
+      },
+    },
+    {
+      source: 'oshb',
+      target: 'nvi',
+      links: [
+        { sources: ['o010010010011'], targets: ['nvi_1'] },
+        { sources: ['o010010010012'], targets: ['nvi_2', 'nvi_3'] },
+      ],
+      polarity: {
+        type: 'primary',
+        syntaxSide: 'sources',
+        nonSyntaxSide: 'targets',
+      },
+    },
+  ],
   // 'Gen.1.2.': '',
   // 'Gen.1.3.': '',
   // 'Mark.16.1': '',
