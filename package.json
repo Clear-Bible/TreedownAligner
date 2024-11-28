@@ -11,7 +11,7 @@
     "@mui/material": "^5.7.0",
     "@reduxjs/toolkit": "^1.8.1",
     "@rgrove/parse-xml": "^3.0.0",
-    "react-redux": "^7.2.8",
+    "react-redux": "^8.0.5",
     "react-scripts": "5.0.0",
     "redux-undo": "^1.0.1",
     "typescript": "^4.6.3",
